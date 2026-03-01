@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import YahooFinance from 'yahoo-finance2';
 
-const TWELVE_DATA_API_KEY = process.env.TWELVE_DATA_API_KEY?.trim() || 'a2a4f90cbc9d4cb4b2931e3e3fbc838f';
+const yahooFinance = new YahooFinance({ suppressNotices: ['yahooSurvey'] });
 const BRAVE_API_KEY = process.env.BRAVE_API_KEY?.trim();
 
 // Stock categories reorganized as requested
@@ -64,71 +65,28 @@ export interface StocksResponse {
   };
 }
 
-// Fetch all stocks - use single batch call (counts as 1 API credit for up to 5 symbols)
-// For more symbols, we need multiple calls but with less delay
-async function fetchAllStocks(): Promise<Map<string, any>> {
+async function fetchStockData(symbol: string, name: string): Promise<StockData | null> {
   try {
-    const stockMap = new Map<string, any>();
-    
-    // Fetch each category separately - max 3 symbols per category
-    for (const [categoryName, stocks] of Object.entries(STOCK_CATEGORIES)) {
-      const symbols = stocks.map(s => s.symbol).join(',');
-      const url = `https://api.twelvedata.com/quote?symbol=${symbols}&apikey=${TWELVE_DATA_API_KEY}`;
-      
-      try {
-        const res = await fetch(url, { timeout: 10000 } as any);
-        
-        if (!res.ok) {
-          console.error(`Twelve Data error for ${categoryName}:`, res.status);
-          continue;
-        }
-        
-        const data = await res.json();
-        
-        if (data.status === 'error') {
-          console.error(`Twelve Data error for ${categoryName}:`, data.message);
-        } else {
-          // Twelve Data returns either a single object (for 1 symbol) or array (for multiple)
-          const results = Array.isArray(data) ? data : [data];
-          
-          for (const item of results) {
-            if (item.symbol) {
-              stockMap.set(item.symbol, item);
-            }
-          }
-        }
-      } catch (e) {
-        console.error(`Failed to fetch ${categoryName}:`, e);
-      }
-    }
-    
-    return stockMap;
-  } catch (error) {
-    console.error('Failed to fetch stocks batch:', error);
-    return new Map();
-  }
-}
+    const quote: any = await yahooFinance.quote(symbol, {
+      fields: ['regularMarketPrice', 'regularMarketChange', 'regularMarketChangePercent', 'regularMarketVolume'],
+    });
 
-function parseStockData(symbol: string, name: string, data: any): StockData | null {
-  if (!data) return null;
-  
-  const price = parseFloat(data.close || data.price || '0');
-  const change = parseFloat(data.change || '0');
-  const changePercent = parseFloat(data.percent_change || '0');
-  const volume = parseInt(data.volume || '0', 10);
-  
-  if (!price || isNaN(price)) {
+    if (!quote || typeof quote.regularMarketPrice !== 'number') {
+      return null;
+    }
+
+    return {
+      symbol,
+      name,
+      price: quote.regularMarketPrice,
+      change: quote.regularMarketChange || 0,
+      changePercent: quote.regularMarketChangePercent || 0,
+      volume: quote.regularMarketVolume || 0,
+    };
+  } catch (error) {
+    console.error(`Failed to fetch ${symbol}:`, error);
     return null;
   }
-
-  return {
-    symbol,
-    name,
-    price,
-    change,
-    changePercent,
-    volume,
-  };
 }
 
 async function fetchCategoryNews(category: string): Promise<string> {
@@ -173,48 +131,32 @@ async function fetchCategoryNews(category: string): Promise<string> {
 // Export the data fetching function for use in briefing.ts
 export async function fetchStocksData(): Promise<StocksResponse | null> {
   try {
-    // Fetch all stocks in one batch call
-    const stockMap = await fetchAllStocks();
-    
-    if (stockMap.size === 0) {
-      console.error('No stock data returned from batch fetch');
-      return null;
-    }
-    
     const categories: CategoryData[] = [];
     let totalStocks = 0;
     let gainers = 0;
     let losers = 0;
     let totalChange = 0;
 
-    // Fetch news for all categories in parallel
-    const categoryNames = Object.keys(STOCK_CATEGORIES);
-    const newsPromises = categoryNames.map(fetchCategoryNews);
-    const newsResults = await Promise.all(newsPromises);
-    const newsMap = new Map(categoryNames.map((name, i) => [name, newsResults[i]]));
-
-    // Process each category
+    // Fetch data for each category
     for (const [categoryName, stocks] of Object.entries(STOCK_CATEGORIES)) {
       const categoryStocks: StockData[] = [];
       let categoryChange = 0;
 
       for (const { symbol, name } of stocks) {
-        const stockData = stockMap.get(symbol);
-        const parsed = parseStockData(symbol, name, stockData);
-        
-        if (parsed) {
-          categoryStocks.push(parsed);
+        const data = await fetchStockData(symbol, name);
+        if (data) {
+          categoryStocks.push(data);
           totalStocks++;
-          categoryChange += parsed.changePercent;
-          if (parsed.changePercent > 0) gainers++;
-          if (parsed.changePercent < 0) losers++;
-          totalChange += parsed.changePercent;
+          categoryChange += data.changePercent;
+          if (data.changePercent > 0) gainers++;
+          if (data.changePercent < 0) losers++;
+          totalChange += data.changePercent;
         }
       }
 
       if (categoryStocks.length > 0) {
         const avgChange = categoryChange / categoryStocks.length;
-        const news = newsMap.get(categoryName);
+        const news = await fetchCategoryNews(categoryName);
         
         // Generate macro summary based on performance
         let summary = '';
