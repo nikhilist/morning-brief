@@ -129,10 +129,8 @@ async function fetchCategoryNews(category: string): Promise<string> {
   }
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<StocksResponse | { error: string }>
-) {
+// Export the data fetching function for use in briefing.ts
+export async function fetchStocksData(): Promise<StocksResponse | null> {
   try {
     const categories: CategoryData[] = [];
     let totalStocks = 0;
@@ -193,11 +191,24 @@ export default async function handler(
       },
     };
 
-    // Cache for 5 minutes
-    res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
-    res.status(200).json(response);
+    return response;
   } catch (error) {
     console.error('Stock API error:', error);
+    return null;
+  }
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<StocksResponse | { error: string }>
+) {
+  const data = await fetchStocksData();
+  
+  if (data) {
+    // Cache for 5 minutes
+    res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
+    res.status(200).json(data);
+  } else {
     res.status(500).json({ error: 'Failed to fetch stock data' });
   }
 }

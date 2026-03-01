@@ -565,16 +565,7 @@ async function fetchCalendarEvents(accessToken?: string) {
   }
 }
 
-// Fetch stocks data
-async function fetchStocksData() {
-  try {
-    const res = await axios.get('http://localhost:3000/api/stocks', { timeout: 10000 });
-    return res.data;
-  } catch (e) {
-    // Fallback: fetch from same origin
-    return null;
-  }
-}
+
 
 // Main handler
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -588,7 +579,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ]);
 
     // Fetch stocks separately (might be slow)
-    const stocksData = await fetchStocksData().catch(() => null);
+    const { fetchStocksData } = await import('./stocks');
+    const stocksData = await fetchStocksData();
 
     // Generate insights using LLM if available, otherwise templates
     const insights = await generateLLMInsights({ 
