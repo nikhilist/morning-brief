@@ -100,8 +100,8 @@ const Header = ({ darkMode, setDarkMode, lastUpdated, onRefresh, refreshing }: a
   const dateString = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
   return (
-    <header className={`sticky top-0 z-50 backdrop-blur-xl border-b transition-colors duration-300 ${
-      darkMode ? 'bg-[#0A0A0F]/80 border-[#252532]' : 'bg-[#F8F8FA]/80 border-[#E5E5EA]'
+    <header className={`border-b transition-colors duration-300 ${
+      darkMode ? 'bg-[#0A0A0F] border-[#252532]' : 'bg-[#F8F8FA] border-[#E5E5EA]'
     }`}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
@@ -758,16 +758,16 @@ export default function Dashboard() {
   if (!data) return null;
 
   return (
-    <div className={`min-h-screen pb-20 ${darkMode ? 'bg-[#0A0A0F]' : 'bg-[#F8F8FA]'}`}>
-      <Header 
-        darkMode={darkMode} 
-        setDarkMode={setDarkMode} 
+    <div className={`${darkMode ? 'bg-[#0A0A0F]' : 'bg-[#F8F8FA]'}`}>
+      <Header
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
         lastUpdated={lastUpdated}
         onRefresh={handleRefresh}
         refreshing={refreshing}
       />
-      
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
+
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Row 1 */}
           <WeatherSection data={data.weather} darkMode={darkMode} />
