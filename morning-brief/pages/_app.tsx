@@ -4,63 +4,13 @@ import { useEffect } from 'react';
 import '../styles/globals.css';
 
 export default function App({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    // Register service worker for PWA
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker
-          .register('/sw.js')
-          .then((registration) => {
-            console.log('SW registered:', registration);
-          })
-          .catch((error) => {
-            console.log('SW registration failed:', error);
-          });
-      });
-    }
-
-    // Prevent pull-to-refresh on mobile (we implement custom PTR)
-    let touchStartY = 0;
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      const touchY = e.touches[0].clientY;
-      const scrollTop = window.scrollY;
-      
-      // Only prevent default if at top and pulling down
-      if (scrollTop === 0 && touchY > touchStartY) {
-        // Allow our custom PTR handler to work
-        return;
-      }
-    };
-
-    document.addEventListener('touchstart', handleTouchStart, { passive: true });
-    document.addEventListener('touchmove', handleTouchMove, { passive: true });
-
-    return () => {
-      document.removeEventListener('touchstart', handleTouchStart);
-      document.removeEventListener('touchmove', handleTouchMove);
-    };
-  }, []);
-
   return (
     <>
       <Head>
         {/* Primary Meta Tags */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="description" content="Your daily briefing with weather, Arsenal, crypto, markets, and more" />
-        
-        {/* PWA Tags */}
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-        
-        {/* iOS PWA Tags */}
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Morning Brief" />
         
         {/* iOS Icons */}
         <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png" />
