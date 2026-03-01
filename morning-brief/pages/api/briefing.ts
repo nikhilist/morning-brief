@@ -5,6 +5,69 @@ const BRAVE_API_KEY = process.env.BRAVE_API_KEY?.trim();
 const FOOTBALL_DATA_API_KEY = process.env.FOOTBALL_DATA_API_KEY?.trim();
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY?.trim();
 
+// Fetch Arsenal injuries/squad status
+async function fetchArsenalInjuries(): Promise<Array<{ player: string; status: string; notes: string }>> {
+  try {
+    if (!BRAVE_API_KEY) {
+      return [{ player: 'Saka', status: 'FIT', notes: 'Available' }, { player: 'Odegaard', status: 'FIT', notes: 'Available' }];
+    }
+
+    const res = await axios.get(
+      `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent('Arsenal injuries team news latest')}&count=5`,
+      {
+        headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' },
+        timeout: 8000
+      }
+    );
+
+    const results = res.data?.web?.results || [];
+
+    // Parse injury news from descriptions
+    const injuries: Array<{ player: string; status: string; notes: string }> = [];
+
+    for (const result of results.slice(0, 3)) {
+      const text = (result.title + ' ' + result.description).toLowerCase();
+
+      // Look for common injury patterns
+      const injuryPatterns = [
+        { player: 'Saka', pattern: /saka.*(?:injured|knock|doubt)/i },
+        { player: 'Odegaard', pattern: /odegaard.*(?:injured|knock|doubt)/i },
+        { player: 'Saliba', pattern: /saliba.*(?:injured|knock|doubt)/i },
+        { player: 'Rice', pattern: /rice.*(?:injured|knock|doubt)/i },
+        { player: 'Havertz', pattern: /havertz.*(?:injured|knock|doubt)/i },
+        { player: 'Saka', fitPattern: /saka.*(?:fit|available|starts)/i },
+        { player: 'Odegaard', fitPattern: /odegaard.*(?:fit|available|starts)/i },
+        { player: 'Saliba', fitPattern: /saliba.*(?:fit|available|starts)/i },
+      ];
+
+      for (const { player, pattern, fitPattern } of injuryPatterns) {
+        if (pattern && pattern.test(text)) {
+          if (!injuries.find(i => i.player === player)) {
+            injuries.push({ player, status: 'DOUBT', notes: 'Check latest' });
+          }
+        } else if (fitPattern && fitPattern.test(text)) {
+          if (!injuries.find(i => i.player === player)) {
+            injuries.push({ player, status: 'FIT', notes: 'Available' });
+          }
+        }
+      }
+    }
+
+    // Default to key players if no specific injury news found
+    if (injuries.length === 0) {
+      return [
+        { player: 'Saka', status: 'FIT', notes: 'Available' },
+        { player: 'Odegaard', status: 'FIT', notes: 'Available' },
+        { player: 'Saliba', status: 'FIT', notes: 'Available' }
+      ];
+    }
+
+    return injuries;
+  } catch (e) {
+    return [{ player: 'Saka', status: 'FIT', notes: 'Available' }, { player: 'Odegaard', status: 'FIT', notes: 'Available' }];
+  }
+}
+
 // Types
 interface WeatherData {
   temp: number;
@@ -139,8 +202,11 @@ async function fetchArsenalData(): Promise<ArsenalData> {
     let opponent = 'Opponent';
     if (resultNews) {
       const title = resultNews.title || '';
-      // Look for match scores (1-2 digits on each side, avoid years like 2025-26)
-      const scoreMatch = title.match(/(\d{1,2})\s*[-–—:]\s*(\d{1,2})/);
+      const description = resultNews.description || '';
+      const combinedText = title + ' ' + description;
+
+      // Look for match scores in both title and description (1-2 digits on each side, avoid years like 2025-26)
+      const scoreMatch = combinedText.match(/(\d{1,2})\s*[-–—:]\s*(\d{1,2})/);
       if (scoreMatch) {
         const first = parseInt(scoreMatch[1]);
         const second = parseInt(scoreMatch[2]);
@@ -149,57 +215,116 @@ async function fetchArsenalData(): Promise<ArsenalData> {
           lastScore = `${scoreMatch[1]}-${scoreMatch[2]}`;
         }
       }
-      if (lastScore === '-' && (title.toLowerCase().includes('victory') || title.toLowerCase().includes('win'))) {
+      if (lastScore === '-' && (combinedText.toLowerCase().includes('victory') || combinedText.toLowerCase().includes('win'))) {
         lastScore = 'WIN';
-      } else if (lastScore === '-' && title.toLowerCase().includes('defeat')) {
+      } else if (lastScore === '-' && combinedText.toLowerCase().includes('defeat')) {
         lastScore = 'LOSS';
-      } else if (lastScore === '-' && title.toLowerCase().includes('draw')) {
+      } else if (lastScore === '-' && combinedText.toLowerCase().includes('draw')) {
         lastScore = 'DRAW';
       }
-      const oppMatch = title.match(/(?:beat|vs|against)\s+([A-Z][a-zA-Z\s]+?)(?:\s|$|\d)/i);
-      if (oppMatch) opponent = oppMatch[1].trim();
+
+      // Extract opponent from title (prioritize "vs TEAM" or "beat TEAM")
+      const vsMatch = title.match(/(?:Arsenal\s+)?(?:vs\.?|beat)\s+([A-Z][a-zA-Z\s]+?)(?:\s+\d|$|\s+to\s+|\s+in\s+|\s+-|\s+at\s+)/i);
+      if (vsMatch) opponent = vsMatch[1].trim();
+      else {
+        // Fallback: look for "Chelsea" or other team names in title
+        const teamMatch = title.match(/Arsenal\s+(?:vs\.?|beat)\s+([A-Z][a-zA-Z]+)/i);
+        if (teamMatch) opponent = teamMatch[1].trim();
+      }
     }
     
-    // Filter out fixture results that look like season/schedule pages (contain year patterns)
-    const validFixtures = fixtures.filter((f: any) => {
-      const title = f.title || '';
-      // Skip if it looks like a season overview page
-      if (/202\d-2\d/.test(title)) return false;
-      if (/schedule.*202\d/i.test(title)) return false;
-      if (/season\s*202\d/i.test(title)) return false;
-      return title.toLowerCase().includes('vs') || title.toLowerCase().includes('v ');
-    });
+    // Fetch proper upcoming fixtures - search for specific match previews
+    let upcomingMatches: any[] = [];
+    try {
+      const fixturesRes = await axios.get(
+        `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent('Arsenal next match preview vs opponent 2026')}&count=5`,
+        {
+          headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' },
+          timeout: 8000
+        }
+      );
 
-    const upcomingMatches = validFixtures.slice(0, 3).map((f: any) => {
-      const title = f.title || '';
-      // Try to extract opponent - look for "vs TEAM" or "Arsenal vs TEAM" or "TEAM vs Arsenal"
-      let opponent = 'TBC';
-      const vsMatch = title.match(/(?:Arsenal\s+)?vs\.?\s+([A-Z][a-zA-Z\s]+?)(?:\s+\d|$|\s+\||\s+-|\s+at\s+)/i);
-      const vsBefore = title.match(/([A-Z][a-zA-Z\s]+?)\s+vs\.?\s+(?:Arsenal|$)/i);
-      if (vsMatch) opponent = vsMatch[1].trim();
-      else if (vsBefore) opponent = vsBefore[1].trim();
-      
-      // Date extraction - look for actual date patterns, not random fragments
-      let date = 'TBD';
-      const dayMatch = title.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/i);
-      const monthDateMatch = title.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2}/i);
-      if (dayMatch) date = dayMatch[1];
-      else if (monthDateMatch) date = monthDateMatch[0];
-      
-      let competition = 'TBC';
-      if (title.includes('Premier League')) competition = 'Premier League';
-      else if (title.includes('Champions League')) competition = 'Champions League';
-      else if (title.includes('FA Cup')) competition = 'FA Cup';
-      else if (title.includes('Carabao') || title.includes('League Cup')) competition = 'League Cup';
-      
-      return { opponent, date, competition };
-    });
+      const fixtures = fixturesRes.data?.web?.results || [];
+
+      // Filter out schedule/season pages and find actual match previews
+      const validFixtures = fixtures.filter((f: any) => {
+        const title = f.title || '';
+        const desc = f.description || '';
+        // Skip season overview pages
+        if (/202\d-2\d/.test(title)) return false;
+        if (/schedule.*202\d/i.test(title)) return false;
+        if (/season\s*202\d/i.test(title)) return false;
+        if (/premier league table/i.test(title)) return false;
+        // Look for actual match previews with vs
+        return (title.toLowerCase().includes('vs') || title.toLowerCase().includes('v ')) &&
+               (title.toLowerCase().includes('preview') || title.toLowerCase().includes('next') ||
+                desc.toLowerCase().includes('kick off') || desc.toLowerCase().includes('fixture'));
+      });
+
+      upcomingMatches = validFixtures.slice(0, 3).map((f: any) => {
+        const title = f.title || '';
+        let opponent = 'TBC';
+
+        // Extract opponent from "Arsenal vs TEAM" or "TEAM vs Arsenal"
+        const vsMatch = title.match(/Arsenal\s+(?:vs\.?|v)\s+([A-Z][a-zA-Z\s]+?)(?:\s+\||\s+-|\s+preview|\s+at\s+|\s+202\d|$)/i);
+        const vsBefore = title.match(/([A-Z][a-zA-Z\s]+?)\s+(?:vs\.?|v)\s+Arsenal/i);
+
+        if (vsMatch) opponent = vsMatch[1].trim();
+        else if (vsBefore) opponent = vsBefore[1].trim();
+
+        // Extract date from description if available
+        let date = 'TBD';
+        const desc = f.description || '';
+        const dayMatch = desc.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+(\w+\s+\d{1,2})/i);
+        const shortDayMatch = desc.match(/(Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*\s+(\w+\s+\d{1,2})/i);
+
+        if (dayMatch) date = `${dayMatch[1]} ${dayMatch[2]}`;
+        else if (shortDayMatch) date = `${shortDayMatch[1]} ${shortDayMatch[2]}`;
+
+        // Competition detection
+        let competition = 'TBC';
+        const checkText = (title + ' ' + desc).toLowerCase();
+        if (checkText.includes('premier league')) competition = 'Premier League';
+        else if (checkText.includes('champions league')) competition = 'Champions League';
+        else if (checkText.includes('fa cup')) competition = 'FA Cup';
+        else if (checkText.includes('carabao') || checkText.includes('league cup')) competition = 'League Cup';
+        else if (checkText.includes('europa')) competition = 'Europa League';
+
+        return { opponent, date, competition };
+      });
+    } catch (e) {
+      console.log('Fixture fetch failed:', e);
+    }
     
+    // Get trending news from main search
     const trendingNews = news.slice(0, 3).map((n: any) => ({
       title: n.title,
       source: n.source,
       url: n.url
     }));
+
+    // Try to get arseblog news specifically
+    let arseblogNews: any[] = [];
+    try {
+      const arseblogRes = await axios.get(
+        `https://api.search.brave.com/res/v1/news/search?q=${encodeURIComponent('site:arseblog.news Arsenal')}&count=5`,
+        {
+          headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' },
+          timeout: 8000
+        }
+      );
+      const arseblogResults = arseblogRes.data?.results || [];
+      arseblogNews = arseblogResults.slice(0, 3).map((n: any) => ({
+        title: n.title,
+        source: 'Arseblog',
+        url: n.url
+      }));
+    } catch (e) {
+      console.log('Arseblog fetch failed:', e);
+    }
+
+    // Combine news, prioritizing arseblog
+    const combinedNews = arseblogNews.length > 0 ? arseblogNews : trendingNews;
     
     let tableData = [];
     try {
@@ -244,8 +369,8 @@ async function fetchArsenalData(): Promise<ArsenalData> {
         { opponent: 'TBC', date: 'TBD', competition: 'TBC' },
         { opponent: 'TBC', date: 'TBD', competition: 'TBC' }
       ],
-      injuries: [{ player: 'Saka', status: 'FIT', notes: 'Available' }, { player: 'Odegaard', status: 'FIT', notes: 'Available' }],
-      trendingNews: trendingNews.length > 0 ? trendingNews : [{ title: 'Arsenal news loading...', source: 'System', url: '#' }],
+      injuries: await fetchArsenalInjuries(),
+      trendingNews: combinedNews.length > 0 ? combinedNews : [{ title: 'Arsenal news loading...', source: 'System', url: '#' }],
       table: tableData
     };
     
@@ -254,7 +379,7 @@ async function fetchArsenalData(): Promise<ArsenalData> {
     return {
       lastMatch: { score: '-', opponent: 'TBC', headline: 'Fetching latest...', description: 'Refresh to update' },
       upcoming: [{ opponent: 'Check Brave API', date: 'TBD', competition: 'PL' }, { opponent: 'TBC', date: 'TBD', competition: 'TBC' }, { opponent: 'TBC', date: 'TBD', competition: 'TBC' }],
-      injuries: [{ player: 'Saka', status: 'FIT', notes: 'Available' }],
+      injuries: [{ player: 'Saka', status: 'FIT', notes: 'Available' }, { player: 'Odegaard', status: 'FIT', notes: 'Available' }],
       trendingNews: [{ title: 'Connect Brave API for live data', source: 'System', url: '#' }],
       table: [
         { position: 1, team: 'Liverpool', played: 24, won: 18, points: 60, form: 'WWWDW' },
