@@ -359,14 +359,34 @@ Respond with ONLY a JSON object in this exact format:
   }
 }
 
-// Placeholder calendar function
-async function fetchCalendarEvents() {
-  return {
-    today: { date: new Date().toISOString().split('T')[0], dayName: 'Today', events: [] },
-    tomorrow: { date: new Date(Date.now() + 86400000).toISOString().split('T')[0], dayName: 'Tomorrow', events: [] },
-    connected: false,
-    error: 'Calendar not configured'
-  };
+// Fetch calendar events - requires access token from client
+async function fetchCalendarEvents(accessToken?: string) {
+  if (!accessToken) {
+    return {
+      today: { date: new Date().toISOString(), dayName: 'Today', events: [] },
+      tomorrow: { date: new Date(Date.now() + 86400000).toISOString(), dayName: 'Tomorrow', events: [] },
+      connected: false,
+      error: 'Calendar not connected'
+    };
+  }
+
+  try {
+    // We can't call our own API easily from serverless, so return minimal data
+    // The client will fetch full calendar data directly
+    return {
+      today: { date: new Date().toISOString(), dayName: 'Today', events: [] },
+      tomorrow: { date: new Date(Date.now() + 86400000).toISOString(), dayName: 'Tomorrow', events: [] },
+      connected: true,
+      accessToken
+    };
+  } catch (e) {
+    return {
+      today: { date: new Date().toISOString(), dayName: 'Today', events: [] },
+      tomorrow: { date: new Date(Date.now() + 86400000).toISOString(), dayName: 'Tomorrow', events: [] },
+      connected: false,
+      error: 'Failed to fetch calendar'
+    };
+  }
 }
 
 // Fetch stocks data

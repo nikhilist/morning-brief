@@ -49,17 +49,52 @@ export default function Dashboard() {
   const [data, setData] = useState<BriefingData | null>(null);
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
+  const [calendarToken, setCalendarToken] = useState<string | null>(null);
+
+  // Handle OAuth callback on mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get('access_token');
+    const refreshToken = urlParams.get('refresh_token');
+    const connected = urlParams.get('calendar_connected');
+
+    if (connected && accessToken) {
+      localStorage.setItem('calendar_access_token', accessToken);
+      if (refreshToken) {
+        localStorage.setItem('calendar_refresh_token', refreshToken);
+      }
+      setCalendarToken(accessToken);
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else {
+      // Check localStorage
+      const stored = localStorage.getItem('calendar_access_token');
+      if (stored) setCalendarToken(stored);
+    }
+  }, []);
 
   useEffect(() => {
     fetchData();
     const interval = setInterval(fetchData, 300000);
     return () => clearInterval(interval);
-  }, []);
+  }, [calendarToken]);
 
   const fetchData = async () => {
     try {
       const res = await fetch('/api/briefing');
       const json = await res.json();
+      
+      // If we have calendar token, fetch calendar events
+      if (calendarToken) {
+        try {
+          const calRes = await fetch(`/api/calendar/events?access_token=${calendarToken}`);
+          const calData = await calRes.json();
+          json.calendar = calData;
+        } catch (e) {
+          console.error('Calendar fetch failed:', e);
+        }
+      }
+      
       setData(json);
       setLoading(false);
     } catch (err) {
@@ -133,7 +168,16 @@ export default function Dashboard() {
         </Section>
 
         {/* CALENDAR */}
-        <CalendarSection calendar={data.calendar} darkMode={darkMode} />
+        <CalendarSection
+          calendar={data.calendar}
+          darkMode={darkMode}
+          onDisconnect={() => {
+            localStorage.removeItem('calendar_access_token');
+            localStorage.removeItem('calendar_refresh_token');
+            setCalendarToken(null);
+            fetchData();
+          }}
+        />
 
         {/* ARSENAL */}
         <Section title="⚽ Arsenal FC" darkMode={darkMode}>
@@ -540,7 +584,7 @@ function formatDuration(minutes: number): string {
 }
 
 // Calendar Section Component
-function CalendarSection({ calendar, darkMode }: { calendar: CalendarData; darkMode: boolean }) {
+function CalendarSection({ calendar, darkMode, onDisconnect }: { calendar: CalendarData; darkMode: boolean; onDisconnect?: () => void }) {
   const [authLoading, setAuthLoading] = useState(false);
 
   const handleConnect = async () => {
@@ -652,6 +696,22 @@ function CalendarSection({ calendar, darkMode }: { calendar: CalendarData; darkM
           )}
         </div>
       </div>
+      
+      {/* Disconnect button */}
+      {onDisconnect && (
+        <div className="mt-4 text-right">
+          <button
+            onClick={onDisconnect}
+            className={`text-sm px-4 py-2 rounded-lg transition-colors ${
+              darkMode 
+                ? 'text-gray-400 hover:text-white hover:bg-slate-700' 
+                : 'text-gray-500 hover:text-gray-900 hover:bg-gray-200'
+            }`}
+          >
+            Disconnect Calendar
+          </button>
+        </div>
+      )}
     </Section>
   );
 }
