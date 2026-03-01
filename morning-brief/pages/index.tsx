@@ -600,7 +600,7 @@ export default function Dashboard() {
   if (!data) return null;
 
   return (
-    <div className={`min-h-screen overflow-y-auto transition-colors duration-500 ${darkMode ? 'bg-[#0A0A0F]' : 'bg-[#F8F8FA]'}`}>
+    <div className={`min-h-screen transition-colors duration-500 ${darkMode ? 'bg-[#0A0A0F]' : 'bg-[#F8F8FA]'}`}>
       <Header 
         darkMode={darkMode} 
         setDarkMode={setDarkMode} 

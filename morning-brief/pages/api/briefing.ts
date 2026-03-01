@@ -160,12 +160,40 @@ async function fetchArsenalData(): Promise<ArsenalData> {
       if (oppMatch) opponent = oppMatch[1].trim();
     }
     
-    const upcomingMatches = fixtures.slice(0, 3).map((f: any) => ({
-      opponent: f.title?.match(/vs\s+([A-Za-z\s]+?)(?:\s|$|\d)/i)?.[1]?.trim() || 'TBC',
-      date: f.title?.match(/(\w+day|\d+\s+\w+|\w+\s+\d+)/i)?.[1] || 'TBD',
-      competition: f.title?.includes('Premier League') ? 'Premier League' : 
-                   f.title?.includes('Champions League') ? 'Champions League' : 'TBC'
-    }));
+    // Filter out fixture results that look like season/schedule pages (contain year patterns)
+    const validFixtures = fixtures.filter((f: any) => {
+      const title = f.title || '';
+      // Skip if it looks like a season overview page
+      if (/202\d-2\d/.test(title)) return false;
+      if (/schedule.*202\d/i.test(title)) return false;
+      if (/season\s*202\d/i.test(title)) return false;
+      return title.toLowerCase().includes('vs') || title.toLowerCase().includes('v ');
+    });
+
+    const upcomingMatches = validFixtures.slice(0, 3).map((f: any) => {
+      const title = f.title || '';
+      // Try to extract opponent - look for "vs TEAM" or "Arsenal vs TEAM" or "TEAM vs Arsenal"
+      let opponent = 'TBC';
+      const vsMatch = title.match(/(?:Arsenal\s+)?vs\.?\s+([A-Z][a-zA-Z\s]+?)(?:\s+\d|$|\s+\||\s+-|\s+at\s+)/i);
+      const vsBefore = title.match(/([A-Z][a-zA-Z\s]+?)\s+vs\.?\s+(?:Arsenal|$)/i);
+      if (vsMatch) opponent = vsMatch[1].trim();
+      else if (vsBefore) opponent = vsBefore[1].trim();
+      
+      // Date extraction - look for actual date patterns, not random fragments
+      let date = 'TBD';
+      const dayMatch = title.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/i);
+      const monthDateMatch = title.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2}/i);
+      if (dayMatch) date = dayMatch[1];
+      else if (monthDateMatch) date = monthDateMatch[0];
+      
+      let competition = 'TBC';
+      if (title.includes('Premier League')) competition = 'Premier League';
+      else if (title.includes('Champions League')) competition = 'Champions League';
+      else if (title.includes('FA Cup')) competition = 'FA Cup';
+      else if (title.includes('Carabao') || title.includes('League Cup')) competition = 'League Cup';
+      
+      return { opponent, date, competition };
+    });
     
     const trendingNews = news.slice(0, 3).map((n: any) => ({
       title: n.title,
