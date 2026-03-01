@@ -378,7 +378,7 @@ const StocksSection = ({ data, darkMode }: { data: any; darkMode: boolean }) => 
   if (!data?.categories) return null;
 
   return (
-    <Card darkMode={darkMode} className="lg:col-span-3">
+    <Card darkMode={darkMode}>
       <div className="p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -430,7 +430,7 @@ const StocksSection = ({ data, darkMode }: { data: any; darkMode: boolean }) => 
 const CalendarSection = ({ data, darkMode, onConnect }: { data: CalendarData; darkMode: boolean; onConnect: () => void }) => {
   if (!data.connected) {
     return (
-      <Card darkMode={darkMode} className="lg:col-span-3">
+      <Card darkMode={darkMode}>
         <div className="p-6 text-center">
           <CalendarIcon className={`w-12 h-12 mx-auto mb-3 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`} />
           <p className={`text-sm font-medium mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Connect Calendar</p>
@@ -452,7 +452,7 @@ const CalendarSection = ({ data, darkMode, onConnect }: { data: CalendarData; da
   };
 
   return (
-    <Card darkMode={darkMode} className="lg:col-span-3">
+    <Card darkMode={darkMode}>
       <div className="p-5">
         <div className="flex items-center gap-2 mb-4">
           <CalendarIcon className={`w-4 h-4 ${darkMode ? 'text-purple-400' : 'text-purple-500'}`} />
@@ -519,7 +519,7 @@ const RedditSection = ({ data, darkMode }: { data: any[]; darkMode: boolean }) =
   if (!data?.length) return null;
 
   return (
-    <Card darkMode={darkMode} className="lg:col-span-3">
+    <Card darkMode={darkMode}>
       <div className="p-5">
         <div className="flex items-center gap-2 mb-4">
           <Flame className={`w-4 h-4 ${darkMode ? 'text-orange-400' : 'text-orange-500'}`} />
@@ -599,7 +599,7 @@ const BlueskySection = ({ data, darkMode }: { data: any; darkMode: boolean }) =>
 
 // Strategy Section
 const StrategySection = ({ data, darkMode, insightsSource }: { data: any; darkMode: boolean; insightsSource: string }) => (
-  <Card darkMode={darkMode} className="lg:col-span-3">
+  <Card darkMode={darkMode}>
     <div className="p-5">
       <div className="flex items-center gap-2 mb-4">
         <Brain className={`w-4 h-4 ${darkMode ? 'text-purple-400' : 'text-purple-500'}`} />
@@ -768,18 +768,22 @@ export default function Dashboard() {
       />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Row 1 */}
-          <WeatherSection data={data.weather} darkMode={darkMode} />
-          <ArsenalSection data={data.arsenal} darkMode={darkMode} />
-          <CryptoSection data={data.crypto} darkMode={darkMode} />
+        <div className="space-y-4">
+          {/* Row 1 - 3 columns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <WeatherSection data={data.weather} darkMode={darkMode} />
+            <ArsenalSection data={data.arsenal} darkMode={darkMode} />
+            <CryptoSection data={data.crypto} darkMode={darkMode} />
+          </div>
 
-          {/* Row 2 */}
-          <TradFiSection data={data.tradfi} darkMode={darkMode} />
-          <BlueskySection data={data.bluesky} darkMode={darkMode} />
-          <div className="hidden lg:block" />
+          {/* Row 2 - 3 columns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <TradFiSection data={data.tradfi} darkMode={darkMode} />
+            <BlueskySection data={data.bluesky} darkMode={darkMode} />
+            <div className="hidden md:block" />
+          </div>
 
-          {/* Row 3 - Full Width Sections */}
+          {/* Full width sections */}
           <StocksSection data={data.stocks} darkMode={darkMode} />
           <RedditSection data={data.reddit} darkMode={darkMode} />
           <CalendarSection
