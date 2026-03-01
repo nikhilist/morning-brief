@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import yahooFinance from 'yahoo-finance2';
+import yf from 'yahoo-finance2';
+const yahooFinance = yf.default;
 
 const BRAVE_API_KEY = process.env.BRAVE_API_KEY?.trim();
 
