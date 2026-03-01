@@ -223,77 +223,93 @@ async function fetchArsenalData(): Promise<ArsenalData> {
         lastScore = 'DRAW';
       }
 
-      // Extract opponent from title (prioritize "vs TEAM" or "beat TEAM")
-      const vsMatch = title.match(/(?:Arsenal\s+)?(?:vs\.?|beat)\s+([A-Z][a-zA-Z\s]+?)(?:\s+\d|$|\s+to\s+|\s+in\s+|\s+-|\s+at\s+)/i);
-      if (vsMatch) opponent = vsMatch[1].trim();
-      else {
-        // Fallback: look for "Chelsea" or other team names in title
-        const teamMatch = title.match(/Arsenal\s+(?:vs\.?|beat)\s+([A-Z][a-zA-Z]+)/i);
-        if (teamMatch) opponent = teamMatch[1].trim();
+      // Extract opponent from title - look for common team names or patterns
+      const titleLower = title.toLowerCase();
+      
+      // Common opponent patterns in headlines
+      const commonTeams = ['Chelsea', 'Liverpool', 'Man City', 'Manchester City', 'Man United', 'Manchester United', 
+        'Tottenham', 'Spurs', 'Newcastle', 'Aston Villa', 'West Ham', 'Brighton', 'Wolves', 'Crystal Palace', 
+        'Brentford', 'Fulham', 'Everton', 'Nottm Forest', 'Bournemouth', 'Luton', 'Burnley', 'Sheffield Utd',
+        'Real Madrid', 'Barcelona', 'Bayern', 'PSG', 'Inter', 'AC Milan', 'Juventus', 'Porto', 'Benfica'];
+      
+      for (const team of commonTeams) {
+        if (titleLower.includes(team.toLowerCase())) {
+          opponent = team;
+          break;
+        }
+      }
+      
+      // If no common team found, try regex patterns
+      if (opponent === 'Opponent') {
+        // Look for "beat X" or "vs X" patterns, excluding common non-team words
+        const beatMatch = title.match(/(?:beat|defeat(?:ed)?)\s+(?:10-man\s+)?([A-Z][a-zA-Z\s]+?)(?:\s+(?:to|in|at|with|on|–|-|\d)|$)/i);
+        if (beatMatch) {
+          opponent = beatMatch[1].trim();
+        } else {
+          const vsMatch = title.match(/(?:Arsenal\s+)?vs\.?\s+(?:10-man\s+)?([A-Z][a-zA-Z\s]+?)(?:\s+[:\d\-]|$)/i);
+          if (vsMatch) opponent = vsMatch[1].trim();
+        }
       }
     }
     
-    // Fetch proper upcoming fixtures - search for specific match previews
+    // Fetch upcoming fixtures from football-data.org (free tier includes fixtures)
     let upcomingMatches: any[] = [];
     try {
+      const headers: any = {};
+      if (FOOTBALL_DATA_API_KEY) {
+        headers['X-Auth-Token'] = FOOTBALL_DATA_API_KEY;
+      }
+      
+      // Get upcoming matches for Arsenal (team ID 57)
       const fixturesRes = await axios.get(
-        `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent('Arsenal next match preview vs opponent 2026')}&count=5`,
-        {
-          headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' },
-          timeout: 8000
-        }
+        'https://api.football-data.org/v4/teams/57/matches?status=SCHEDULED&limit=3',
+        { headers, timeout: 8000 }
       );
-
-      const fixtures = fixturesRes.data?.web?.results || [];
-
-      // Filter out schedule/season pages and find actual match previews
-      const validFixtures = fixtures.filter((f: any) => {
-        const title = f.title || '';
-        const desc = f.description || '';
-        // Skip season overview pages
-        if (/202\d-2\d/.test(title)) return false;
-        if (/schedule.*202\d/i.test(title)) return false;
-        if (/season\s*202\d/i.test(title)) return false;
-        if (/premier league table/i.test(title)) return false;
-        // Look for actual match previews with vs
-        return (title.toLowerCase().includes('vs') || title.toLowerCase().includes('v ')) &&
-               (title.toLowerCase().includes('preview') || title.toLowerCase().includes('next') ||
-                desc.toLowerCase().includes('kick off') || desc.toLowerCase().includes('fixture'));
-      });
-
-      upcomingMatches = validFixtures.slice(0, 3).map((f: any) => {
-        const title = f.title || '';
-        let opponent = 'TBC';
-
-        // Extract opponent from "Arsenal vs TEAM" or "TEAM vs Arsenal"
-        const vsMatch = title.match(/Arsenal\s+(?:vs\.?|v)\s+([A-Z][a-zA-Z\s]+?)(?:\s+\||\s+-|\s+preview|\s+at\s+|\s+202\d|$)/i);
-        const vsBefore = title.match(/([A-Z][a-zA-Z\s]+?)\s+(?:vs\.?|v)\s+Arsenal/i);
-
-        if (vsMatch) opponent = vsMatch[1].trim();
-        else if (vsBefore) opponent = vsBefore[1].trim();
-
-        // Extract date from description if available
-        let date = 'TBD';
-        const desc = f.description || '';
-        const dayMatch = desc.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+(\w+\s+\d{1,2})/i);
-        const shortDayMatch = desc.match(/(Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*\s+(\w+\s+\d{1,2})/i);
-
-        if (dayMatch) date = `${dayMatch[1]} ${dayMatch[2]}`;
-        else if (shortDayMatch) date = `${shortDayMatch[1]} ${shortDayMatch[2]}`;
-
-        // Competition detection
-        let competition = 'TBC';
-        const checkText = (title + ' ' + desc).toLowerCase();
-        if (checkText.includes('premier league')) competition = 'Premier League';
-        else if (checkText.includes('champions league')) competition = 'Champions League';
-        else if (checkText.includes('fa cup')) competition = 'FA Cup';
-        else if (checkText.includes('carabao') || checkText.includes('league cup')) competition = 'League Cup';
-        else if (checkText.includes('europa')) competition = 'Europa League';
-
-        return { opponent, date, competition };
+      
+      const matches = fixturesRes.data?.matches || [];
+      upcomingMatches = matches.slice(0, 3).map((match: any) => {
+        const isHome = match.homeTeam.id === 57;
+        const opponent = isHome ? match.awayTeam.shortName : match.homeTeam.shortName;
+        const matchDate = new Date(match.utcDate);
+        const dateStr = matchDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        const competition = match.competition.name === 'Premier League' ? 'Premier League' : 
+                           match.competition.name === 'UEFA Champions League' ? 'Champions League' : 
+                           match.competition.name;
+        
+        return { 
+          opponent, 
+          date: dateStr, 
+          competition,
+          homeAway: isHome ? 'H' : 'A'
+        };
       });
     } catch (e) {
-      console.log('Fixture fetch failed:', e);
+      console.log('Football-data fixtures fetch failed:', e);
+      // Fallback to search-based approach
+      try {
+        const searchRes = await axios.get(
+          `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent('Arsenal fixtures upcoming matches premier league')}&count=5`,
+          {
+            headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' },
+            timeout: 8000
+          }
+        );
+        
+        const results = searchRes.data?.web?.results || [];
+        for (const result of results) {
+          const title = result.title || '';
+          const commonTeams = ['Chelsea', 'Liverpool', 'Man City', 'Tottenham', 'Newcastle', 'Aston Villa', 'West Ham'];
+          for (const team of commonTeams) {
+            if (title.toLowerCase().includes(team.toLowerCase()) && title.toLowerCase().includes('arsenal')) {
+              upcomingMatches.push({ opponent: team, date: 'TBC', competition: 'Premier League' });
+              break;
+            }
+          }
+          if (upcomingMatches.length >= 2) break;
+        }
+      } catch (e2) {
+        console.log('Fallback fixture search failed:', e2);
+      }
     }
     
     // Get trending news from main search
