@@ -503,6 +503,7 @@ export default function Dashboard() {
 
   // Handle OAuth callback
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get('access_token');
     const connected = urlParams.get('calendar_connected');
@@ -519,25 +520,31 @@ export default function Dashboard() {
 
   // Load dark mode preference
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const saved = localStorage.getItem('darkMode');
     if (saved !== null) setDarkMode(saved === 'true');
   }, []);
 
   // Save dark mode preference
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     localStorage.setItem('darkMode', String(darkMode));
   }, [darkMode]);
 
   const fetchData = async () => {
     try {
       const res = await fetch('/api/briefing');
+      if (!res.ok) throw new Error('API error');
       const json = await res.json();
       
-      if (calendarToken) {
+      // Only fetch calendar if we have a token and are on client
+      if (calendarToken && typeof window !== 'undefined') {
         try {
           const calRes = await fetch(`/api/calendar/events?access_token=${calendarToken}`);
-          const calData = await calRes.json();
-          json.calendar = calData;
+          if (calRes.ok) {
+            const calData = await calRes.json();
+            json.calendar = calData;
+          }
         } catch (e) {
           console.error('Calendar fetch failed:', e);
         }
@@ -547,6 +554,20 @@ export default function Dashboard() {
       setLastUpdated(new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }));
     } catch (err) {
       console.error('Failed to fetch:', err);
+      // Set fallback data so UI still renders
+      setData({
+        weather: { temp: 0, condition: 'Loading...', high: 0, low: 0, humidity: '0', wind: '0', precip: '0%', forecast: [], insights: { immediate: '', todayStrategy: '', tomorrowAnchor: '' } },
+        arsenal: { lastMatch: { score: '-', opponent: '', headline: '' }, upcoming: [], injuries: [], trendingNews: [], table: [] },
+        crypto: { prices: {}, sentiment: '', metrics: [], insights: { macroContext: '', smartMoneySignals: '', contrarianSetup: '' } },
+        tradfi: { marketContext: {}, macroThemes: [] },
+        reddit: [],
+        bluesky: { handle: '', followsCount: 0 },
+        viral: [],
+        calendar: { today: { date: '', dayName: '', events: [] }, tomorrow: { date: '', dayName: '', events: [] }, connected: false },
+        stocks: null,
+        strategy: { strategicAssessment: '', blindspots: [], opportunities: [], patternAnalysis: '' },
+        meta: { generatedAt: new Date().toISOString(), version: '3.2.0', insightsSource: 'template' }
+      });
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -565,6 +586,7 @@ export default function Dashboard() {
   };
 
   const handleCalendarConnect = async () => {
+    if (typeof window === 'undefined') return;
     try {
       const res = await fetch('/api/calendar/auth');
       const data = await res.json();
