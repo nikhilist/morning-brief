@@ -1,7 +1,35 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Cloud, Trophy, TrendingUp, DollarSign, Flame, Brain, RefreshCw, Moon, Sun, Wind, Droplets, Globe, MapPin } from 'lucide-react';
+import { Cloud, Trophy, TrendingUp, DollarSign, Flame, Brain, RefreshCw, Moon, Sun, Wind, Droplets, Globe, MapPin, BarChart3, TrendingDown, Activity, Calendar as CalendarIcon, Clock, Video, MapPin as LocationIcon, ExternalLink, Link2 } from 'lucide-react';
+
+interface CalendarEvent {
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+  duration: number;
+  location?: string;
+  meetLink?: string;
+  description?: string;
+  organizer?: string;
+  attendees?: string[];
+  isAllDay: boolean;
+  status: string;
+}
+
+interface CalendarDay {
+  date: string;
+  dayName: string;
+  events: CalendarEvent[];
+}
+
+interface CalendarData {
+  today: CalendarDay;
+  tomorrow: CalendarDay;
+  connected: boolean;
+  error?: string;
+}
 
 interface BriefingData {
   weather: any;
@@ -12,6 +40,8 @@ interface BriefingData {
   bluesky: any;
   viral: any[];
   strategy: any;
+  stocks: any;
+  calendar: CalendarData;
   meta: any;
 }
 
@@ -101,6 +131,9 @@ export default function Dashboard() {
             </div>
           </div>
         </Section>
+
+        {/* CALENDAR */}
+        <CalendarSection calendar={data.calendar} darkMode={darkMode} />
 
         {/* ARSENAL */}
         <Section title="⚽ Arsenal FC" darkMode={darkMode}>
@@ -258,6 +291,92 @@ export default function Dashboard() {
           </div>
         </Section>
 
+        {/* STOCK WATCHLIST */}
+        <Section title="📊 Stock Watchlist" darkMode={darkMode}>
+          <div className="space-y-6">
+            {/* Summary Stats */}
+            {data.stocks?.summary && (
+              <div className="grid grid-cols-4 gap-4">
+                <div className={`p-4 rounded-xl text-center ${darkMode ? 'bg-slate-800' : 'bg-white'}`}>
+                  <p className={`text-3xl font-bold ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>{data.stocks.summary.totalStocks}</p>
+                  <p className="text-sm text-gray-500 mt-1">Total</p>
+                </div>
+                <div className={`p-4 rounded-xl text-center ${darkMode ? 'bg-slate-800' : 'bg-white'}`}>
+                  <p className="text-3xl font-bold text-green-500">{data.stocks.summary.gainers}</p>
+                  <p className="text-sm text-gray-500 mt-1">Gainers</p>
+                </div>
+                <div className={`p-4 rounded-xl text-center ${darkMode ? 'bg-slate-800' : 'bg-white'}`}>
+                  <p className="text-3xl font-bold text-red-500">{data.stocks.summary.losers}</p>
+                  <p className="text-sm text-gray-500 mt-1">Losers</p>
+                </div>
+                <div className={`p-4 rounded-xl text-center ${darkMode ? 'bg-slate-800' : 'bg-white'}`}>
+                  <p className={`text-3xl font-bold ${data.stocks.summary.avgChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                    {data.stocks.summary.avgChange >= 0 ? '+' : ''}{data.stocks.summary.avgChange.toFixed(2)}%
+                  </p>
+                  <p className="text-sm text-gray-500 mt-1">Avg Change</p>
+                </div>
+              </div>
+            )}
+
+            {/* Stock Categories */}
+            <div className="grid lg:grid-cols-2 gap-6">
+              {data.stocks?.categories?.map((category: any, idx: number) => (
+                <div key={idx} className={`p-6 rounded-xl ${darkMode ? 'bg-slate-800' : 'bg-white'}`}>
+                  <div className="flex items-center gap-2 mb-4">
+                    <BarChart3 className={`w-5 h-5 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+                    <h3 className="font-semibold text-lg">{category.name}</h3>
+                  </div>
+                  <div className="space-y-3">
+                    {category.stocks.map((stock: any, i: number) => (
+                      <div key={i} className={`p-4 rounded-lg ${darkMode ? 'bg-slate-700/50' : 'bg-gray-100'} hover:opacity-80 transition-opacity`}>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-lg">{stock.symbol}</span>
+                              <span className={`text-xs px-2 py-0.5 rounded ${darkMode ? 'bg-slate-600 text-gray-300' : 'bg-gray-200 text-gray-600'}`}>
+                                {stock.name}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-500 mt-1">
+                              Vol: {(stock.volume / 1000000).toFixed(1)}M
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-xl">${stock.price.toFixed(2)}</p>
+                            <div className={`flex items-center gap-1 justify-end ${stock.changePercent >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                              {stock.changePercent >= 0 ? (
+                                <TrendingUp className="w-4 h-4" />
+                              ) : (
+                                <TrendingDown className="w-4 h-4" />
+                              )}
+                              <span className="font-semibold">
+                                {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                              </span>
+                            </div>
+                            <p className={`text-sm ${stock.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                              {stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+                        {/* Mini sparkline bar */}
+                        <div className="mt-3 flex items-center gap-2">
+                          <div className={`flex-1 h-2 rounded-full ${darkMode ? 'bg-slate-600' : 'bg-gray-300'} overflow-hidden`}>
+                            <div 
+                              className={`h-full rounded-full ${stock.changePercent >= 0 ? 'bg-gradient-to-r from-green-500 to-green-400' : 'bg-gradient-to-r from-red-500 to-red-400'}`}
+                              style={{ width: `${Math.min(Math.abs(stock.changePercent) * 5, 100)}%` }}
+                            />
+                          </div>
+                          <Activity className={`w-4 h-4 ${stock.changePercent >= 0 ? 'text-green-500' : 'text-red-500'}`} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Section>
+
         {/* REDDIT RADAR */}
         <Section title="👽 Reddit Radar — Your Communities" darkMode={darkMode}>
           <div className="grid md:grid-cols-2 gap-6">
@@ -393,6 +512,223 @@ function InsightBox({ title, color, children, darkMode }: { title: string; color
     <div className={`p-5 rounded-xl border-l-4 ${colors[color]} ${darkMode ? 'bg-slate-800' : 'bg-white'}`}>
       <h3 className={`font-semibold text-lg mb-2 text-${color}-400`}>{title}</h3>
       <div className={`text-base leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{children}</div>
+    </div>
+  );
+}
+
+// Format time helper
+function formatTime(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+}
+
+// Format duration helper
+function formatDuration(minutes: number): string {
+  if (minutes < 60) {
+    return `${minutes} min`;
+  }
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  if (mins === 0) {
+    return `${hours} hr${hours > 1 ? 's' : ''}`;
+  }
+  return `${hours} hr${hours > 1 ? 's' : ''} ${mins} min`;
+}
+
+// Calendar Section Component
+function CalendarSection({ calendar, darkMode }: { calendar: CalendarData; darkMode: boolean }) {
+  const [authLoading, setAuthLoading] = useState(false);
+
+  const handleConnect = async () => {
+    setAuthLoading(true);
+    try {
+      const res = await fetch('/api/calendar/auth');
+      const data = await res.json();
+      if (data.authUrl) {
+        window.location.href = data.authUrl;
+      } else {
+        alert(data.error || 'Failed to get auth URL');
+      }
+    } catch (err) {
+      alert('Failed to initiate authentication');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  // Not connected state
+  if (!calendar.connected) {
+    return (
+      <Section title="📅 Schedule — Your Calendar" darkMode={darkMode}>
+        <div className={`p-8 rounded-xl text-center ${darkMode ? 'bg-slate-800' : 'bg-white'}`}>
+          <div className="mb-4">
+            <CalendarIcon className={`w-16 h-16 mx-auto mb-4 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`} />
+            <h3 className="text-xl font-semibold mb-2">Connect Your Calendar</h3>
+            <p className={`max-w-md mx-auto ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              {calendar.error || 'Link your Google Calendar to see today and tomorrow\'s events, video calls, and schedule at a glance.'}
+            </p>
+          </div>
+          <button
+            onClick={handleConnect}
+            disabled={authLoading}
+            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-500 text-white rounded-lg font-semibold transition-colors flex items-center gap-2 mx-auto"
+          >
+            {authLoading ? (
+              <>
+                <RefreshCw className="w-5 h-5 animate-spin" />
+                Connecting...
+              </>
+            ) : (
+              <>
+                <ExternalLink className="w-5 h-5" />
+                Connect Google Calendar
+              </>
+            )}
+          </button>
+        </div>
+      </Section>
+    );
+  }
+
+  const todayEvents = calendar.today?.events || [];
+  const tomorrowEvents = calendar.tomorrow?.events || [];
+  const todayDate = calendar.today?.date ? new Date(calendar.today.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) : 'Today';
+  const tomorrowDate = calendar.tomorrow?.date ? new Date(calendar.tomorrow.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) : 'Tomorrow';
+
+  return (
+    <Section title="📅 Schedule — Your Calendar" darkMode={darkMode}>
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Today */}
+        <div className={`p-6 rounded-xl ${darkMode ? 'bg-slate-800' : 'bg-white'}`}>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-lg flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-blue-500"></span>
+              {todayDate}
+            </h3>
+            <span className={`text-sm px-3 py-1 rounded-full ${darkMode ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-600'}`}>
+              {todayEvents.length} events
+            </span>
+          </div>
+          
+          {todayEvents.length === 0 ? (
+            <div className={`p-6 text-center rounded-lg ${darkMode ? 'bg-slate-700/30' : 'bg-gray-100'}`}>
+              <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>No events scheduled for today</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {todayEvents.map((event) => (
+                <EventCard key={event.id} event={event} darkMode={darkMode} />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Tomorrow */}
+        <div className={`p-6 rounded-xl ${darkMode ? 'bg-slate-800' : 'bg-white'}`}>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-lg flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-purple-500"></span>
+              {tomorrowDate}
+            </h3>
+            <span className={`text-sm px-3 py-1 rounded-full ${darkMode ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-600'}`}>
+              {tomorrowEvents.length} events
+            </span>
+          </div>
+          
+          {tomorrowEvents.length === 0 ? (
+            <div className={`p-6 text-center rounded-lg ${darkMode ? 'bg-slate-700/30' : 'bg-gray-100'}`}>
+              <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>No events scheduled for tomorrow</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {tomorrowEvents.map((event) => (
+                <EventCard key={event.id} event={event} darkMode={darkMode} />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+// Event Card Component
+function EventCard({ event, darkMode }: { event: CalendarEvent; darkMode: boolean }) {
+  const isHappeningNow = () => {
+    const now = new Date();
+    const start = new Date(event.start);
+    const end = new Date(event.end);
+    return now >= start && now <= end;
+  };
+
+  const happeningNow = isHappeningNow();
+
+  return (
+    <div className={`p-4 rounded-lg border-l-4 transition-all ${
+      happeningNow 
+        ? 'border-green-500 ' + (darkMode ? 'bg-green-900/20' : 'bg-green-50') 
+        : 'border-blue-500 ' + (darkMode ? 'bg-slate-700/50' : 'bg-gray-100')
+    }`}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1 min-w-0">
+          <h4 className="font-semibold text-base truncate" title={event.title}>
+            {event.title}
+          </h4>
+          
+          <div className="flex flex-wrap items-center gap-3 mt-2 text-sm">
+            {/* Time */}
+            <div className={`flex items-center gap-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              <Clock className="w-4 h-4" />
+              {event.isAllDay ? (
+                <span>All day</span>
+              ) : (
+                <span>
+                  {formatTime(event.start)} - {formatTime(event.end)}
+                  <span className="ml-2 text-xs opacity-70">({formatDuration(event.duration)})</span>
+                </span>
+              )}
+            </div>
+            
+            {happeningNow && (
+              <span className="text-xs px-2 py-0.5 rounded bg-green-500 text-white font-medium">
+                NOW
+              </span>
+            )}
+          </div>
+          
+          {/* Location */}
+          {event.location && (
+            <div className={`flex items-center gap-1 mt-2 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              <LocationIcon className="w-4 h-4" />
+              <span className="truncate">{event.location}</span>
+            </div>
+          )}
+          
+          {/* Attendees */}
+          {event.attendees && event.attendees.length > 0 && (
+            <div className={`flex items-center gap-1 mt-1 text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+              <span>{event.attendees.length} attendee{event.attendees.length > 1 ? 's' : ''}</span>
+            </div>
+          )}
+        </div>
+        
+        {/* Meet Link */}
+        {event.meetLink && (
+          <a
+            href={event.meetLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors whitespace-nowrap"
+          >
+            <Video className="w-4 h-4" />
+            Join
+          </a>
+        )}
+      </div>
     </div>
   );
 }

@@ -3,9 +3,58 @@ import axios from 'axios';
 
 const BRAVE_API_KEY = process.env.BRAVE_API_KEY?.trim();
 const FOOTBALL_DATA_API_KEY = process.env.FOOTBALL_DATA_API_KEY?.trim();
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY?.trim();
+
+// Types
+interface WeatherData {
+  temp: number;
+  condition: string;
+  high: number;
+  low: number;
+  humidity: string;
+  wind: string;
+  precip: string;
+  forecast: string[];
+}
+
+interface CryptoData {
+  prices: {
+    bitcoin: { price: string; change: string; up: boolean };
+    ethereum: { price: string; change: string; up: boolean };
+    solana: { price: string; change: string; up: boolean };
+  };
+  sentiment: string;
+  metrics: Array<{ label: string; value: string; note: string }>;
+}
+
+interface ArsenalData {
+  lastMatch: {
+    score: string;
+    opponent: string;
+    headline: string;
+    description?: string;
+    url?: string;
+  };
+  upcoming: Array<{ opponent: string; date: string; competition: string }>;
+  injuries: Array<{ player: string; status: string; notes: string }>;
+  trendingNews: Array<{ title: string; source: string; url: string }>;
+  table: Array<{ position: number; team: string; played: number; won: number; points: number; form: string }>;
+}
+
+interface RedditPost {
+  title: string;
+  score: number;
+  comments: number;
+  url: string;
+}
+
+interface RedditData {
+  subreddit: string;
+  posts: RedditPost[];
+}
 
 // Helper functions
-async function fetchWeather() {
+async function fetchWeather(): Promise<WeatherData> {
   try {
     const res = await axios.get('https://wttr.in/Princeton,NJ?format=j1', { timeout: 5000 });
     const current = res.data.current_condition[0];
@@ -21,11 +70,11 @@ async function fetchWeather() {
       forecast: forecast.map((d: any) => `${new Date(d.date).toLocaleDateString('en-US', { weekday: 'short' })}: ${d.weatherDesc[0].value}, ${d.maxtempF}°/${d.mintempF}°`)
     };
   } catch (e) {
-    return { temp: 35, condition: 'Mist', high: 43, low: 34, humidity: 96, wind: 6, precip: '70%', forecast: ['Sat: Rain 43°/34°', 'Sun: Snow 36°/28°', 'Mon: Clear 41°/32°'] };
+    return { temp: 35, condition: 'Mist', high: 43, low: 34, humidity: '96', wind: '6', precip: '70%', forecast: ['Sat: Rain 43°/34°', 'Sun: Snow 36°/28°', 'Mon: Clear 41°/32°'] };
   }
 }
 
-async function fetchCryptoPrices() {
+async function fetchCryptoPrices(): Promise<CryptoData> {
   try {
     const res = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true', { timeout: 5000 });
     const fmt = (n: number, chg: number) => ({ price: '$' + n.toLocaleString(), change: (chg > 0 ? '+' : '') + chg.toFixed(2) + '%', up: chg > 0 });
@@ -43,7 +92,7 @@ async function fetchCryptoPrices() {
   }
 }
 
-async function fetchRedditPosts() {
+async function fetchRedditPosts(): Promise<RedditData[]> {
   const subreddits = ['memes', 'soccer', 'Gunners', 'frugalmalefashion', 'malefashionadvice', 'wallstreetbets', 'technology', 'india'];
   try {
     const posts = await Promise.all(subreddits.map(async (sub) => {
@@ -61,13 +110,12 @@ async function fetchBlueskyFeed() {
   return { handle, followsCount: 351, timeline: [], summary: `Connected as @${handle}. You follow 351 accounts.`, profileUrl: `https://bsky.app/profile/${handle}`, feedUrl: `https://bsky.app/profile/${handle}/follows` };
 }
 
-async function fetchArsenalData() {
+async function fetchArsenalData(): Promise<ArsenalData> {
   try {
     if (!BRAVE_API_KEY) {
       throw new Error('No API key');
     }
     
-    // Fetch real Arsenal news
     const [newsRes, fixturesRes] = await Promise.all([
       axios.get(`https://api.search.brave.com/res/v1/news/search?q=${encodeURIComponent('Arsenal FC latest result match')}&count=5`, {
         headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' }, timeout: 8000
@@ -80,7 +128,6 @@ async function fetchArsenalData() {
     const news = newsRes?.data?.results || [];
     const fixtures = fixturesRes?.data?.web?.results || [];
     
-    // Find match result
     const resultNews = news.find((n: any) => {
       const title = n.title?.toLowerCase() || '';
       return title.includes('arsenal') && 
@@ -88,7 +135,6 @@ async function fetchArsenalData() {
          title.includes('defeat') || title.includes('draw') || title.match(/\d+\s*[-–—]\s*\d+/));
     });
     
-    // Extract score
     let lastScore = '-';
     let opponent = 'Opponent';
     if (resultNews) {
@@ -107,7 +153,6 @@ async function fetchArsenalData() {
       if (oppMatch) opponent = oppMatch[1].trim();
     }
     
-    // Parse fixtures
     const upcomingMatches = fixtures.slice(0, 3).map((f: any) => ({
       opponent: f.title?.match(/vs\s+([A-Za-z\s]+?)(?:\s|$|\d)/i)?.[1]?.trim() || 'TBC',
       date: f.title?.match(/(\w+day|\d+\s+\w+|\w+\s+\d+)/i)?.[1] || 'TBD',
@@ -115,14 +160,12 @@ async function fetchArsenalData() {
                    f.title?.includes('Champions League') ? 'Champions League' : 'TBC'
     }));
     
-    // Trending news
     const trendingNews = news.slice(0, 3).map((n: any) => ({
       title: n.title,
       source: n.source,
       url: n.url
     }));
     
-    // Fetch REAL Premier League table from football-data.org
     let tableData = [];
     try {
       const headers: any = {};
@@ -146,7 +189,6 @@ async function fetchArsenalData() {
       }));
     } catch (e: any) {
       console.log('Football-data API error:', e?.message);
-      // Fallback to static data if API fails
       tableData = [
         { position: 1, team: 'Liverpool', played: 24, won: 18, points: 60, form: 'WWWDW' },
         { position: 2, team: 'Arsenal', played: 24, won: 14, points: 47, form: 'WWDLW' },
@@ -201,8 +243,13 @@ function generateTradfiUpdate() {
   };
 }
 
-function generateDailyInsights({ dayName, isWeekend, weather, crypto, redditData, blueskyData }: any) {
+// Template-based fallback insights generator
+function generateTemplateInsights({ dayName, isWeekend, weather, crypto, redditData, arsenalData }: any) {
   const btcUp = crypto?.prices?.bitcoin?.up ?? false;
+  const arsenalWon = arsenalData?.lastMatch?.score?.includes('WIN') || 
+    (arsenalData?.lastMatch?.score?.match && arsenalData?.lastMatch?.score?.match(/^\d+-\d+$/) && 
+     parseInt(arsenalData?.lastMatch?.score?.split('-')[0]) > parseInt(arsenalData?.lastMatch?.score?.split('-')[1]));
+  
   return {
     weather: {
       immediate: `It's ${weather?.temp || 35}°F with ${weather?.condition?.toLowerCase() || 'clear'}.`,
@@ -225,6 +272,114 @@ function generateDailyInsights({ dayName, isWeekend, weather, crypto, redditData
   };
 }
 
+// LLM-powered insights generator
+async function generateLLMInsights({ 
+  dayName, 
+  isWeekend, 
+  weather, 
+  crypto, 
+  redditData, 
+  arsenalData,
+  today,
+  stocks
+}: { 
+  dayName: string;
+  isWeekend: boolean;
+  weather: WeatherData;
+  crypto: CryptoData;
+  redditData: RedditData[];
+  arsenalData: ArsenalData;
+  today: Date;
+  stocks?: any;
+}): Promise<any> {
+  // If no OpenAI key, use templates
+  if (!OPENAI_API_KEY) {
+    return generateTemplateInsights({ dayName, isWeekend, weather, crypto, redditData, arsenalData });
+  }
+
+  try {
+    const { default: OpenAI } = await import('openai');
+    const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+
+    const arsenalResult = arsenalData?.lastMatch?.score !== '-' 
+      ? `${arsenalData.lastMatch.score} vs ${arsenalData.lastMatch.opponent}`
+      : 'No recent result';
+    const arsenalPosition = arsenalData?.table?.find((t: any) => t.team?.includes('Arsenal'))?.position || 'unknown';
+    
+    const prompt = `Generate a personalized morning brief for Nik. Context:
+- Location: Princeton, NJ
+- Weather: ${weather.temp}°F, ${weather.condition}, ${weather.precip} chance of rain
+- Day: ${dayName} (${isWeekend ? 'weekend' : 'workday'})
+- Crypto: BTC ${crypto.prices.bitcoin.change}, sentiment: ${crypto.sentiment}
+- Arsenal: Last match ${arsenalResult}, table position: ${arsenalPosition}
+- Reddit trending: ${redditData.slice(0, 2).map(r => r.subreddit).join(', ')}
+- Stocks: ${stocks?.summary ? `${stocks.summary.gainers} up, ${stocks.summary.losers} down` : 'N/A'}
+
+Nik is an Engineering Lead working from home, spouse Meg works in NYC, son Neel is 3 years old. Family is top priority.
+
+Respond with ONLY a JSON object in this exact format:
+{
+  "weather": {
+    "immediate": "1 sentence about current weather",
+    "todayStrategy": "1 sentence advice for the day",
+    "tomorrowAnchor": "1 sentence about tomorrow"
+  },
+  "crypto": {
+    "macroContext": "1 sentence market context",
+    "smartMoneySignals": "1 sentence about what smart money is doing", 
+    "contrarianSetup": "1 sentence contrarian opportunity"
+  },
+  "strategy": {
+    "strategicAssessment": "2-3 sentence daily overview",
+    "blindspots": ["blindspot 1", "blindspot 2", "blindspot 3"],
+    "opportunities": ["opportunity 1", "opportunity 2", "opportunity 3"],
+    "patternAnalysis": "1 sentence about patterns"
+  }
+}`;
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: 'You are a sharp, insightful assistant. Be concise, practical, and slightly witty. Avoid corporate speak.' },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.7,
+      max_tokens: 800
+    });
+
+    const content = completion.choices[0]?.message?.content || '';
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      return JSON.parse(jsonMatch[0]);
+    }
+    throw new Error('No JSON in response');
+  } catch (e) {
+    console.log('LLM failed, using templates:', e);
+    return generateTemplateInsights({ dayName, isWeekend, weather, crypto, redditData, arsenalData });
+  }
+}
+
+// Placeholder calendar function
+async function fetchCalendarEvents() {
+  return {
+    today: { date: new Date().toISOString().split('T')[0], dayName: 'Today', events: [] },
+    tomorrow: { date: new Date(Date.now() + 86400000).toISOString().split('T')[0], dayName: 'Tomorrow', events: [] },
+    connected: false,
+    error: 'Calendar not configured'
+  };
+}
+
+// Fetch stocks data
+async function fetchStocksData() {
+  try {
+    const res = await axios.get('http://localhost:3000/api/stocks', { timeout: 10000 });
+    return res.data;
+  } catch (e) {
+    // Fallback: fetch from same origin
+    return null;
+  }
+}
+
 // Main handler
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -232,11 +387,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
     const isWeekend = today.getDay() === 0 || today.getDay() === 6;
     
-    const [weatherData, cryptoData, redditData, blueskyData, arsenalData] = await Promise.all([
-      fetchWeather(), fetchCryptoPrices(), fetchRedditPosts(), fetchBlueskyFeed(), fetchArsenalData()
+    const [weatherData, cryptoData, redditData, blueskyData, arsenalData, calendarData] = await Promise.all([
+      fetchWeather(), fetchCryptoPrices(), fetchRedditPosts(), fetchBlueskyFeed(), fetchArsenalData(), fetchCalendarEvents()
     ]);
 
-    const insights = generateDailyInsights({ dayName, isWeekend, weather: weatherData, crypto: cryptoData, redditData, blueskyData });
+    // Fetch stocks separately (might be slow)
+    const stocksData = await fetchStocksData().catch(() => null);
+
+    // Generate insights using LLM if available, otherwise templates
+    const insights = await generateLLMInsights({ 
+      dayName, 
+      isWeekend, 
+      weather: weatherData, 
+      crypto: cryptoData, 
+      redditData, 
+      arsenalData,
+      today,
+      stocks: stocksData
+    });
+
     const viralData = await fetchViralTrends();
     
     res.status(200).json({
@@ -247,10 +416,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       reddit: redditData,
       bluesky: blueskyData,
       viral: viralData,
+      calendar: calendarData,
+      stocks: stocksData,
       strategy: insights.strategy,
-      meta: { generatedAt: today.toISOString(), version: '3.0.0' }
+      meta: { 
+        generatedAt: today.toISOString(), 
+        version: '3.2.0',
+        insightsSource: OPENAI_API_KEY ? 'llm' : 'template'
+      }
     });
   } catch (error) {
+    console.error('Briefing generation error:', error);
     res.status(500).json({ error: 'Failed to generate briefing' });
   }
 }
