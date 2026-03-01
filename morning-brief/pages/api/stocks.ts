@@ -64,55 +64,41 @@ export interface StocksResponse {
   };
 }
 
-// Sleep helper for rate limiting
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-// Fetch all stocks with rate limiting (8 calls per minute max)
+// Fetch all stocks - use single batch call (counts as 1 API credit for up to 5 symbols)
+// For more symbols, we need multiple calls but with less delay
 async function fetchAllStocks(): Promise<Map<string, any>> {
   try {
-    // Get all symbols
-    const allSymbols: string[] = [];
-    for (const stocks of Object.values(STOCK_CATEGORIES)) {
-      for (const { symbol } of stocks) {
-        allSymbols.push(symbol);
-      }
-    }
-    
-    // Fetch in batches of 7 with 8 second delay between batches
-    // (7 calls + 8 sec wait = stays under 8/minute limit)
     const stockMap = new Map<string, any>();
-    const batchSize = 7;
     
-    for (let i = 0; i < allSymbols.length; i += batchSize) {
-      const batch = allSymbols.slice(i, i + batchSize);
-      const symbols = batch.join(',');
+    // Fetch each category separately - max 3 symbols per category
+    for (const [categoryName, stocks] of Object.entries(STOCK_CATEGORIES)) {
+      const symbols = stocks.map(s => s.symbol).join(',');
       const url = `https://api.twelvedata.com/quote?symbol=${symbols}&apikey=${TWELVE_DATA_API_KEY}`;
       
-      const res = await fetch(url, { timeout: 15000 } as any);
-      
-      if (!res.ok) {
-        console.error('Twelve Data batch error:', res.status);
-        continue;
-      }
-      
-      const data = await res.json();
-      
-      if (data.status === 'error') {
-        console.error('Twelve Data error:', data.message);
-      } else {
-        // Twelve Data returns either a single object (for 1 symbol) or array (for multiple)
-        const results = Array.isArray(data) ? data : [data];
+      try {
+        const res = await fetch(url, { timeout: 10000 } as any);
         
-        for (const item of results) {
-          if (item.symbol) {
-            stockMap.set(item.symbol, item);
+        if (!res.ok) {
+          console.error(`Twelve Data error for ${categoryName}:`, res.status);
+          continue;
+        }
+        
+        const data = await res.json();
+        
+        if (data.status === 'error') {
+          console.error(`Twelve Data error for ${categoryName}:`, data.message);
+        } else {
+          // Twelve Data returns either a single object (for 1 symbol) or array (for multiple)
+          const results = Array.isArray(data) ? data : [data];
+          
+          for (const item of results) {
+            if (item.symbol) {
+              stockMap.set(item.symbol, item);
+            }
           }
         }
-      }
-      
-      // Wait 8 seconds between batches to respect rate limit
-      if (i + batchSize < allSymbols.length) {
-        await sleep(8000);
+      } catch (e) {
+        console.error(`Failed to fetch ${categoryName}:`, e);
       }
     }
     
