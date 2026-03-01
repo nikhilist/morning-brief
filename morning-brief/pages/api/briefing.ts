@@ -139,14 +139,21 @@ async function fetchArsenalData(): Promise<ArsenalData> {
     let opponent = 'Opponent';
     if (resultNews) {
       const title = resultNews.title || '';
-      const scoreMatch = title.match(/(\d+)\s*[-–—:]\s*(\d+)/);
+      // Look for match scores (1-2 digits on each side, avoid years like 2025-26)
+      const scoreMatch = title.match(/(\d{1,2})\s*[-–—:]\s*(\d{1,2})/);
       if (scoreMatch) {
-        lastScore = `${scoreMatch[1]}-${scoreMatch[2]}`;
-      } else if (title.toLowerCase().includes('victory') || title.toLowerCase().includes('win')) {
+        const first = parseInt(scoreMatch[1]);
+        const second = parseInt(scoreMatch[2]);
+        // Validate it's actually a match score (not a year)
+        if (first <= 20 && second <= 20) {
+          lastScore = `${scoreMatch[1]}-${scoreMatch[2]}`;
+        }
+      }
+      if (lastScore === '-' && (title.toLowerCase().includes('victory') || title.toLowerCase().includes('win'))) {
         lastScore = 'WIN';
-      } else if (title.toLowerCase().includes('defeat')) {
+      } else if (lastScore === '-' && title.toLowerCase().includes('defeat')) {
         lastScore = 'LOSS';
-      } else if (title.toLowerCase().includes('draw')) {
+      } else if (lastScore === '-' && title.toLowerCase().includes('draw')) {
         lastScore = 'DRAW';
       }
       const oppMatch = title.match(/(?:beat|vs|against)\s+([A-Z][a-zA-Z\s]+?)(?:\s|$|\d)/i);
