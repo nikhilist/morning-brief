@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import YahooFinance from 'yahoo-finance2';
-const yahooFinance = new YahooFinance();
 
+const TWELVE_DATA_API_KEY = process.env.TWELVE_DATA_API_KEY?.trim() || 'a2a4f90cbc9d4cb4b2931e3e3fbc838f';
 const BRAVE_API_KEY = process.env.BRAVE_API_KEY?.trim();
 
 // Stock categories reorganized as requested
@@ -67,21 +66,39 @@ export interface StocksResponse {
 
 async function fetchStockData(symbol: string, name: string): Promise<StockData | null> {
   try {
-    const quote: any = await yahooFinance.quote(symbol, {
-      fields: ['regularMarketPrice', 'regularMarketChange', 'regularMarketChangePercent', 'regularMarketVolume'],
-    });
-
-    if (!quote || typeof quote.regularMarketPrice !== 'number') {
+    const url = `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${TWELVE_DATA_API_KEY}`;
+    const res = await fetch(url, { timeout: 10000 } as any);
+    
+    if (!res.ok) {
+      console.error(`Twelve Data error for ${symbol}:`, res.status);
+      return null;
+    }
+    
+    const data = await res.json();
+    
+    // Check for API errors
+    if (data.status === 'error') {
+      console.error(`Twelve Data error for ${symbol}:`, data.message);
+      return null;
+    }
+    
+    // Parse values - Twelve Data returns strings
+    const price = parseFloat(data.close || data.price || '0');
+    const change = parseFloat(data.change || '0');
+    const changePercent = parseFloat(data.percent_change || '0');
+    const volume = parseInt(data.volume || '0', 10);
+    
+    if (!price || isNaN(price)) {
       return null;
     }
 
     return {
       symbol,
       name,
-      price: quote.regularMarketPrice,
-      change: quote.regularMarketChange || 0,
-      changePercent: quote.regularMarketChangePercent || 0,
-      volume: quote.regularMarketVolume || 0,
+      price,
+      change,
+      changePercent,
+      volume,
     };
   } catch (error) {
     console.error(`Failed to fetch ${symbol}:`, error);
@@ -119,7 +136,6 @@ async function fetchCategoryNews(category: string): Promise<string> {
     const results = data.results || [];
     
     if (results.length > 0) {
-      // Return the most relevant headline
       return results[0].title;
     }
     
