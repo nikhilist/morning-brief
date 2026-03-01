@@ -398,16 +398,46 @@ const StocksSection = ({ data, darkMode }: { data: any; darkMode: boolean }) => 
             </div>
           )}
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <div className="space-y-4">
           {data.categories.map((category: any) => (
-            <div key={category.name}>
-              <p className={`text-xs font-medium mb-2 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{category.name}</p>
+            <div key={category.name} className={`p-4 rounded-xl ${darkMode ? 'bg-[#0A0A0F]' : 'bg-gray-50'}`}>
+              <div className="flex items-center justify-between mb-3">
+                <span className={`text-sm font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{category.name}</span>
+                {category.insight && (
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs ${category.insight.avgChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {category.insight.avgChange >= 0 ? '+' : ''}{category.insight.avgChange.toFixed(2)}%
+                    </span>
+                    <div className={`w-2 h-2 rounded-full ${
+                      category.insight.trend === 'up' ? 'bg-green-500' :
+                      category.insight.trend === 'down' ? 'bg-red-500' : 'bg-gray-500'
+                    }`} />
+                  </div>
+                )}
+              </div>
+
+              {/* Macro Summary */}
+              {category.insight?.summary && (
+                <p className={`text-xs mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {category.insight.summary}
+                </p>
+              )}
+
+              {/* News */}
+              {category.insight?.news && (
+                <p className={`text-xs mb-3 line-clamp-2 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                  📰 {category.insight.news}
+                </p>
+              )}
+
+              {/* Stocks */}
               <div className="space-y-2">
                 {category.stocks.map((stock: any) => (
                   <div key={stock.symbol} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{stock.symbol}</span>
+                      <span className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{stock.name}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>${stock.price.toFixed(2)}</span>
