@@ -307,64 +307,40 @@ const ArsenalSection = ({ data, darkMode }: { data: any; darkMode: boolean }) =>
   </Card>
 );
 
-// Crypto Section
-const CryptoSection = ({ data, darkMode }: { data: any; darkMode: boolean }) => (
-  <Card darkMode={darkMode}>
-    <div className="p-5">
-      <div className="flex items-center gap-2 mb-4">
-        <DollarSign className={`w-4 h-4 ${darkMode ? 'text-yellow-400' : 'text-yellow-600'}`} />
-        <span className={`text-xs font-semibold uppercase tracking-wider ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-          Crypto
-        </span>
-      </div>
-      
-      <div className="space-y-3">
-        {Object.entries(data.prices || {}).map(([name, coin]: [string, any]) => (
-          <div key={name} className={`flex items-center justify-between p-3 rounded-xl ${darkMode ? 'bg-[#0A0A0F]' : 'bg-gray-50'}`}>
-            <div className="flex items-center gap-3">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                name === 'bitcoin' ? 'bg-orange-500/20 text-orange-400' :
-                name === 'ethereum' ? 'bg-blue-500/20 text-blue-400' :
-                'bg-purple-500/20 text-purple-400'
-              }`}>
-                {name[0].toUpperCase()}
-              </div>
-              <div>
-                <p className={`text-sm font-medium capitalize ${darkMode ? 'text-white' : 'text-gray-900'}`}>{name}</p>
-              </div>
-            </div>
-            <div className="text-right">
-              <p className={`text-sm font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{coin.price}</p>
-              <p className={`text-xs ${coin.up ? 'text-green-400' : 'text-red-400'}`}>{coin.change}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </Card>
-);
-
-// TradFi Section
-const TradFiSection = ({ data, darkMode }: { data: any; darkMode: boolean }) => {
-  if (!data?.marketContext) return null;
+// Crypto Section - uses stocks API data
+const CryptoSection = ({ data, darkMode }: { data: any[]; darkMode: boolean }) => {
+  if (!data?.length) return null;
   
   return (
     <Card darkMode={darkMode}>
       <div className="p-5">
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className={`w-4 h-4 ${darkMode ? 'text-green-400' : 'text-green-500'}`} />
+          <DollarSign className={`w-4 h-4 ${darkMode ? 'text-yellow-400' : 'text-yellow-600'}`} />
           <span className={`text-xs font-semibold uppercase tracking-wider ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            Markets
+            Crypto
           </span>
         </div>
         
-        <div className="space-y-3">
-          {Object.entries(data.marketContext || {}).slice(0, 3).map(([key, value]: [string, any]) => (
-            <div key={key} className={`p-3 rounded-xl ${darkMode ? 'bg-[#0A0A0F]' : 'bg-gray-50'}`}>
-              <p className={`text-xs font-medium mb-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-              </p>
-              <p className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{value}</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {data.map((coin: any) => (
+            <div key={coin.symbol} className={`p-3 rounded-xl ${darkMode ? 'bg-[#0A0A0F]' : 'bg-gray-50'}`}>
+              <div className="flex items-center gap-2 mb-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                  coin.symbol.includes('BTC') ? 'bg-orange-500/20 text-orange-400' :
+                  coin.symbol.includes('ETH') ? 'bg-blue-500/20 text-blue-400' :
+                  coin.symbol.includes('SOL') ? 'bg-purple-500/20 text-purple-400' :
+                  'bg-green-500/20 text-green-400'
+                }`}>
+                  {coin.symbol[0]}
+                </div>
+                <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{coin.name}</p>
+              </div>
+              <div className="text-right">
+                <p className={`text-sm font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>${coin.price.toLocaleString()}</p>
+                <p className={`text-xs ${coin.changePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {coin.changePercent >= 0 ? '+' : ''}{coin.changePercent.toFixed(2)}%
+                </p>
+              </div>
             </div>
           ))}
         </div>
@@ -803,17 +779,11 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <WeatherSection data={data.weather} darkMode={darkMode} />
             <ArsenalSection data={data.arsenal} darkMode={darkMode} />
-            <CryptoSection data={data.crypto} darkMode={darkMode} />
-          </div>
-
-          {/* Row 2 - 3 columns */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <TradFiSection data={data.tradfi} darkMode={darkMode} />
             <BlueskySection data={data.bluesky} darkMode={darkMode} />
-            <div className="hidden md:block" />
           </div>
 
           {/* Full width sections */}
+          <CryptoSection data={data.stocks?.crypto} darkMode={darkMode} />
           <StocksSection data={data.stocks} darkMode={darkMode} />
           <RedditSection data={data.reddit} darkMode={darkMode} />
           <CalendarSection

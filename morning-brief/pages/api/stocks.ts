@@ -10,27 +10,35 @@ const STOCK_CATEGORIES = {
     { symbol: 'NVDA', name: 'NVIDIA' },
     { symbol: 'VRT', name: 'Vertiv' },
     { symbol: 'ALAB', name: 'Astera Labs' },
+    { symbol: 'AMAT', name: 'Applied Materials' },
+    { symbol: 'NBIS', name: 'NioCorp' },
+    { symbol: 'SITM', name: 'SiTime' },
+  ],
+  'Cybersecurity': [
+    { symbol: 'CRWD', name: 'CrowdStrike' },
+    { symbol: 'RBRK', name: 'Rubrik' },
   ],
   'E-commerce': [
     { symbol: 'AMZN', name: 'Amazon' },
     { symbol: 'MELI', name: 'MercadoLibre' },
     { symbol: 'JMIA', name: 'Jumia' },
   ],
-  'Big Tech': [
-    { symbol: 'NOW', name: 'ServiceNow' },
-    { symbol: 'CRWD', name: 'CrowdStrike' },
-    { symbol: 'AMAT', name: 'Applied Materials' },
-  ],
   'Software': [
     { symbol: 'DOCN', name: 'DigitalOcean' },
-    { symbol: 'RBRK', name: 'Rubrik' },
+    { symbol: 'NOW', name: 'ServiceNow' },
   ],
   'Other': [
-    { symbol: 'NBIS', name: 'NioCorp' },
-    { symbol: 'SITM', name: 'SiTime' },
     { symbol: 'COPX', name: 'Global X Copper Miners ETF' },
   ],
 };
+
+// Crypto tickers
+const CRYPTO_TICKERS = [
+  { symbol: 'BTC-USD', name: 'Bitcoin' },
+  { symbol: 'ETH-USD', name: 'Ethereum' },
+  { symbol: 'SOL-USD', name: 'Solana' },
+  { symbol: 'HYPE-USD', name: 'Hyperliquid' },
+];
 
 interface StockData {
   symbol: string;
@@ -56,6 +64,7 @@ interface CategoryData {
 
 export interface StocksResponse {
   categories: CategoryData[];
+  crypto: StockData[];
   lastUpdated: string;
   summary: {
     totalStocks: number;
@@ -94,11 +103,11 @@ async function fetchCategoryNews(category: string): Promise<string> {
   
   try {
     const searchQueries: Record<string, string> = {
-      'AI Infrastructure': 'AI infrastructure stocks NVIDIA Vertiv data centers news',
+      'AI Infrastructure': 'AI infrastructure stocks NVIDIA data centers news',
+      'Cybersecurity': 'CrowdStrike Rubrik cybersecurity stocks news',
       'E-commerce': 'Amazon MercadoLibre e-commerce retail stocks news',
-      'Big Tech': 'ServiceNow CrowdStrike cybersecurity enterprise tech news',
-      'Software': 'cloud software SaaS stocks DigitalOcean Rubrik news',
-      'Other': 'semiconductor materials copper mining stocks news',
+      'Software': 'DigitalOcean ServiceNow cloud software stocks news',
+      'Other': 'copper mining materials stocks news',
     };
     
     const query = searchQueries[category] || `${category} stocks news`;
@@ -137,7 +146,7 @@ export async function fetchStocksData(): Promise<StocksResponse | null> {
     let losers = 0;
     let totalChange = 0;
 
-    // Fetch data for each category
+    // Fetch stock data for each category
     for (const [categoryName, stocks] of Object.entries(STOCK_CATEGORIES)) {
       const categoryStocks: StockData[] = [];
       let categoryChange = 0;
@@ -179,8 +188,18 @@ export async function fetchStocksData(): Promise<StocksResponse | null> {
       }
     }
 
+    // Fetch crypto data
+    const crypto: StockData[] = [];
+    for (const { symbol, name } of CRYPTO_TICKERS) {
+      const data = await fetchStockData(symbol, name);
+      if (data) {
+        crypto.push(data);
+      }
+    }
+
     const response: StocksResponse = {
       categories,
+      crypto,
       lastUpdated: new Date().toISOString(),
       summary: {
         totalStocks,
