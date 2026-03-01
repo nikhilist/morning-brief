@@ -64,7 +64,10 @@ export interface StocksResponse {
   };
 }
 
-// Fetch all stocks in a single batch call to avoid rate limits
+// Sleep helper for rate limiting
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Fetch all stocks with rate limiting (8 calls per minute max)
 async function fetchAllStocks(): Promise<Map<string, any>> {
   try {
     // Get all symbols
@@ -75,32 +78,41 @@ async function fetchAllStocks(): Promise<Map<string, any>> {
       }
     }
     
-    // Use batch endpoint - allows multiple symbols in one call
-    const symbols = allSymbols.join(',');
-    const url = `https://api.twelvedata.com/quote?symbol=${symbols}&apikey=${TWELVE_DATA_API_KEY}`;
-    
-    const res = await fetch(url, { timeout: 15000 } as any);
-    
-    if (!res.ok) {
-      console.error('Twelve Data batch error:', res.status);
-      return new Map();
-    }
-    
-    const data = await res.json();
-    
-    // Check for API errors
-    if (data.status === 'error') {
-      console.error('Twelve Data error:', data.message);
-      return new Map();
-    }
-    
-    // Twelve Data returns either a single object (for 1 symbol) or array (for multiple)
-    const results = Array.isArray(data) ? data : [data];
-    
+    // Fetch in batches of 7 with 8 second delay between batches
+    // (7 calls + 8 sec wait = stays under 8/minute limit)
     const stockMap = new Map<string, any>();
-    for (const item of results) {
-      if (item.symbol) {
-        stockMap.set(item.symbol, item);
+    const batchSize = 7;
+    
+    for (let i = 0; i < allSymbols.length; i += batchSize) {
+      const batch = allSymbols.slice(i, i + batchSize);
+      const symbols = batch.join(',');
+      const url = `https://api.twelvedata.com/quote?symbol=${symbols}&apikey=${TWELVE_DATA_API_KEY}`;
+      
+      const res = await fetch(url, { timeout: 15000 } as any);
+      
+      if (!res.ok) {
+        console.error('Twelve Data batch error:', res.status);
+        continue;
+      }
+      
+      const data = await res.json();
+      
+      if (data.status === 'error') {
+        console.error('Twelve Data error:', data.message);
+      } else {
+        // Twelve Data returns either a single object (for 1 symbol) or array (for multiple)
+        const results = Array.isArray(data) ? data : [data];
+        
+        for (const item of results) {
+          if (item.symbol) {
+            stockMap.set(item.symbol, item);
+          }
+        }
+      }
+      
+      // Wait 8 seconds between batches to respect rate limit
+      if (i + batchSize < allSymbols.length) {
+        await sleep(8000);
       }
     }
     
