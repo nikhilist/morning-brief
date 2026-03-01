@@ -236,6 +236,48 @@ const ArsenalSection = ({ data, darkMode }: { data: any; darkMode: boolean }) =>
       </div>
     </div>
     
+    {/* News */}
+    {data.trendingNews?.length > 0 && (
+      <div className={`border-t ${darkMode ? 'border-[#252532]' : 'border-gray-100'}`}>
+        <div className="p-4">
+          <p className={`text-xs font-medium uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Latest News</p>
+          <div className="space-y-2">
+            {data.trendingNews.slice(0, 3).map((news: any, i: number) => (
+              <a 
+                key={i} 
+                href={news.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`block p-3 rounded-xl ${darkMode ? 'bg-[#0A0A0F] hover:bg-[#141419]' : 'bg-gray-50 hover:bg-gray-100'} transition-colors`}
+              >
+                <p className={`text-sm line-clamp-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{news.title}</p>
+                <p className={`text-xs mt-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{news.source}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Injuries */}
+    {data.injuries?.length > 0 && (
+      <div className={`border-t ${darkMode ? 'border-[#252532]' : 'border-gray-100'}`}>
+        <div className="p-4">
+          <p className={`text-xs font-medium uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Squad Status</p>
+          <div className="space-y-2">
+            {data.injuries.slice(0, 3).map((injury: any, i: number) => (
+              <div key={i} className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-[#0A0A0F]' : 'bg-gray-50'}`}>
+                <span className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{injury.player}</span>
+                <Badge color={injury.status === 'FIT' ? 'green' : injury.status === 'DOUBT' ? 'yellow' : 'red'} darkMode={darkMode}>
+                  {injury.status}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
+
     {/* Table */}
     <div className={`border-t ${darkMode ? 'border-[#252532]' : 'border-gray-100'}`}>
       <div className="p-4">
@@ -346,25 +388,29 @@ const StocksSection = ({ data, darkMode }: { data: any; darkMode: boolean }) => 
             </span>
           </div>
           {data.summary && (
-            <Badge color={data.summary.avgChange >= 0 ? 'green' : 'red'} darkMode={darkMode}>
-              {data.summary.avgChange >= 0 ? '+' : ''}{data.summary.avgChange.toFixed(2)}%
-            </Badge>
+            <div className="flex items-center gap-2">
+              <span className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                {data.summary.gainers} ↑ {data.summary.losers} ↓
+              </span>
+              <Badge color={data.summary.avgChange >= 0 ? 'green' : 'red'} darkMode={darkMode}>
+                {data.summary.avgChange >= 0 ? '+' : ''}{data.summary.avgChange.toFixed(2)}%
+              </Badge>
+            </div>
           )}
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {data.categories.slice(0, 2).map((category: any) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {data.categories.map((category: any) => (
             <div key={category.name}>
               <p className={`text-xs font-medium mb-2 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{category.name}</p>
               <div className="space-y-2">
-                {category.stocks.slice(0, 3).map((stock: any) => (
+                {category.stocks.map((stock: any) => (
                   <div key={stock.symbol} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{stock.symbol}</span>
-                      <span className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{stock.name}</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>${stock.price.toFixed(2)}</span>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>${stock.price.toFixed(2)}</span>
                       <span className={`text-xs ${stock.changePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                         {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(1)}%
                       </span>
@@ -463,6 +509,89 @@ const CalendarSection = ({ data, darkMode, onConnect }: { data: CalendarData; da
             )}
           </div>
         </div>
+      </div>
+    </Card>
+  );
+};
+
+// Reddit Section
+const RedditSection = ({ data, darkMode }: { data: any[]; darkMode: boolean }) => {
+  if (!data?.length) return null;
+  
+  return (
+    <Card darkMode={darkMode} className="lg:col-span-2">
+      <div className="p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <Flame className={`w-4 h-4 ${darkMode ? 'text-orange-400' : 'text-orange-500'}`} />
+          <span className={`text-xs font-semibold uppercase tracking-wider ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            Reddit Radar
+          </span>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {data.slice(0, 4).map((sub) => (
+            <div key={sub.subreddit}>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xs">👽</span>
+                <span className={`text-xs font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>r/{sub.subreddit}</span>
+              </div>
+              <div className="space-y-2">
+                {sub.posts.slice(0, 2).map((post: any, i: number) => (
+                  <a 
+                    key={i} 
+                    href={post.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`block p-3 rounded-xl ${darkMode ? 'bg-[#0A0A0F] hover:bg-[#141419]' : 'bg-gray-50 hover:bg-gray-100'} transition-colors`}
+                  >
+                    <p className={`text-sm line-clamp-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{post.title}</p>
+                    <div className={`flex items-center gap-3 mt-1 text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                      <span>⬆️ {post.score.toLocaleString()}</span>
+                      <span>💬 {post.comments}</span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+// Bluesky Section
+const BlueskySection = ({ data, darkMode }: { data: any; darkMode: boolean }) => {
+  if (!data?.handle) return null;
+  
+  return (
+    <Card darkMode={darkMode}>
+      <div className="p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-lg">🦋</span>
+          <span className={`text-xs font-semibold uppercase tracking-wider ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            Bluesky
+          </span>
+        </div>
+        
+        <div className={`p-4 rounded-xl ${darkMode ? 'bg-[#0A0A0F]' : 'bg-gray-50'} mb-4`}>
+          <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>@{data.handle}</p>
+          <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Following {data.followsCount} accounts</p>
+        </div>
+        
+        <a 
+          href={data.feedUrl || `https://bsky.app/profile/${data.handle}/follows`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-medium transition-colors ${
+            darkMode 
+              ? 'bg-blue-500/10 text-blue-400 hover:bg-blue-500/20' 
+              : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+          }`}
+        >
+          View Timeline
+          <ExternalLink className="w-4 h-4" />
+        </a>
       </div>
     </Card>
   );
@@ -648,6 +777,10 @@ export default function Dashboard() {
           {/* Second Row */}
           <TradFiSection data={data.tradfi} darkMode={darkMode} />
           <StocksSection data={data.stocks} darkMode={darkMode} />
+          <BlueskySection data={data.bluesky} darkMode={darkMode} />
+          
+          {/* Third Row */}
+          <RedditSection data={data.reddit} darkMode={darkMode} />
           <CalendarSection 
             data={data.calendar} 
             darkMode={darkMode} 
