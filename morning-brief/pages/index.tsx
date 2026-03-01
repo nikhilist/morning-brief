@@ -302,6 +302,35 @@ const CryptoSection = ({ data, darkMode }: { data: any; darkMode: boolean }) => 
   </Card>
 );
 
+// TradFi Section
+const TradFiSection = ({ data, darkMode }: { data: any; darkMode: boolean }) => {
+  if (!data?.marketContext) return null;
+  
+  return (
+    <Card darkMode={darkMode}>
+      <div className="p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <TrendingUp className={`w-4 h-4 ${darkMode ? 'text-green-400' : 'text-green-500'}`} />
+          <span className={`text-xs font-semibold uppercase tracking-wider ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            Markets
+          </span>
+        </div>
+        
+        <div className="space-y-3">
+          {Object.entries(data.marketContext || {}).slice(0, 3).map(([key, value]: [string, any]) => (
+            <div key={key} className={`p-3 rounded-xl ${darkMode ? 'bg-[#0A0A0F]' : 'bg-gray-50'}`}>
+              <p className={`text-xs font-medium mb-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+              </p>
+              <p className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Card>
+  );
+};
+
 // Stocks Section
 const StocksSection = ({ data, darkMode }: { data: any; darkMode: boolean }) => {
   if (!data?.categories) return null;
@@ -616,7 +645,8 @@ export default function Dashboard() {
           <ArsenalSection data={data.arsenal} darkMode={darkMode} />
           <CryptoSection data={data.crypto} darkMode={darkMode} />
           
-          {/* Second Row - Wider Cards */}
+          {/* Second Row */}
+          <TradFiSection data={data.tradfi} darkMode={darkMode} />
           <StocksSection data={data.stocks} darkMode={darkMode} />
           <CalendarSection 
             data={data.calendar} 
