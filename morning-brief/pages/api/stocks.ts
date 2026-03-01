@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import yf from 'yahoo-finance2';
-const yahooFinance = yf.default;
+import yahooFinance from 'yahoo-finance2';
 
 const BRAVE_API_KEY = process.env.BRAVE_API_KEY?.trim();
 
@@ -67,7 +66,9 @@ export interface StocksResponse {
 
 async function fetchStockData(symbol: string, name: string): Promise<StockData | null> {
   try {
-    const quote: any = await yahooFinance.quote(symbol, {
+    // Use quoteCombine which is the newer API
+    const yf = yahooFinance as any;
+    const quote: any = await yf.quote(symbol, {
       fields: ['regularMarketPrice', 'regularMarketChange', 'regularMarketChangePercent', 'regularMarketVolume'],
     });
 
