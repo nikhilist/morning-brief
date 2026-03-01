@@ -9,23 +9,19 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html,
-body {
-  max-width: 100vw;
-  min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Smooth scrolling with momentum on iOS */
 html {
   scroll-behavior: smooth;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 body {
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
