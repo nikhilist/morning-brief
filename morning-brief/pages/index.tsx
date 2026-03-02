@@ -477,6 +477,9 @@ const CalendarSection = ({ data, darkMode, onConnect }: { data: CalendarData; da
                         <p className={`text-sm font-medium truncate ${darkMode ? 'text-white' : 'text-gray-900'}`}>{event.title}</p>
                         <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                           {formatTime(event.start)} · {event.duration} min
+                          {event.calendarName && event.calendarName !== 'My Calendar' && (
+                            <span className={`ml-1 ${darkMode ? 'text-purple-400' : 'text-purple-500'}`}>· {event.calendarName}</span>
+                          )}
                         </p>
                       </div>
                       {event.meetLink && (
@@ -503,6 +506,9 @@ const CalendarSection = ({ data, darkMode, onConnect }: { data: CalendarData; da
                     <p className={`text-sm font-medium truncate ${darkMode ? 'text-white' : 'text-gray-900'}`}>{event.title}</p>
                     <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                       {formatTime(event.start)} · {event.duration} min
+                      {event.calendarName && event.calendarName !== 'My Calendar' && (
+                        <span className={`ml-1 ${darkMode ? 'text-purple-400' : 'text-purple-500'}`}>· {event.calendarName}</span>
+                      )}
                     </p>
                   </div>
                 ))}
