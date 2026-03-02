@@ -11,6 +11,7 @@ interface CalendarEvent {
   description?: string;
   organizer?: string;
   calendarName: string;
+  calendarAccess: string;
   isAllDay: boolean;
   status: string;
 }
@@ -37,24 +38,37 @@ function formatISO(date: Date): string {
   return date.toISOString();
 }
 
-async function fetchCalendarList(accessToken: string): Promise<Array<{ id: string; name: string }>> {
+async function fetchCalendarList(accessToken: string): Promise<Array<{ id: string; name: string; accessRole: string }>> {
   try {
-    const res = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
+    // Include all calendars (primary + shared + subscribed)
+    const res = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList?showHidden=true&showDeleted=false', {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
 
     if (!res.ok) {
       console.error('Failed to fetch calendar list');
-      return [{ id: 'primary', name: 'My Calendar' }];
+      return [{ id: 'primary', name: 'My Calendar', accessRole: 'owner' }];
     }
 
     const data = await res.json();
+    console.log(`Found ${data.items?.length || 0} calendars:`, data.items?.map((c: any) => ({ name: c.summary, access: c.accessRole, selected: c.selected })));
+    
+    // Include all calendars the user has access to (not just selected ones)
+    // This includes shared family calendars
     return (data.items || [])
-      .filter((cal: any) => cal.selected !== false) // Only selected calendars
-      .map((cal: any) => ({ id: cal.id, name: cal.summary }));
+      .filter((cal: any) => {
+        // Include if user has read access (owner, writer, or reader)
+        const hasAccess = ['owner', 'writer', 'reader'].includes(cal.accessRole);
+        return hasAccess;
+      })
+      .map((cal: any) => ({ 
+        id: cal.id, 
+        name: cal.summary,
+        accessRole: cal.accessRole
+      }));
   } catch (e) {
     console.error('Calendar list fetch error:', e);
-    return [{ id: 'primary', name: 'My Calendar' }];
+    return [{ id: 'primary', name: 'My Calendar', accessRole: 'owner' }];
   }
 }
 
@@ -120,8 +134,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log(`Found ${calendars.length} calendars:`, calendars.map(c => c.name));
 
     // Fetch events from all calendars
-    let allTodayEvents: Array<CalendarEvent & { calendarName: string }> = [];
-    let allTomorrowEvents: Array<CalendarEvent & { calendarName: string }> = [];
+    let allTodayEvents: CalendarEvent[] = [];
+    let allTomorrowEvents: CalendarEvent[] = [];
 
     for (const calendar of calendars) {
       // Today's events
@@ -170,6 +184,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           description: event.description,
           organizer: event.organizer?.displayName || event.organizer?.email,
           calendarName: calendar.name,
+          calendarAccess: calendar.accessRole,
           isAllDay,
           status: event.status,
         };
