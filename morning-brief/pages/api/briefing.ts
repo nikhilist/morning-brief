@@ -179,50 +179,63 @@ async function fetchArsenalData(): Promise<ArsenalData> {
       throw new Error('No API key');
     }
 
-    // Search for last match result specifically
+    // Search for last match result using NEWS search for most recent results
     let lastScore = '-';
     let opponent = 'Opponent';
     let lastMatchHeadline = 'Latest match';
     let lastMatchUrl = '#';
     
     try {
+      // Use news search with freshness filter for last 24 hours
       const lastMatchRes = await axios.get(
-        `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent('Arsenal last match result score vs')}&count=5`,
+        `https://api.search.brave.com/res/v1/news/search?q=${encodeURIComponent('Arsenal match result score')}&freshness=pd&count=10`,
         { headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' }, timeout: 8000 }
       );
       
-      const results = lastMatchRes.data?.web?.results || [];
+      const results = lastMatchRes.data?.results || [];
+      console.log(`Found ${results.length} news results for Arsenal matches`);
       
-      // Find result with score pattern
+      // Find result with score pattern - prioritize most recent
       for (const result of results) {
         const title = result.title || '';
         const desc = result.description || '';
         const combined = `${title} ${desc}`.toLowerCase();
         
-        // Look for score patterns like "2-1", "3-0", etc.
+        // Skip preview/articles about upcoming matches
+        if (combined.includes('preview') || combined.includes('predicted') || combined.includes('build-up')) {
+          continue;
+        }
+        
+        // Look for score patterns like "2-1", "3-0", "1-0", etc. (more flexible)
         const scoreMatch = combined.match(/(\d)\s*-\s*(\d)/);
         if (scoreMatch && combined.includes('arsenal')) {
-          const arsenalGoals = parseInt(scoreMatch[1]);
-          const oppGoals = parseInt(scoreMatch[2]);
+          const firstGoal = parseInt(scoreMatch[1]);
+          const secondGoal = parseInt(scoreMatch[2]);
           
-          // Determine if Arsenal won/lost based on context
-          if (combined.includes('arsenal') && combined.includes('beat')) {
-            lastScore = `${arsenalGoals}-${oppGoals}`;
-          } else if (combined.includes('lost') || combined.includes('defeat')) {
-            lastScore = `${oppGoals}-${arsenalGoals}`;
-          } else if (combined.includes('draw')) {
-            lastScore = `${arsenalGoals}-${oppGoals}`;
+          // Determine score based on context words
+          if (combined.includes('beat') || combined.includes('win') || combined.includes('won') || 
+              combined.includes('victory') || combined.includes('triumph')) {
+            // Arsenal won - first number is likely Arsenal's goals
+            lastScore = `${firstGoal}-${secondGoal}`;
+          } else if (combined.includes('lost') || combined.includes('defeat') || combined.includes('beaten')) {
+            // Arsenal lost - first number is likely opponent's goals
+            lastScore = `${secondGoal}-${firstGoal}`;
+          } else if (combined.includes('draw') || combined.includes('drawn')) {
+            lastScore = `${firstGoal}-${secondGoal}`;
           } else {
-            lastScore = `${arsenalGoals}-${oppGoals}`;
+            // Default: assume first number is Arsenal's goals (standard format)
+            lastScore = `${firstGoal}-${secondGoal}`;
           }
           
-          // Extract opponent
-          const commonTeams = ['Chelsea', 'Liverpool', 'Man City', 'Manchester City', 'Man United', 'Tottenham', 
-            'Spurs', 'Newcastle', 'Aston Villa', 'West Ham', 'Brighton', 'Wolves', 'Crystal Palace', 
-            'Brentford', 'Fulham', 'Everton', 'Nottm Forest', 'Bournemouth'];
+          // Extract opponent from the title (more specific matching)
+          const commonTeams = ['Chelsea', 'Liverpool', 'Man City', 'Manchester City', 'Man United', 'Manchester Utd',
+            'Tottenham', 'Spurs', 'Newcastle', 'Aston Villa', 'West Ham', 'Brighton', 'Wolves', 'Crystal Palace', 
+            'Brentford', 'Fulham', 'Everton', 'Nottm Forest', 'Bournemouth', 'Leicester', 'Ipswich', 'Southampton'];
           
           for (const team of commonTeams) {
-            if (combined.includes(team.toLowerCase())) {
+            const teamLower = team.toLowerCase();
+            // Check if team appears in title (more reliable than description)
+            if (title.toLowerCase().includes(teamLower)) {
               opponent = team;
               break;
             }
@@ -230,7 +243,8 @@ async function fetchArsenalData(): Promise<ArsenalData> {
           
           lastMatchHeadline = title;
           lastMatchUrl = result.url;
-          break;
+          console.log(`Found match: ${opponent} ${lastScore} - ${title}`);
+          break; // Take the first (most recent) valid result
         }
       }
     } catch (e) {
