@@ -470,7 +470,7 @@ const CalendarSection = ({ data, darkMode, onConnect }: { data: CalendarData; da
               <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>No events</p>
             ) : (
               <div className="space-y-2">
-                {data.today?.events?.slice(0, 3).map((event) => (
+                {data.today?.events?.slice(0, 3).map((event: any) => (
                   <div key={event.id} className={`p-3 rounded-xl ${darkMode ? 'bg-[#0A0A0F]' : 'bg-gray-50'}`}>
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
@@ -501,7 +501,7 @@ const CalendarSection = ({ data, darkMode, onConnect }: { data: CalendarData; da
               <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>No events</p>
             ) : (
               <div className="space-y-2">
-                {data.tomorrow?.events?.slice(0, 3).map((event) => (
+                {data.tomorrow?.events?.slice(0, 3).map((event: any) => (
                   <div key={event.id} className={`p-3 rounded-xl ${darkMode ? 'bg-[#0A0A0F]' : 'bg-gray-50'}`}>
                     <p className={`text-sm font-medium truncate ${darkMode ? 'text-white' : 'text-gray-900'}`}>{event.title}</p>
                     <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
