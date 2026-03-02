@@ -770,16 +770,12 @@ export default function Dashboard() {
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-24">
         <div className="space-y-4">
-          {/* Row 1 - 2 columns */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <WeatherSection data={data.weather} darkMode={darkMode} />
-            <ArsenalSection data={data.arsenal} darkMode={darkMode} />
-          </div>
+          {/* Row 1 - Arsenal only */}
+          <ArsenalSection data={data.arsenal} darkMode={darkMode} />
 
           {/* Full width sections */}
           <CryptoSection data={data.stocks?.crypto} darkMode={darkMode} />
           <StocksSection data={data.stocks} darkMode={darkMode} />
-          <RedditSection data={data.reddit} darkMode={darkMode} />
           <CalendarSection
             data={data.calendar}
             darkMode={darkMode}
