@@ -254,15 +254,20 @@ async function fetchArsenalData(): Promise<ArsenalData> {
     // Search for upcoming fixtures
     let upcomingMatches: any[] = [];
     try {
+      // Use news search with "preview" or "coming up" to find future matches
       const fixturesRes = await axios.get(
-        `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent('Arsenal next 3 fixtures upcoming matches 2026')}&count=10`,
+        `https://api.search.brave.com/res/v1/news/search?q=${encodeURIComponent('Arsenal preview upcoming match vs')}&freshness=pw&count=10`,
         { headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' }, timeout: 8000 }
       );
       
-      const results = fixturesRes.data?.web?.results || [];
-      const commonTeams = ['Chelsea', 'Liverpool', 'Man City', 'Manchester City', 'Man United', 'Tottenham', 
-        'Spurs', 'Newcastle', 'Aston Villa', 'West Ham', 'Brighton', 'Wolves', 'Crystal Palace', 
-        'Brentford', 'Fulham', 'Everton', 'Nottm Forest', 'Bournemouth', 'Luton', 'Burnley'];
+      const results = fixturesRes.data?.results || [];
+      console.log(`Found ${results.length} news results for upcoming fixtures`);
+      
+      const commonTeams = ['Chelsea', 'Liverpool', 'Man City', 'Manchester City', 'Man United', 'Manchester Utd',
+        'Tottenham', 'Spurs', 'Newcastle', 'Aston Villa', 'West Ham', 'Brighton', 'Wolves', 'Crystal Palace', 
+        'Brentford', 'Fulham', 'Everton', 'Nottm Forest', 'Bournemouth', 'Leicester', 'Ipswich', 'Southampton'];
+      
+      const seenOpponents = new Set<string>();
       
       for (const result of results) {
         if (upcomingMatches.length >= 3) break;
@@ -274,31 +279,38 @@ async function fetchArsenalData(): Promise<ArsenalData> {
         // Check if it's about Arsenal
         if (!combined.includes('arsenal')) continue;
         
+        // Skip results that contain scores (those are past matches)
+        if (combined.match(/\d\s*-\s*\d/)) continue;
+        
         // Look for opponent
         let matchOpponent = '';
         for (const team of commonTeams) {
-          if (combined.includes(team.toLowerCase())) {
+          if (title.toLowerCase().includes(team.toLowerCase())) {
             matchOpponent = team;
             break;
           }
         }
         
-        if (matchOpponent) {
-          // Try to extract date
-          let dateStr = 'TBD';
-          const dateMatch = combined.match(/(monday|tuesday|wednesday|thursday|friday|saturday|sunday),?\s+(\d{1,2}\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*)/i);
-          if (dateMatch) {
-            dateStr = `${dateMatch[1]} ${dateMatch[2]}`;
-          }
-          
-          // Check competition
-          let competition = 'Premier League';
-          if (combined.includes('champions league')) competition = 'Champions League';
-          else if (combined.includes('fa cup')) competition = 'FA Cup';
-          else if (combined.includes('carabao')) competition = 'League Cup';
-          
-          upcomingMatches.push({ opponent: matchOpponent, date: dateStr, competition });
+        // Skip if no opponent found or already seen or is the last match opponent
+        if (!matchOpponent || seenOpponents.has(matchOpponent) || matchOpponent === opponent) continue;
+        
+        seenOpponents.add(matchOpponent);
+        
+        // Try to extract date
+        let dateStr = 'TBD';
+        const dateMatch = combined.match(/(monday|tuesday|wednesday|thursday|friday|saturday|sunday)[,\s]+(\d{1,2}[\s/]+(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*|[\d/]+)/i);
+        if (dateMatch) {
+          dateStr = `${dateMatch[1]} ${dateMatch[2]}`;
         }
+        
+        // Check competition
+        let competition = 'Premier League';
+        if (combined.includes('champions league')) competition = 'Champions League';
+        else if (combined.includes('fa cup')) competition = 'FA Cup';
+        else if (combined.includes('carabao')) competition = 'League Cup';
+        
+        console.log(`Found upcoming: ${matchOpponent} on ${dateStr}`);
+        upcomingMatches.push({ opponent: matchOpponent, date: dateStr, competition });
       }
     } catch (e) {
       console.log('Fixtures search failed:', e);
