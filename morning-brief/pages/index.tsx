@@ -219,6 +219,11 @@ const ArsenalSection = ({ data, darkMode }: { data: any; darkMode: boolean }) =>
         <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
           vs {data.lastMatch?.opponent}
         </p>
+        {data.lastMatch?.summary && (
+          <p className={`text-xs mt-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            {data.lastMatch.summary}
+          </p>
+        )}
       </div>
       
       {/* Upcoming */}

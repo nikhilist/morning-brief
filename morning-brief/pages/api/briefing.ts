@@ -97,6 +97,7 @@ interface ArsenalData {
     headline: string;
     description?: string;
     url?: string;
+    summary?: string;
   };
   upcoming: Array<{ opponent: string; date: string; competition: string }>;
   injuries: Array<{ player: string; status: string; notes: string }>;
@@ -355,6 +356,57 @@ async function fetchArsenalData(): Promise<ArsenalData> {
     // Combine news, prioritizing arseblog
     const combinedNews = arseblogNews.length > 0 ? arseblogNews : trendingNews;
     
+    // Generate match summary from available news snippets
+    let matchSummary = '';
+    if (lastScore !== '-' && opponent !== 'Opponent') {
+      // Search for match reports about this specific game
+      try {
+        const matchReportRes = await axios.get(
+          `https://api.search.brave.com/res/v1/news/search?q=${encodeURIComponent(`Arsenal ${lastScore} ${opponent} match report`)}&freshness=pd&count=3`,
+          { headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' }, timeout: 8000 }
+        );
+        
+        const reports = matchReportRes.data?.results || [];
+        if (reports.length > 0) {
+          // Combine headlines and descriptions for summary
+          const snippets = reports.slice(0, 2).map((r: any) => `${r.title}. ${r.description}`).join(' ');
+          
+          // Create a simple summary from the snippets
+          const arsenalGoals = parseInt(lastScore.split('-')[0]);
+          const oppGoals = parseInt(lastScore.split('-')[1]);
+          
+          if (arsenalGoals > oppGoals) {
+            matchSummary = `Arsenal secured a ${lastScore} victory over ${opponent}. `;
+          } else if (arsenalGoals < oppGoals) {
+            matchSummary = `Arsenal fell to a ${lastScore} defeat against ${opponent}. `;
+          } else {
+            matchSummary = `Arsenal drew ${lastScore} with ${opponent}. `;
+          }
+          
+          // Add key details from snippets
+          if (snippets.toLowerCase().includes('red card')) {
+            matchSummary += 'The match saw a red card. ';
+          }
+          if (snippets.toLowerCase().includes('penalty')) {
+            matchSummary += 'A penalty was awarded. ';
+          }
+          if (snippets.toLowerCase().includes('header')) {
+            matchSummary += 'Key goal from a header. ';
+          }
+          if (snippets.toLowerCase().includes('timber') || snippets.toLowerCase().includes('saka') || snippets.toLowerCase().includes('odegaard')) {
+            matchSummary += 'Key players involved in the goals. ';
+          }
+        }
+      } catch (e) {
+        console.log('Match summary generation failed:', e);
+      }
+      
+      // Fallback summary
+      if (!matchSummary) {
+        matchSummary = `Arsenal ${lastScore} ${opponent}. Check full report for details.`;
+      }
+    }
+    
     let tableData = [];
     try {
       const headers: any = {};
@@ -390,7 +442,8 @@ async function fetchArsenalData(): Promise<ArsenalData> {
         score: lastScore,
         opponent: opponent,
         headline: lastMatchHeadline,
-        url: lastMatchUrl
+        url: lastMatchUrl,
+        summary: matchSummary
       },
       upcoming: upcomingMatches.length > 0 ? upcomingMatches : [
         { opponent: 'Check fixtures', date: 'TBD', competition: 'Premier League' },
