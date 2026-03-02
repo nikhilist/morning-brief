@@ -178,146 +178,133 @@ async function fetchArsenalData(): Promise<ArsenalData> {
     if (!BRAVE_API_KEY) {
       throw new Error('No API key');
     }
-    
-    const [newsRes, fixturesRes] = await Promise.all([
-      axios.get(`https://api.search.brave.com/res/v1/news/search?q=${encodeURIComponent('Arsenal FC latest result match')}&count=5`, {
-        headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' }, timeout: 8000
-      }).catch(() => null),
-      axios.get(`https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent('Arsenal FC fixtures 2026')}&count=3`, {
-        headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' }, timeout: 8000
-      }).catch(() => null)
-    ]);
-    
-    const news = newsRes?.data?.results || [];
-    const fixtures = fixturesRes?.data?.web?.results || [];
-    
-    const resultNews = news.find((n: any) => {
-      const title = n.title?.toLowerCase() || '';
-      return title.includes('arsenal') && 
-        (title.includes('beat') || title.includes('win') || title.includes('victory') ||
-         title.includes('defeat') || title.includes('draw') || title.match(/\d+\s*[-–—]\s*\d+/));
-    });
-    
+
+    // Search for last match result specifically
     let lastScore = '-';
     let opponent = 'Opponent';
-    if (resultNews) {
-      const title = resultNews.title || '';
-      const description = resultNews.description || '';
-      const combinedText = title + ' ' + description;
-
-      // Look for match scores in both title and description (1-2 digits on each side, avoid years like 2025-26)
-      const scoreMatch = combinedText.match(/(\d{1,2})\s*[-–—:]\s*(\d{1,2})/);
-      if (scoreMatch) {
-        const first = parseInt(scoreMatch[1]);
-        const second = parseInt(scoreMatch[2]);
-        // Validate it's actually a match score (not a year)
-        if (first <= 20 && second <= 20) {
-          lastScore = `${scoreMatch[1]}-${scoreMatch[2]}`;
-        }
-      }
-      if (lastScore === '-' && (combinedText.toLowerCase().includes('victory') || combinedText.toLowerCase().includes('win'))) {
-        lastScore = 'WIN';
-      } else if (lastScore === '-' && combinedText.toLowerCase().includes('defeat')) {
-        lastScore = 'LOSS';
-      } else if (lastScore === '-' && combinedText.toLowerCase().includes('draw')) {
-        lastScore = 'DRAW';
-      }
-
-      // Extract opponent from title - look for common team names or patterns
-      const titleLower = title.toLowerCase();
-      
-      // Common opponent patterns in headlines
-      const commonTeams = ['Chelsea', 'Liverpool', 'Man City', 'Manchester City', 'Man United', 'Manchester United', 
-        'Tottenham', 'Spurs', 'Newcastle', 'Aston Villa', 'West Ham', 'Brighton', 'Wolves', 'Crystal Palace', 
-        'Brentford', 'Fulham', 'Everton', 'Nottm Forest', 'Bournemouth', 'Luton', 'Burnley', 'Sheffield Utd',
-        'Real Madrid', 'Barcelona', 'Bayern', 'PSG', 'Inter', 'AC Milan', 'Juventus', 'Porto', 'Benfica'];
-      
-      for (const team of commonTeams) {
-        if (titleLower.includes(team.toLowerCase())) {
-          opponent = team;
-          break;
-        }
-      }
-      
-      // If no common team found, try regex patterns
-      if (opponent === 'Opponent') {
-        // Look for "beat X" or "vs X" patterns, excluding common non-team words
-        const beatMatch = title.match(/(?:beat|defeat(?:ed)?)\s+(?:10-man\s+)?([A-Z][a-zA-Z\s]+?)(?:\s+(?:to|in|at|with|on|–|-|\d)|$)/i);
-        if (beatMatch) {
-          opponent = beatMatch[1].trim();
-        } else {
-          const vsMatch = title.match(/(?:Arsenal\s+)?vs\.?\s+(?:10-man\s+)?([A-Z][a-zA-Z\s]+?)(?:\s+[:\d\-]|$)/i);
-          if (vsMatch) opponent = vsMatch[1].trim();
-        }
-      }
-    }
+    let lastMatchHeadline = 'Latest match';
+    let lastMatchUrl = '#';
     
-    // Fetch upcoming fixtures from football-data.org (free tier includes fixtures)
-    let upcomingMatches: any[] = [];
     try {
-      const headers: any = {};
-      if (FOOTBALL_DATA_API_KEY) {
-        headers['X-Auth-Token'] = FOOTBALL_DATA_API_KEY;
-      }
-      
-      // Get upcoming matches for Arsenal (team ID 57)
-      const fixturesRes = await axios.get(
-        'https://api.football-data.org/v4/teams/57/matches?status=SCHEDULED&limit=3',
-        { headers, timeout: 8000 }
+      const lastMatchRes = await axios.get(
+        `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent('Arsenal last match result score vs')}&count=5`,
+        { headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' }, timeout: 8000 }
       );
       
-      const matches = fixturesRes.data?.matches || [];
-      upcomingMatches = matches.slice(0, 3).map((match: any) => {
-        const isHome = match.homeTeam.id === 57;
-        const opponent = isHome ? match.awayTeam.shortName : match.homeTeam.shortName;
-        const matchDate = new Date(match.utcDate);
-        const dateStr = matchDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-        const competition = match.competition.name === 'Premier League' ? 'Premier League' : 
-                           match.competition.name === 'UEFA Champions League' ? 'Champions League' : 
-                           match.competition.name;
+      const results = lastMatchRes.data?.web?.results || [];
+      
+      // Find result with score pattern
+      for (const result of results) {
+        const title = result.title || '';
+        const desc = result.description || '';
+        const combined = `${title} ${desc}`.toLowerCase();
         
-        return { 
-          opponent, 
-          date: dateStr, 
-          competition,
-          homeAway: isHome ? 'H' : 'A'
-        };
-      });
-    } catch (e) {
-      console.log('Football-data fixtures fetch failed:', e);
-      // Fallback to search-based approach
-      try {
-        const searchRes = await axios.get(
-          `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent('Arsenal fixtures upcoming matches premier league')}&count=5`,
-          {
-            headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' },
-            timeout: 8000
+        // Look for score patterns like "2-1", "3-0", etc.
+        const scoreMatch = combined.match(/(\d)\s*-\s*(\d)/);
+        if (scoreMatch && combined.includes('arsenal')) {
+          const arsenalGoals = parseInt(scoreMatch[1]);
+          const oppGoals = parseInt(scoreMatch[2]);
+          
+          // Determine if Arsenal won/lost based on context
+          if (combined.includes('arsenal') && combined.includes('beat')) {
+            lastScore = `${arsenalGoals}-${oppGoals}`;
+          } else if (combined.includes('lost') || combined.includes('defeat')) {
+            lastScore = `${oppGoals}-${arsenalGoals}`;
+          } else if (combined.includes('draw')) {
+            lastScore = `${arsenalGoals}-${oppGoals}`;
+          } else {
+            lastScore = `${arsenalGoals}-${oppGoals}`;
           }
-        );
-        
-        const results = searchRes.data?.web?.results || [];
-        for (const result of results) {
-          const title = result.title || '';
-          const commonTeams = ['Chelsea', 'Liverpool', 'Man City', 'Tottenham', 'Newcastle', 'Aston Villa', 'West Ham'];
+          
+          // Extract opponent
+          const commonTeams = ['Chelsea', 'Liverpool', 'Man City', 'Manchester City', 'Man United', 'Tottenham', 
+            'Spurs', 'Newcastle', 'Aston Villa', 'West Ham', 'Brighton', 'Wolves', 'Crystal Palace', 
+            'Brentford', 'Fulham', 'Everton', 'Nottm Forest', 'Bournemouth'];
+          
           for (const team of commonTeams) {
-            if (title.toLowerCase().includes(team.toLowerCase()) && title.toLowerCase().includes('arsenal')) {
-              upcomingMatches.push({ opponent: team, date: 'TBC', competition: 'Premier League' });
+            if (combined.includes(team.toLowerCase())) {
+              opponent = team;
               break;
             }
           }
-          if (upcomingMatches.length >= 2) break;
+          
+          lastMatchHeadline = title;
+          lastMatchUrl = result.url;
+          break;
         }
-      } catch (e2) {
-        console.log('Fallback fixture search failed:', e2);
       }
+    } catch (e) {
+      console.log('Last match search failed:', e);
     }
     
-    // Get trending news from main search
-    const trendingNews = news.slice(0, 3).map((n: any) => ({
-      title: n.title,
-      source: n.source,
-      url: n.url
-    }));
+    // Search for upcoming fixtures
+    let upcomingMatches: any[] = [];
+    try {
+      const fixturesRes = await axios.get(
+        `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent('Arsenal next 3 fixtures upcoming matches 2026')}&count=10`,
+        { headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' }, timeout: 8000 }
+      );
+      
+      const results = fixturesRes.data?.web?.results || [];
+      const commonTeams = ['Chelsea', 'Liverpool', 'Man City', 'Manchester City', 'Man United', 'Tottenham', 
+        'Spurs', 'Newcastle', 'Aston Villa', 'West Ham', 'Brighton', 'Wolves', 'Crystal Palace', 
+        'Brentford', 'Fulham', 'Everton', 'Nottm Forest', 'Bournemouth', 'Luton', 'Burnley'];
+      
+      for (const result of results) {
+        if (upcomingMatches.length >= 3) break;
+        
+        const title = result.title || '';
+        const desc = result.description || '';
+        const combined = `${title} ${desc}`.toLowerCase();
+        
+        // Check if it's about Arsenal
+        if (!combined.includes('arsenal')) continue;
+        
+        // Look for opponent
+        let matchOpponent = '';
+        for (const team of commonTeams) {
+          if (combined.includes(team.toLowerCase())) {
+            matchOpponent = team;
+            break;
+          }
+        }
+        
+        if (matchOpponent) {
+          // Try to extract date
+          let dateStr = 'TBD';
+          const dateMatch = combined.match(/(monday|tuesday|wednesday|thursday|friday|saturday|sunday),?\s+(\d{1,2}\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*)/i);
+          if (dateMatch) {
+            dateStr = `${dateMatch[1]} ${dateMatch[2]}`;
+          }
+          
+          // Check competition
+          let competition = 'Premier League';
+          if (combined.includes('champions league')) competition = 'Champions League';
+          else if (combined.includes('fa cup')) competition = 'FA Cup';
+          else if (combined.includes('carabao')) competition = 'League Cup';
+          
+          upcomingMatches.push({ opponent: matchOpponent, date: dateStr, competition });
+        }
+      }
+    } catch (e) {
+      console.log('Fixtures search failed:', e);
+    }
+    
+    // Get news
+    let trendingNews: any[] = [];
+    try {
+      const newsRes = await axios.get(
+        `https://api.search.brave.com/res/v1/news/search?q=${encodeURIComponent('Arsenal FC news latest')}&count=5`,
+        { headers: { 'X-Subscription-Token': BRAVE_API_KEY, 'Accept': 'application/json' }, timeout: 8000 }
+      );
+      trendingNews = newsRes.data?.results?.slice(0, 3).map((n: any) => ({
+        title: n.title,
+        source: n.source,
+        url: n.url
+      })) || [];
+    } catch (e) {
+      console.log('News fetch failed:', e);
+    }
 
     // Try to get arseblog news specifically
     let arseblogNews: any[] = [];
@@ -376,9 +363,8 @@ async function fetchArsenalData(): Promise<ArsenalData> {
       lastMatch: {
         score: lastScore,
         opponent: opponent,
-        headline: resultNews?.title || 'Latest match',
-        description: resultNews?.description?.slice(0, 100),
-        url: resultNews?.url
+        headline: lastMatchHeadline,
+        url: lastMatchUrl
       },
       upcoming: upcomingMatches.length > 0 ? upcomingMatches : [
         { opponent: 'Check fixtures', date: 'TBD', competition: 'Premier League' },
