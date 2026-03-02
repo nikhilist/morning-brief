@@ -10,7 +10,7 @@ interface CalendarEvent {
   meetLink?: string;
   description?: string;
   organizer?: string;
-  calendarName?: string;
+  calendarName: string;
   isAllDay: boolean;
   status: string;
 }
