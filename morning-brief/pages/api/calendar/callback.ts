@@ -36,12 +36,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ error: 'Failed to exchange code for tokens', details: tokens });
     }
 
-    // Redirect back to home page with tokens
+    // Store tokens in HttpOnly cookies (never expose in URL)
     const accessToken = tokens.access_token;
     const refreshToken = tokens.refresh_token || '';
+    const cookieOptions = 'HttpOnly; Secure; SameSite=Strict; Path=/';
 
-    const redirectUrl = `/?calendar_connected=1&access_token=${encodeURIComponent(accessToken)}${refreshToken ? `&refresh_token=${encodeURIComponent(refreshToken)}` : ''}`;
-    res.redirect(redirectUrl);
+    const cookies = [
+      `calendar_access_token=${encodeURIComponent(accessToken)}; ${cookieOptions}; Max-Age=3600`,
+    ];
+    if (refreshToken) {
+      cookies.push(`calendar_refresh_token=${encodeURIComponent(refreshToken)}; ${cookieOptions}`);
+    }
+    res.setHeader('Set-Cookie', cookies);
+
+    // Redirect cleanly — no tokens in the URL
+    res.redirect('/?calendar_connected=1');
   } catch (error: any) {
     console.error('Calendar callback error:', error);
     res.status(500).json({ error: 'Failed to authenticate', details: error.message });

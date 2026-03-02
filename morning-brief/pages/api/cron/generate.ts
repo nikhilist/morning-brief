@@ -6,9 +6,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // Verify cron secret if configured
-  const cronSecret = req.headers['x-vercel-cron-secret'] || req.query.secret;
-  
+  // Verify cron secret via header only — never accept via query param (shows up in logs)
+  const cronSecret = req.headers['x-vercel-cron-secret'];
+
   // Only allow cron or authorized requests
   if (process.env.CRON_SECRET && cronSecret !== process.env.CRON_SECRET) {
     return res.status(401).json({ error: 'Unauthorized' });
