@@ -1,9 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { google } from 'googleapis';
-import { addDays, startOfDay, endOfDay, formatISO } from 'date-fns';
-
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 interface CalendarEvent {
   id: string;
@@ -15,19 +10,34 @@ interface CalendarEvent {
   meetLink?: string;
   description?: string;
   organizer?: string;
-  attendees?: string[];
   isAllDay: boolean;
   status: string;
 }
 
-interface CalendarDay {
-  date: string;
-  dayName: string;
-  events: CalendarEvent[];
+function addDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+function startOfDay(date: Date): Date {
+  const result = new Date(date);
+  result.setHours(0, 0, 0, 0);
+  return result;
+}
+
+function endOfDay(date: Date): Date {
+  const result = new Date(date);
+  result.setHours(23, 59, 59, 999);
+  return result;
+}
+
+function formatISO(date: Date): string {
+  return date.toISOString();
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { access_token, refresh_token } = req.query;
+  const { access_token } = req.query;
   const today = new Date();
 
   if (!access_token || typeof access_token !== 'string') {
@@ -39,49 +49,50 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   }
 
-  if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
-    return res.status(500).json({
-      connected: false,
-      error: 'Calendar not configured on server',
-      today: { date: today.toISOString(), dayName: 'Today', events: [] },
-      tomorrow: { date: addDays(today, 1).toISOString(), dayName: 'Tomorrow', events: [] }
-    });
-  }
-
   try {
-    const oauth2Client = new google.auth.OAuth2(
-      GOOGLE_CLIENT_ID,
-      GOOGLE_CLIENT_SECRET
-    );
-
-    oauth2Client.setCredentials({
-      access_token,
-      refresh_token: refresh_token as string | undefined,
-    });
-
-    const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
-
     const tomorrow = addDays(today, 1);
 
     // Fetch today's events
-    const todayRes = await calendar.events.list({
+    const todayParams = new URLSearchParams({
       calendarId: 'primary',
       timeMin: formatISO(startOfDay(today)),
       timeMax: formatISO(endOfDay(today)),
-      singleEvents: true,
+      singleEvents: 'true',
       orderBy: 'startTime',
-      maxResults: 20,
+      maxResults: '20',
     });
 
+    const todayRes = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?${todayParams}`, {
+      headers: { Authorization: `Bearer ${access_token}` }
+    });
+
+    if (!todayRes.ok) {
+      const error = await todayRes.json();
+      throw new Error(error.error?.message || 'Failed to fetch today\'s events');
+    }
+
+    const todayData = await todayRes.json();
+
     // Fetch tomorrow's events
-    const tomorrowRes = await calendar.events.list({
+    const tomorrowParams = new URLSearchParams({
       calendarId: 'primary',
       timeMin: formatISO(startOfDay(tomorrow)),
       timeMax: formatISO(endOfDay(tomorrow)),
-      singleEvents: true,
+      singleEvents: 'true',
       orderBy: 'startTime',
-      maxResults: 20,
+      maxResults: '20',
     });
+
+    const tomorrowRes = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?${tomorrowParams}`, {
+      headers: { Authorization: `Bearer ${access_token}` }
+    });
+
+    if (!tomorrowRes.ok) {
+      const error = await tomorrowRes.json();
+      throw new Error(error.error?.message || 'Failed to fetch tomorrow\'s events');
+    }
+
+    const tomorrowData = await tomorrowRes.json();
 
     const mapEvent = (event: any): CalendarEvent => {
       const start = event.start?.dateTime || event.start?.date;
@@ -112,14 +123,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         meetLink,
         description: event.description,
         organizer: event.organizer?.displayName || event.organizer?.email,
-        attendees: event.attendees?.map((a: any) => a.displayName || a.email) || [],
         isAllDay,
         status: event.status,
       };
     };
 
-    const todayEvents = (todayRes.data.items || []).map(mapEvent);
-    const tomorrowEvents = (tomorrowRes.data.items || []).map(mapEvent);
+    const todayEvents = (todayData.items || []).map(mapEvent);
+    const tomorrowEvents = (tomorrowData.items || []).map(mapEvent);
 
     res.status(200).json({
       connected: true,
