@@ -103,6 +103,7 @@ interface ArsenalData {
   injuries: Array<{ player: string; status: string; notes: string }>;
   trendingNews: Array<{ title: string; source: string; url: string }>;
   table: Array<{ position: number; team: string; played: number; won: number; points: number; form: string }>;
+  arseblogSummary?: string;
 }
 
 interface RedditPost {
@@ -335,6 +336,7 @@ async function fetchArsenalData(): Promise<ArsenalData> {
 
     // Try to get arseblog news specifically
     let arseblogNews: any[] = [];
+    let arseblogSummary = '';
     try {
       const arseblogRes = await axios.get(
         `https://api.search.brave.com/res/v1/news/search?q=${encodeURIComponent('site:arseblog.news Arsenal')}&count=5`,
@@ -349,6 +351,29 @@ async function fetchArsenalData(): Promise<ArsenalData> {
         source: 'Arseblog',
         url: n.url
       }));
+      
+      // Generate summary from Arseblog articles
+      if (arseblogResults.length > 0) {
+        const snippets = arseblogResults.slice(0, 2).map((r: any) => `${r.title}. ${r.description}`).join(' ');
+        
+        // Extract key themes from Arseblog
+        arseblogSummary = 'Latest from Arseblog: ';
+        if (snippets.toLowerCase().includes('arteta')) {
+          arseblogSummary += 'Arteta tactics under review. ';
+        }
+        if (snippets.toLowerCase().includes('saka') || snippets.toLowerCase().includes('odegaard') || snippets.toLowerCase().includes('saliba')) {
+          arseblogSummary += 'Key player updates. ';
+        }
+        if (snippets.toLowerCase().includes('transfer') || snippets.toLowerCase().includes('signing')) {
+          arseblogSummary += 'Transfer talk heating up. ';
+        }
+        if (snippets.toLowerCase().includes('injury')) {
+          arseblogSummary += 'Injury concerns discussed. ';
+        }
+        if (arseblogSummary === 'Latest from Arseblog: ') {
+          arseblogSummary += 'Match analysis and fan perspectives.';
+        }
+      }
     } catch (e) {
       console.log('Arseblog fetch failed:', e);
     }
@@ -452,7 +477,8 @@ async function fetchArsenalData(): Promise<ArsenalData> {
       ],
       injuries: await fetchArsenalInjuries(),
       trendingNews: combinedNews.length > 0 ? combinedNews : [{ title: 'Arsenal news loading...', source: 'System', url: '#' }],
-      table: tableData
+      table: tableData,
+      arseblogSummary
     };
     
   } catch (e: any) {

@@ -246,6 +246,15 @@ const ArsenalSection = ({ data, darkMode }: { data: any; darkMode: boolean }) =>
       <div className={`border-t ${darkMode ? 'border-[#252532]' : 'border-gray-100'}`}>
         <div className="p-4">
           <p className={`text-xs font-medium uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Latest News</p>
+          
+          {/* Arseblog Summary */}
+          {data.arseblogSummary && (
+            <div className={`p-3 rounded-xl mb-3 ${darkMode ? 'bg-[#EF0107]/5' : 'bg-red-50/50'}`}>
+              <p className={`text-xs font-medium mb-1 ${darkMode ? 'text-red-400' : 'text-red-600'}`}>Arseblog</p>
+              <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{data.arseblogSummary}</p>
+            </div>
+          )}
+          
           <div className="space-y-2">
             {data.trendingNews.slice(0, 3).map((news: any, i: number) => (
               <a 
