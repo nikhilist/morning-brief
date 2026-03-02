@@ -273,25 +273,6 @@ const ArsenalSection = ({ data, darkMode }: { data: any; darkMode: boolean }) =>
       </div>
     )}
 
-    {/* Injuries */}
-    {data.injuries?.length > 0 && (
-      <div className={`border-t ${darkMode ? 'border-[#252532]' : 'border-gray-100'}`}>
-        <div className="p-4">
-          <p className={`text-xs font-medium uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Squad Status</p>
-          <div className="space-y-2">
-            {data.injuries.slice(0, 3).map((injury: any, i: number) => (
-              <div key={i} className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-[#0A0A0F]' : 'bg-gray-50'}`}>
-                <span className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{injury.player}</span>
-                <Badge color={injury.status === 'FIT' ? 'green' : injury.status === 'DOUBT' ? 'yellow' : 'red'} darkMode={darkMode}>
-                  {injury.status}
-                </Badge>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    )}
-
     {/* Table */}
     <div className={`border-t ${darkMode ? 'border-[#252532]' : 'border-gray-100'}`}>
       <div className="p-4">
@@ -789,11 +770,10 @@ export default function Dashboard() {
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-24">
         <div className="space-y-4">
-          {/* Row 1 - 3 columns */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Row 1 - 2 columns */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <WeatherSection data={data.weather} darkMode={darkMode} />
             <ArsenalSection data={data.arsenal} darkMode={darkMode} />
-            <BlueskySection data={data.bluesky} darkMode={darkMode} />
           </div>
 
           {/* Full width sections */}
