@@ -28,7 +28,7 @@ _This is the non-negotiable foundation. Everything here loads in every session._
 - **Current Reality:** Commitments piling up, travel limited despite loving it
 - **Values:** Happy, balanced family life
 
-**Shared Google Calendar:** Primary source for family events, milestones, Meg's priorities. Need to connect this.
+**Shared Google Calendar:** Primary source for family events, milestones, Meg's priorities. ✅ Connected via OAuth.
 
 ---
 
@@ -57,13 +57,14 @@ _This is the non-negotiable foundation. Everything here loads in every session._
 
 | Project | Status | Last Touched | Notes |
 |---------|--------|--------------|-------|
-| morning-brief | **PAUSED** | ~2026-02-24 | Daily brief ready by 7am (or prep at 3am). Needs: weather, calendar (Google), news, Tasks sync. Blocked on: Google Calendar connection, task system choice. |
-| Tasks system integration | **OPEN** | 2026-03-03 | Nik is a serial procrastinator. Needs external task system linked with persistent follow-ups. Not started. |
+| morning-brief | **ACTIVE** | 2026-03-03 | Cron job configured (6am daily). Sends to Telegram @ 935335162. **Email rule**: Read ALL unread emails and summarize each one — don't just list subjects. **Arsenal rule**: Include summary of all arseblog.news articles from last 24 hours. **Todoist rule**: Show tasks due today AND past due tasks. |
+| Tasks system integration | **TODOIST** | 2026-03-03 | Connected. 0 tasks currently. |
 
 ---
 
 ## Interests & Patterns
 
+- **Arsenal FC — lifelong fan** (Nik + Meg). Arsenal news is not optional — it's essential morning reading.
 - Travel (aspirational — wants to do more)
 - Family time / work-life balance
 - Automation and efficiency
@@ -80,6 +81,18 @@ _This is the non-negotiable foundation. Everything here loads in every session._
 - Will call out when I'm not useful
 - Prefers proactive suggestions when they genuinely add value
 - Has patience for questions before action
+
+---
+
+## Connected Services
+
+- **Google Calendar** — Read access, OAuth active
+  - Primary: nikhilist@gmail.com
+  - Family: Neel calendar (shared with Meg)
+  - Arsenal FC calendar
+- **Gmail** — Read access, OAuth active
+- **Google Keep** — Read/write access via Drive API, OAuth active
+- **Todoist** — Full access, API token active
 
 ---
 

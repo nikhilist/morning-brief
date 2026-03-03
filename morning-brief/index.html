@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morning Brief - Tuesday, March 3</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .section h2 {
+      font-size: 14px;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .weather {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .weather .temp {
+      font-size: 32px;
+      font-weight: 600;
+    }
+    .weather .emoji {
+      font-size: 40px;
+    }
+    .event, .task {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .event:last-child, .task:last-child {
+      border-bottom: none;
+    }
+    .event-time, .task-check {
+      color: #666;
+      font-size: 14px;
+      min-width: 80px;
+    }
+    .event-title, .task-title {
+      flex: 1;
+      font-size: 15px;
+    }
+    .calendar-name {
+      font-size: 12px;
+      color: #999;
+      background: #f0f0f0;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    .empty {
+      color: #999;
+      font-style: italic;
+      padding: 10px 0;
+    }
+    .gmail-count {
+      font-size: 18px;
+      color: #333;
+    }
+    .gmail-count span {
+      font-size: 32px;
+      font-weight: 600;
+      color: #ea4335;
+    }
+    .footer {
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📅 Tuesday, March 3</h1>
+  
+  <div class="section">
+    <h2>Weather - Princeton, NJ</h2>
+    <div class="weather">
+      <div class="emoji">🌧️</div>
+      <div class="temp">5° / -1°</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Today's Events</h2>
+    <div class="event">
+      <span class="event-time">All day</span>
+      <span class="event-title">Pajama Day@school</span>
+      <span class="calendar-name">Family</span>
+    </div>
+    <div class="event">
+      <span class="event-time">1:30 PM</span>
+      <span class="event-title">Procedure@BaskingRidge</span>
+      <span class="calendar-name">Family</span>
+    </div>
+    <div class="event">
+      <span class="event-time">8:30 PM</span>
+      <span class="event-title">Karate Neel</span>
+      <span class="calendar-name">Family</span>
+    </div>
+    <div class="event">
+      <span class="event-time">All day</span>
+      <span class="event-title">Wacky Day@School</span>
+      <span class="calendar-name">Family</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Tasks</h2>
+    <div class="task">
+      <span class="task-check">☐</span>
+      <span class="task-title">Call up Goldfish to re-enroll Neel</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Gmail</h2>
+    <div class="gmail-count">
+      <span>5</span> unread messages
+    </div>
+  </div>
+
+  <div class="footer">
+    Generated at 5:30 AM
+  </div>
+</body>
+</html>
