@@ -30,12 +30,44 @@ Things like:
 - Preferred voice: "Nova" (warm, slightly British)
 - Default speaker: Kitchen HomePod
 
-## Habitica
+## Configurations — DO NOT DELETE
 
-- User ID: 404a4487-6eea-4ed3-b60b-03f82092b29a
-- API Token: e3470ee9-56d7-49f4-bd56-4f3f175bd804
-- Config: ~/.habitica
-- Use for: Daily habit tracking, dailies, todos, habits
+### Morning Brief (6am daily)
+- Cron job ID: `59aea0cd-f3da-4556-b0f8-b5da9e8dd866`
+- Sends to Telegram: `@Nikhoshi` (chat ID: 935335162)
+- Script location: `~/.openclaw/workspace/morning-brief.sh`
+
+### Google OAuth (gog)
+- Email: nikhilist@gmail.com
+- Services: Gmail, Calendar, Drive
+- Client secret: `~/.openclaw/credentials/google_client_secret.json`
+- Token storage: `~/.config/gogcli/keyring/`
+- Binary: `~/.local/bin/gog`
+- Env vars needed:
+  - `GOG_KEYRING_BACKEND=file`
+  - `GOG_KEYRING_PASSWORD=""`
+  - `GOG_ACCOUNT=nikhilist@gmail.com`
+
+### Todoist
+- API Token: `81d341953323302cf0919e4ec8a8d9531ea6f881`
+- CLI: `todoist` (npm: `todoist-ts-cli`)
+- Config: `~/.config/todoist-cli/config.json`
+
+### Habitica
+- User ID: `404a4487-6eea-4ed3-b60b-03f82092b29a`
+- API Token: `e3470ee9-56d7-49f4-bd56-4f3f175bd804`
+- Config: `~/.habitica`
+- Skill: `~/.openclaw/workspace/skills/habitica-skill/`
+
+### Telegram
+- Bot connected: YES
+- Username: @Nikhoshi
+- Chat ID: 935335162
+- Used for: Morning brief delivery
+
+### Arsenal News
+- Source: https://arseblog.news/
+- Format: Summarize all articles from last 24h
 ```
 
 ## Why Separate?
