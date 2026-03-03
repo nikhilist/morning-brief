@@ -1,0 +1,86 @@
+# MEMORY.md — Core Context
+
+_This is the non-negotiable foundation. Everything here loads in every session._
+
+---
+
+## Communication Style
+
+- **Direct.** No fluff. Skip the "Great question!" filler.
+- **No bullet points** unless giving step-by-step instructions.
+- **Always respond** — good or bad, never go quiet mid-thought.
+- **Ask before acting** — patience for questions, not for surprises.
+
+---
+
+## Nik — The Human
+
+- **Location:** Princeton, NJ
+- **Timezone:** Eastern Time
+- **Family:** Meg (spouse), Neel (3.5 years old)
+- **Work:** Engineering Lead at Aetna, fully remote
+  - Currently building a Grievances & Appeals application — multi-year effort
+  - Responsibility: Setup the team and help them succeed at any cost
+- **Meg's Work:** Managing Editor in NYC (commutes)
+- **Morning Routine:** Wake at 7am, drop Neel off 8:45-9:15am
+- **Top Priority:** Family — Meg and Neel come first, always
+- **Work Style:** Hard during the day, unplug after hours
+- **Current Reality:** Commitments piling up, travel limited despite loving it
+- **Values:** Happy, balanced family life
+
+**Shared Google Calendar:** Primary source for family events, milestones, Meg's priorities. Need to connect this.
+
+---
+
+## What I Can Help With
+
+- Research, coding, automation, writing, analysis
+- Project planning and tracking
+- Web search, browser automation, file operations
+- Summarizing content, explaining concepts
+- Managing todo lists, reminders, schedules
+- Discord/Telegram/Slack integration (when configured)
+- Proactive automation suggestions — watch patterns, suggest improvements
+
+## What I Cannot Help With
+
+- Accessing external systems without credentials (Aetna work VPN, internal tools — unless you set up access)
+- Physical world actions (can't book without APIs, can't make calls)
+- Real-time data without tools (stock prices, live sports — unless I search)
+- Legal/medical expertise (will flag these)
+- Accessing accounts without explicit setup
+- Aetna Grievances & Appeals work details (internal, wait for you to share what you want)
+
+---
+
+## Active Projects
+
+| Project | Status | Last Touched | Notes |
+|---------|--------|--------------|-------|
+| morning-brief | **PAUSED** | ~2026-02-24 | Daily brief ready by 7am (or prep at 3am). Needs: weather, calendar (Google), news, Tasks sync. Blocked on: Google Calendar connection, task system choice. |
+| Tasks system integration | **OPEN** | 2026-03-03 | Nik is a serial procrastinator. Needs external task system linked with persistent follow-ups. Not started. |
+
+---
+
+## Interests & Patterns
+
+- Travel (aspirational — wants to do more)
+- Family time / work-life balance
+- Automation and efficiency
+- Software engineering
+- **Hates chores** — observe patterns, suggest automation proactively
+- **Procrastinator** — needs external accountability system
+
+---
+
+## Patterns
+
+- Checks in periodically, then goes heads-down
+- Values brevity over hand-holding
+- Will call out when I'm not useful
+- Prefers proactive suggestions when they genuinely add value
+- Has patience for questions before action
+
+---
+
+_Last updated: 2026-03-03 by Gunner_
