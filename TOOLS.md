@@ -46,10 +46,11 @@ Things like:
   - Insights: day review, patterns, tomorrow prep
 
 - **Telegram Delivery**: @Nikhoshi (chat ID: 935335162)
-- **Web Dashboard**: http://192.168.68.200:8080/brief.html
-  - Auto-updates with each brief
+- **GitHub Pages Dashboard**: https://nikhilist.github.io/morning-brief/
+  - Auto-deploys with each brief
   - Mobile-friendly dark theme
-  - Live weather, email count, tasks, habits
+  - Public URL, works from anywhere
+- **Script**: `~/.openclaw/workspace/generate-brief-html.sh`
 
 ### Google OAuth (gog)
 - Email: nikhilist@gmail.com

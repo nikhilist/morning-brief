@@ -1,7 +1,8 @@
 #!/bin/bash
-# Generate static HTML brief page
+# Generate static HTML brief page and deploy to GitHub Pages
 
 OUTPUT_FILE="/home/nik/.openclaw/workspace/brief.html"
+INDEX_FILE="/home/nik/.openclaw/workspace/index.html"
 DATE=$(date '+%A, %B %-d, %Y')
 TIME=$(date '+%I:%M %p')
 
@@ -19,24 +20,21 @@ export GOG_KEYRING_BACKEND=file
 export GOG_KEYRING_PASSWORD=""
 export GOG_ACCOUNT=nikhilist@gmail.com
 
-# Nik's events
-NIK_EVENTS=$(gog calendar events nikhilist@gmail.com --from $(date '+%Y-%m-%d') --to $(date -d '+1 day' '+%Y-%m-%d' 2>/dev/null || date -v+1d '+%Y-%m-%d') --json 2>/dev/null || echo '{"events":[]}')
-
-# Neel's events  
-NEEL_EVENTS=$(gog calendar events "8tdo49s92dr6h34pcros8a17k8@group.calendar.google.com" --from $(date '+%Y-%m-%d') --to $(date -d '+1 day' '+%Y-%m-%d' 2>/dev/null || date -v+1d '+%Y-%m-%d') --json 2>/dev/null || echo '{"events":[]}')
-
 # Email count
 EMAIL_COUNT=$(gog gmail search 'is:unread' --json 2>/dev/null | jq '.threads | length' 2>/dev/null || echo "0")
 
 # Todoist tasks
 TODO_COUNT=$(todoist tasks --json 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
+TODO_LIST=$(todoist tasks --json 2>/dev/null | jq -r '.[] | "<li>\(.content)</li>"' 2>/dev/null || echo "")
 
 # Habitica dailies
 export HABITICA_USER_ID="404a4487-6eea-4ed3-b60b-03f82092b29a"
 export HABITICA_API_TOKEN="e3470ee9-56d7-49f4-bd56-4f3f175bd804"
 HABITICA_PENDING=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh list dailys 2>/dev/null | grep -c "value: 0" || echo "0")
+HABITICA_DONE=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh list dailys 2>/dev/null | grep "value: 1" | sed 's/.*\[daily\] //;s/ .*//' || echo "")
+HABITICA_TODO=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh list dailys 2>/dev/null | grep "value: 0" | sed 's/.*\[daily\] //;s/ .*//' || echo "")
 
-cat > "$OUTPUT_FILE" << HTML
+cat > "$INDEX_FILE" << HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,16 +92,6 @@ cat > "$OUTPUT_FILE" << HTML
         .weather-main { font-size: 3rem; font-weight: 300; }
         .weather-desc { color: #8892b0; margin-top: 5px; }
         .weather-icon { font-size: 4rem; }
-        .event {
-            display: flex;
-            align-items: flex-start;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .event:last-child { border-bottom: none; }
-        .event-time { min-width: 80px; color: #64ffda; font-size: 0.9rem; }
-        .event-title { flex: 1; }
-        .event-person { color: #8892b0; font-size: 0.85rem; }
         .badge {
             display: inline-block;
             background: rgba(100, 255, 218, 0.1);
@@ -134,6 +122,12 @@ cat > "$OUTPUT_FILE" << HTML
             color: #8892b0;
             font-size: 0.9rem;
         }
+        .task-list { list-style: none; margin-top: 10px; }
+        .task-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .task-list li:last-child { border-bottom: none; }
         .refresh-btn {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -196,14 +190,42 @@ cat > "$OUTPUT_FILE" << HTML
                 </div>
             </div>
         </div>
+HTML
 
+# Add tasks section if there are tasks
+if [ "$TODO_COUNT" -gt 0 ]; then
+cat >> "$INDEX_FILE" << HTML
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">✅</span>
+                Tasks
+            </div>
+            <ul class="task-list">
+                $TODO_LIST
+            </ul>
+        </div>
+HTML
+fi
+
+cat >> "$INDEX_FILE" << HTML
         <div class="footer">
             Last updated: $TIME<br>
-            <button class="refresh-btn" onclick="location.reload()">Refresh Brief</button>
+            <a href="https://github.com/nikhilist/morning-brief" class="refresh-btn">View on GitHub</a>
         </div>
     </div>
 </body>
 </html>
 HTML
 
-echo "Brief generated at $OUTPUT_FILE"
+# Copy to brief.html too
+cp "$INDEX_FILE" "$OUTPUT_FILE"
+
+# Commit and push to GitHub Pages
+cd /home/nik/.openclaw/workspace
+git add index.html brief.html
+git commit -m "Update brief: $DATE $TIME" 2>/dev/null || true
+git push origin main 2>&1 || echo "Push failed - may need manual intervention"
+
+echo "Brief generated and deployed"
+echo "Local: $OUTPUT_FILE"
+echo "GitHub Pages: https://nikhilist.github.io/morning-brief/"
