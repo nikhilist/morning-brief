@@ -32,10 +32,24 @@ Things like:
 
 ## Configurations — DO NOT DELETE
 
-### Morning Brief (6am daily)
-- Cron job ID: `59aea0cd-f3da-4556-b0f8-b5da9e8dd866`
-- Sends to Telegram: `@Nikhoshi` (chat ID: 935335162)
-- Script location: `~/.openclaw/workspace/morning-brief.sh`
+### Daily Briefs (3x daily)
+- **Morning Brief** — 7:00 AM
+  - Cron ID: `59aea0cd-f3da-4556-b0f8-b5da9e8dd866`
+  - Full brief: weather, both calendars, all unread emails, tasks, habits, Arsenal news
+  
+- **Afternoon Brief** — 4:00 PM  
+  - Cron ID: `e01cd07b-d98b-4d92-bc22-5c73b3dfa0f3`
+  - Update: what's changed since morning
+  
+- **Evening Brief** — 11:00 PM
+  - Cron ID: `939d9e12-4519-4667-8edd-b0bff4fb41a8`
+  - Insights: day review, patterns, tomorrow prep
+
+- **Telegram Delivery**: @Nikhoshi (chat ID: 935335162)
+- **Web Dashboard**: http://192.168.68.200:8080/brief.html
+  - Auto-updates with each brief
+  - Mobile-friendly dark theme
+  - Live weather, email count, tasks, habits
 
 ### Google OAuth (gog)
 - Email: nikhilist@gmail.com

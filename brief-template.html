@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nik's Daily Brief</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eaeaea;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .date {
+            font-size: 0.9rem;
+            color: #8892b0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .location {
+            color: #64ffda;
+            font-size: 1.1rem;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .card-header .icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .weather-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .weather-main {
+            font-size: 3rem;
+            font-weight: 300;
+        }
+        
+        .weather-desc {
+            color: #8892b0;
+            margin-top: 5px;
+        }
+        
+        .weather-icon {
+            font-size: 4rem;
+        }
+        
+        .event {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .event:last-child {
+            border-bottom: none;
+        }
+        
+        .event-time {
+            min-width: 80px;
+            color: #64ffda;
+            font-size: 0.9rem;
+        }
+        
+        .event-title {
+            flex: 1;
+        }
+        
+        .event-person {
+            color: #8892b0;
+            font-size: 0.85rem;
+        }
+        
+        .email-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .email-sender {
+            color: #64ffda;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .email-subject {
+            color: #eaeaea;
+            margin-top: 4px;
+        }
+        
+        .email-summary {
+            color: #8892b0;
+            font-size: 0.9rem;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #64ffda;
+            border-radius: 4px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .checkbox.checked {
+            background: #64ffda;
+        }
+        
+        .checkbox.checked::after {
+            content: "✓";
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        
+        .habit-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
+        .habit-streak {
+            margin-left: auto;
+            color: #ffd700;
+            font-size: 0.9rem;
+        }
+        
+        .arsenal-card {
+            background: linear-gradient(135deg, rgba(239, 1, 7, 0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-left: 4px solid #ef0107;
+        }
+        
+        .news-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        
+        .news-title {
+            font-weight: 600;
+            color: #ef0107;
+            margin-bottom: 5px;
+        }
+        
+        .news-summary {
+            color: #8892b0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-left: 10px;
+        }
+        
+        .badge.pending {
+            background: rgba(239, 1, 7, 0.1);
+            color: #ef0107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="date">Tuesday, March 3, 2026</div>
+            <h1>Morning Brief</h1>
+            <div class="location">📍 Princeton, NJ</div>
+        </header>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">🌤️</span>
+                Weather
+            </div>
+            <div class="weather-card">
+                <div>
+                    <div class="weather-main">31°F</div>
+                    <div class="weather-desc">Feels like 26°F • Partly cloudy • Light winds</div>
+                </div>
+                <div class="weather-icon">☁️</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">📆</span>
+                Today's Agenda
+            </div>
+            
+            <div class="event">
+                <div class="event-time">All day</div>
+                <div class="event-title">
+                    Pajama Day @ school
+                    <div class="event-person">Neel</div>
+                </div>
+            </div>
+            
+            <div class="event">
+                <div class="event-time">8:30 AM</div>
+                <div class="event-title">
+                    Procedure @ Basking Ridge
+                    <div class="event-person">Neel</div>
+                </div>
+            </div>
+            
+            <div class="event">
+                <div class="event-time">3:30 PM</div>
+                <div class="event-title">
+                    Karate Neel
+                    <div class="event-person">Neel</div>
+                </div>
+            </div>
+            
+            <div class="event">
+                <div class="event-time">7:00 AM</div>
+                <div class="event-title">
+                    Wake up
+                </div>
+            </div>
+            
+            <div class="event">
+                <div class="event-time">8:45 AM</div>
+                <div class="event-title">
+                    Drop Neel off
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">📧</span>
+                Email <span class="badge pending">10 unread</span>
+            </div>
+            
+            <div class="email-item">
+                <div class="email-sender">The Athletic</div>
+                <div class="email-subject">World Cup: 100 days to go</div>
+                <div class="email-summary">Preview and what to know about the upcoming tournament.</div>
+            </div>
+            
+            <div class="email-item">
+                <div class="email-sender">Google Play</div>
+                <div class="email-subject">Your Order Receipt</div>
+                <div class="email-summary">Order confirmation from March 3rd purchase.</div>
+            </div>
+            
+            <div class="email-item">
+                <div class="email-sender">Todoist</div>
+                <div class="email-subject">Daily Digest: 1 task due</div>
+                <div class="email-summary">You have 1 task due today.</div>
+            </div>
+            
+            <div class="email-item">
+                <div class="email-sender">DCU</div>
+                <div class="email-subject">Your eStatement is ready</div>
+                <div class="email-summary">Monthly statement available to view.</div>
+            </div>
+            
+            <div class="email-item">
+                <div class="email-sender">+ 6 more...</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">✅</span>
+                Tasks <span class="badge pending">1 due</span>
+            </div>
+            
+            <div class="task-item">
+                <div class="checkbox"></div>
+                <span>Get the contact lens prescription updated</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">🎯</span>
+                Habits
+            </div>
+            
+            <div class="habit-item">
+                <div class="checkbox"></div>
+                <span>Vitamin D - 50000IU</span>
+            </div>
+            
+            <div class="habit-item">
+                <div class="checkbox checked"></div>
+                <span>Vitamin B12 + Calcium</span>
+            </div>
+        </div>
+
+        <div class="card arsenal-card">
+            <div class="card-header">
+                <span class="icon">🔴</span>
+                Arsenal FC
+            </div>
+            
+            <div class="news-item">
+                <div class="news-title">Sagoe Jr joins Kalmar FF on loan</div>
+                <div class="news-summary">Swedish side until January. Unusual timing with season starting in April, but he'll get competitive minutes before winter break.</div>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-title">Raya set for new deal</div>
+                <div class="news-summary">Reward for impressive form since joining from Brentford, cementing his place ahead of Ramsdale.</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Generated on Tuesday, March 3, 2026 at 7:00 AM<br>
+            Next brief: 4:00 PM
+        </div>
+    </div>
+</body>
+</html>
