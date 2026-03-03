@@ -65,45 +65,47 @@
             margin-left: 10px;
         }
         .badge.pending { background: rgba(239, 1, 7, 0.1); color: #ef0107; }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+        .event {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .stat-box {
-            background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
+        .event:last-child { border-bottom: none; }
+        .event-time { min-width: 80px; color: #64ffda; font-size: 0.85rem; }
+        .event-title { flex: 1; }
+        .email-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .stat-number { font-size: 2rem; font-weight: 600; color: #64ffda; }
-        .stat-label { font-size: 0.9rem; color: #8892b0; margin-top: 5px; }
+        .email-item:last-child { border-bottom: none; }
+        .email-sender { color: #64ffda; font-weight: 500; font-size: 0.9rem; }
+        .email-subject { color: #eaeaea; font-size: 0.95rem; margin-top: 2px; }
+        .task-list, .habit-list { list-style: none; margin-top: 10px; }
+        .task-list li, .habit-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .task-list li:last-child, .habit-list li:last-child { border-bottom: none; }
+        .habit-pending { color: #ef0107; }
+        .habit-done { color: #64ffda; text-decoration: line-through; opacity: 0.7; }
+        .arsenal-card {
+            background: linear-gradient(135deg, rgba(239, 1, 7, 0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-left: 4px solid #ef0107;
+        }
+        .news-list { list-style: none; margin-top: 10px; }
+        .news-list li {
+            padding: 8px 0;
+            color: #ffd700;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .news-list li:last-child { border-bottom: none; }
         .footer {
             text-align: center;
             padding: 30px;
             color: #8892b0;
             font-size: 0.9rem;
         }
-        .task-list { list-style: none; margin-top: 10px; }
-        .task-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .task-list li:last-child { border-bottom: none; }
-        .refresh-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            margin-top: 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        .refresh-btn:hover { opacity: 0.9; }
         @media (max-width: 600px) {
             h1 { font-size: 1.8rem; }
             .weather-main { font-size: 2rem; }
@@ -135,36 +137,61 @@
 
         <div class="card">
             <div class="card-header">
-                <span class="icon">📊</span>
-                Daily Snapshot
+                <span class="icon">📆</span>
+                Today's Agenda <span class="badge">10 emails</span>
             </div>
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-number">10</div>
-                    <div class="stat-label">Unread Emails</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">1</div>
-                    <div class="stat-label">Tasks Due</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">1</div>
-                    <div class="stat-label">Habits Pending</div>
-                </div>
+            <div class="event"><div class="event-time">2026-03-03</div><div class="event-title">Pajama Day@school</div></div>
+<div class="event"><div class="event-time">08:30</div><div class="event-title">Procedure@BaskingRidge</div></div>
+<div class="event"><div class="event-time">15:30</div><div class="event-title">Karate Neel</div></div>
+<div class="event"><div class="event-time">2026-03-04</div><div class="event-title">Wacky Day@School</div></div>
+            <div class="event">
+                <div class="event-time">7:00 AM</div>
+                <div class="event-title">Wake up</div>
             </div>
+            <div class="event">
+                <div class="event-time">8:45 AM</div>
+                <div class="event-title">Drop Neel off</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">📧</span>
+                Emails <span class="badge pending">10 unread</span>
+            </div>
+            <div class="email-item"><div class="email-sender">Google <no-reply@google.com></div><div class="email-subject">✅ Nikhil, finish setting up your Android device with Google</div></div>
+<div class="email-item"><div class="email-sender">Google <no-reply@accounts.google.com></div><div class="email-subject">Security alert</div></div>
+<div class="email-item"><div class="email-sender">Prime Tire <TheAthletic@e1.theathletic.com></div><div class="email-subject">My doubts ahead of the season opener</div></div>
+<div class="email-item"><div class="email-sender">ClassDojo <parent@classdojo.com></div><div class="email-subject">Makeup Class for missed Karate class last week! 3-330pm today!! tomorrow</div></div>
+<div class="email-item"><div class="email-sender">Vanguard <Participant_Education@eonline.e-vanguard.com></div><div class="email-subject">Welcome to your retirement plan at Vanguard</div></div>
+<div class="email-item"><div class="email-sender">Matter <ben@getmatter.com></div><div class="email-subject">New in Matter: Multi-language text to speech, easier link saving, and more</div></div>
+<div class="email-item"><div class="email-sender">ClassDojo <parent@classdojo.com></div><div class="email-subject">Ms. Maccaroni shared a post in Neel's school</div></div>
+<div class="email-item"><div class="email-sender">Monarch <email@email.monarch.com></div><div class="email-subject">Your account balance activity for  Mar 2nd</div></div>
+<div class="email-item"><div class="email-sender">ARSEBLOG <bingo@patreon.com></div><div class="email-subject">Premier League preview podcast: Brighton away</div></div>
+<div class="email-item"><div class="email-sender">Capital One <capitalone@notification.capitalone.com></div><div class="email-subject">Protect your account: Enable more alerts today</div></div>
         </div>
         <div class="card">
             <div class="card-header">
                 <span class="icon">✅</span>
-                Tasks
+                Tasks <span class="badge pending">1 due</span>
             </div>
             <ul class="task-list">
                 <li>Get the contact lens prescription updated</li>
             </ul>
         </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">🎯</span>
+                Habits
+            </div>
+            <ul class="habit-list">
+                <li class="habit-pending">☐ Vitamin D - 50000IU</li>
+                <li class="habit-done">☑ Vitamin B12 + Calcium</li>
+            </ul>
+        </div>
         <div class="footer">
-            Last updated: 11:01 PM<br>
-            <a href="https://github.com/nikhilist/morning-brief" class="refresh-btn">View on GitHub</a>
+            Last updated: 11:04 PM<br>
+            <a href="https://github.com/nikhilist/morning-brief" style="color: #64ffda;">github.com/nikhilist/morning-brief</a>
         </div>
     </div>
 </body>
