@@ -57,7 +57,7 @@ _This is the non-negotiable foundation. Everything here loads in every session._
 
 | Project | Status | Last Touched | Notes |
 |---------|--------|--------------|-------|
-| morning-brief | **ACTIVE** | 2026-03-03 | Cron job configured (6am daily). Sends to Telegram @ 935335162. **Email rule**: Read ALL unread emails, summarize EACH one — brief 1-sentence summaries. **Arsenal rule**: Include summary of all arseblog.news articles from last 24 hours. **Todoist rule**: Show tasks due today AND past due tasks. **Habitica rule**: Show due dailies. **Setup status**: ✅ Google OAuth (Gmail+Calendar+Drive) via gog. ✅ Todoist connected. ✅ Habitica connected. |
+| morning-brief | **ACTIVE** | 2026-03-03 | Cron job configured (6am daily). Sends to Telegram @ 935335162. **Email rule**: Read ALL unread emails, summarize EACH one — brief 1-sentence summaries. **Arsenal rule**: Include summary of all arseblog.news articles from last 24 hours. **Todoist rule**: Show tasks due today AND past due tasks. **Habitica rule**: Show due dailies. **Calendar rule**: Check BOTH nikhilist@gmail.com AND Neel's calendar (8tdo49s92dr6h34pcros8a17k8@group.calendar.google.com). **Setup status**: ✅ Google OAuth (Gmail+Calendar+Drive) via gog. ✅ Todoist connected. ✅ Habitica connected. |
 | Tasks system integration | **TODOIST** | 2026-03-03 | Connected. 0 tasks currently. |
 
 ---
