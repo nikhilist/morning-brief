@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nik's Daily Brief</title>
+    <title>Nik's Morning Brief</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -64,7 +64,7 @@
             font-size: 0.85rem;
             margin-left: 10px;
         }
-        .badge.pending { background: rgba(239, 1, 7, 0.1); color: #ef0107; }
+        .badge.new { background: rgba(239, 1, 7, 0.2); color: #ff6b6b; }
         .event {
             display: flex;
             align-items: flex-start;
@@ -93,6 +93,17 @@
             background: linear-gradient(135deg, rgba(239, 1, 7, 0.1) 0%, rgba(255,255,255,0.05) 100%);
             border-left: 4px solid #ef0107;
         }
+        .insights-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-left: 4px solid #667eea;
+        }
+        .insight-text {
+            color: #b8c5d6;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        .insight-text:last-child { margin-bottom: 0; }
         .news-list { list-style: none; margin-top: 10px; }
         .news-list li {
             padding: 8px 0;
@@ -106,6 +117,11 @@
             color: #8892b0;
             font-size: 0.9rem;
         }
+        .delta-note {
+            font-size: 0.85rem;
+            color: #8892b0;
+            margin-left: 10px;
+        }
         @media (max-width: 600px) {
             h1 { font-size: 1.8rem; }
             .weather-main { font-size: 2rem; }
@@ -116,7 +132,7 @@
 <body>
     <div class="container">
         <header>
-            <div class="date">Tuesday, March 3, 2026</div>
+            <div class="date">Wednesday, March 4, 2026</div>
             <h1>Morning Brief</h1>
             <div class="location">📍 Princeton, NJ</div>
         </header>
@@ -138,12 +154,10 @@
         <div class="card">
             <div class="card-header">
                 <span class="icon">📆</span>
-                Today's Agenda <span class="badge">10 emails</span>
+                Today's Agenda
             </div>
-            <div class="event"><div class="event-time">2026-03-03</div><div class="event-title">Pajama Day@school</div></div>
-<div class="event"><div class="event-time">08:30</div><div class="event-title">Procedure@BaskingRidge</div></div>
-<div class="event"><div class="event-time">15:30</div><div class="event-title">Karate Neel</div></div>
-<div class="event"><div class="event-time">2026-03-04</div><div class="event-title">Wacky Day@School</div></div>
+            <div class="event"><div class="event-time">2026-03-04</div><div class="event-title">Wacky Day@School</div></div>
+<div class="event"><div class="event-time">2026-03-05</div><div class="event-title">Silly Socks@School</div></div>
             <div class="event">
                 <div class="event-time">7:00 AM</div>
                 <div class="event-title">Wake up</div>
@@ -153,13 +167,14 @@
                 <div class="event-title">Drop Neel off</div>
             </div>
         </div>
-
         <div class="card">
             <div class="card-header">
                 <span class="icon">📧</span>
-                Emails <span class="badge pending">10 unread</span>
+                New Emails <span class="badge new">10 new</span>
+                <span class="delta-note">(10 total unread)</span>
             </div>
-            <div class="email-item"><div class="email-sender">Google <no-reply@google.com></div><div class="email-subject">✅ Nikhil, finish setting up your Android device with Google</div></div>
+            <div class="email-item"><div class="email-sender">Monarch <email@email.monarch.com></div><div class="email-subject">🗓 New recurring merchant found</div></div>
+<div class="email-item"><div class="email-sender">Google <no-reply@google.com></div><div class="email-subject">✅ Nikhil, finish setting up your Android device with Google</div></div>
 <div class="email-item"><div class="email-sender">Google <no-reply@accounts.google.com></div><div class="email-subject">Security alert</div></div>
 <div class="email-item"><div class="email-sender">Prime Tire <TheAthletic@e1.theathletic.com></div><div class="email-subject">My doubts ahead of the season opener</div></div>
 <div class="email-item"><div class="email-sender">ClassDojo <parent@classdojo.com></div><div class="email-subject">Makeup Class for missed Karate class last week! 3-330pm today!! tomorrow</div></div>
@@ -168,7 +183,6 @@
 <div class="email-item"><div class="email-sender">ClassDojo <parent@classdojo.com></div><div class="email-subject">Ms. Maccaroni shared a post in Neel's school</div></div>
 <div class="email-item"><div class="email-sender">Monarch <email@email.monarch.com></div><div class="email-subject">Your account balance activity for  Mar 2nd</div></div>
 <div class="email-item"><div class="email-sender">ARSEBLOG <bingo@patreon.com></div><div class="email-subject">Premier League preview podcast: Brighton away</div></div>
-<div class="email-item"><div class="email-sender">Capital One <capitalone@notification.capitalone.com></div><div class="email-subject">Protect your account: Enable more alerts today</div></div>
         </div>
         <div class="card">
             <div class="card-header">
@@ -189,8 +203,22 @@
                 <li class="habit-done">☑ Vitamin B12 + Calcium</li>
             </ul>
         </div>
+        <div class="card arsenal-card">
+            <div class="card-header">
+                <span class="icon">🔴</span>
+                Arsenal FC
+            </div>
+            <ul class="news-list">
+                <li>.tdi_51 .tdm-title{background-color:#cc0000;-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Oswald!important;font-size:21px!important}html[class*='ie'] .tdi_51 .tdm-title{background:none;color:#cc0000}body .tdi_51 .tdm-title-line:after{background-color:#dddddd}.tdi_51 .tdm-title-line{width:100%;height:10px}.tdi_51 .tdm-title-line:after{height:1px;bottom:-100%}@media (min-width:1019px) and (max-width:1140px){.tdi_51 .tdm-title-line{height:8px}.tdi_51 .tdm-title{font-size:19px!important}}@media (min-width:768px) and (max-width:1018px){.tdi_51 .tdm-title-line{height:6px}.tdi_51 .tdm-title{font-size:18px!important}}@media (max-width:767px){.tdi_51 .tdm-title-line{height:8px}.tdi_51 .tdm-title{font-size:19px!important}}</li>
+<li>MATCHES & TEAM NEWS</li>
+<li>Arteta fields more questions about set pieces&#8230;blah, blah, blah</li>
+<li>Rice, Odegaard, White, Raya &#8211; Arteta issues pre-Brighton fitness update</li>
+<li>&#8220;You’ve got to love it&#8221; &#8211; Martin Keown on the tension of a title race</li>
+            </ul>
+        </div>
+
         <div class="footer">
-            Last updated: 11:04 PM<br>
+            Last updated: 12:05 AM<br>
             <a href="https://github.com/nikhilist/morning-brief" style="color: #64ffda;">github.com/nikhilist/morning-brief</a>
         </div>
     </div>
