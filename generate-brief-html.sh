@@ -1,38 +1,47 @@
 #!/bin/bash
-# Generate static HTML brief page and deploy to GitHub Pages
+# Generate full HTML brief page and deploy to GitHub Pages
 
 OUTPUT_FILE="/home/nik/.openclaw/workspace/brief.html"
 INDEX_FILE="/home/nik/.openclaw/workspace/index.html"
 DATE=$(date '+%A, %B %-d, %Y')
 TIME=$(date '+%I:%M %p')
 
-# Get weather
-WEATHER_JSON=$(curl -s "https://api.open-meteo.com/v1/forecast?latitude=40.3573&longitude=-74.6672&current=temperature_2m,apparent_temperature,weather_code&timezone=America/New_York")
-TEMP=$(echo "$WEATHER_JSON" | jq -r '.current.temperature_2m')
-FEELS_LIKE=$(echo "$WEATHER_JSON" | jq -r '.current.apparent_temperature')
-# Convert C to F
-TEMP_F=$(echo "scale=0; ($TEMP * 9/5) + 32" | bc -l 2>/dev/null || echo "31")
-FEELS_F=$(echo "scale=0; ($FEELS_LIKE * 9/5) + 32" | bc -l 2>/dev/null || echo "26")
-
-# Get calendar events (using gog)
+# Setup env
 export PATH=$PATH:$HOME/.local/bin
 export GOG_KEYRING_BACKEND=file
 export GOG_KEYRING_PASSWORD=""
 export GOG_ACCOUNT=nikhilist@gmail.com
-
-# Email count
-EMAIL_COUNT=$(gog gmail search 'is:unread' --json 2>/dev/null | jq '.threads | length' 2>/dev/null || echo "0")
-
-# Todoist tasks
-TODO_COUNT=$(todoist tasks --json 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
-TODO_LIST=$(todoist tasks --json 2>/dev/null | jq -r '.[] | "<li>\(.content)</li>"' 2>/dev/null || echo "")
-
-# Habitica dailies
 export HABITICA_USER_ID="404a4487-6eea-4ed3-b60b-03f82092b29a"
 export HABITICA_API_TOKEN="e3470ee9-56d7-49f4-bd56-4f3f175bd804"
-HABITICA_PENDING=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh list dailys 2>/dev/null | grep -c "value: 0" || echo "0")
-HABITICA_DONE=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh list dailys 2>/dev/null | grep "value: 1" | sed 's/.*\[daily\] //;s/ .*//' || echo "")
-HABITICA_TODO=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh list dailys 2>/dev/null | grep "value: 0" | sed 's/.*\[daily\] //;s/ .*//' || echo "")
+
+# Get weather
+WEATHER_JSON=$(curl -s "https://api.open-meteo.com/v1/forecast?latitude=40.3573&longitude=-74.6672&current=temperature_2m,apparent_temperature,weather_code&timezone=America/New_York")
+TEMP=$(echo "$WEATHER_JSON" | jq -r '.current.temperature_2m')
+FEELS_LIKE=$(echo "$WEATHER_JSON" | jq -r '.current.apparent_temperature')
+TEMP_F=$(echo "scale=0; ($TEMP * 9/5) + 32" | bc -l 2>/dev/null || echo "31")
+FEELS_F=$(echo "scale=0; ($FEELS_LIKE * 9/5) + 32" | bc -l 2>/dev/null || echo "26")
+
+# Get emails with details
+EMAILS_JSON=$(gog gmail search 'is:unread' --json 2>/dev/null || echo '{"threads":[]}')
+EMAIL_COUNT=$(echo "$EMAILS_JSON" | jq '.threads | length')
+EMAIL_LIST=$(echo "$EMAILS_JSON" | jq -r '.threads[:10][] | "<div class=\"email-item\"><div class=\"email-sender\">\(.from)</div><div class=\"email-subject\">\(.subject)</div></div>"' 2>/dev/null || echo "")
+
+# Get calendar events
+NEEL_EVENTS=$(gog calendar events "8tdo49s92dr6h34pcros8a17k8@group.calendar.google.com" --from $(date '+%Y-%m-%d') --to $(date -d '+1 day' '+%Y-%m-%d' 2>/dev/null || date -v+1d '+%Y-%m-%d') --json 2>/dev/null || echo '{"events":[]}')
+NEEL_LIST=$(echo "$NEEL_EVENTS" | jq -r '.events[] | "<div class=\"event\"><div class=\"event-time\">\(.start.date // (.start.dateTime | split("T")[1][:5]))</div><div class=\"event-title\">\(.summary)</div></div>"' 2>/dev/null || echo "")
+
+# Get Todoist tasks
+TODO_JSON=$(todoist tasks --json 2>/dev/null || echo '[]')
+TODO_COUNT=$(echo "$TODO_JSON" | jq 'length')
+TODO_LIST=$(echo "$TODO_JSON" | jq -r '.[] | "<li>\(.content)</li>"' 2>/dev/null || echo "")
+
+# Get Habitica dailies
+HABITICA_OUT=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh list dailys 2>/dev/null)
+HABIT_PENDING=$(echo "$HABITICA_OUT" | grep "value: 0" | sed 's/.*\[daily\] //;s/ (value:.*//' || echo "")
+HABIT_DONE=$(echo "$HABITICA_OUT" | grep "value: 1" | sed 's/.*\[daily\] //;s/ (value:.*//' || echo "")
+
+# Get Arsenal news
+ARSEBLOG=$(curl -s https://arseblog.news/ | grep -oP '(?<=<h2 class="entry-title"><a href="[^"]*"[^>]*>)[^<]*' | head -3 | sed 's/^/<li>/;s/$/<\/li>/' || echo "")
 
 cat > "$INDEX_FILE" << HTML
 <!DOCTYPE html>
@@ -102,45 +111,47 @@ cat > "$INDEX_FILE" << HTML
             margin-left: 10px;
         }
         .badge.pending { background: rgba(239, 1, 7, 0.1); color: #ef0107; }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+        .event {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .stat-box {
-            background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
+        .event:last-child { border-bottom: none; }
+        .event-time { min-width: 80px; color: #64ffda; font-size: 0.85rem; }
+        .event-title { flex: 1; }
+        .email-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .stat-number { font-size: 2rem; font-weight: 600; color: #64ffda; }
-        .stat-label { font-size: 0.9rem; color: #8892b0; margin-top: 5px; }
+        .email-item:last-child { border-bottom: none; }
+        .email-sender { color: #64ffda; font-weight: 500; font-size: 0.9rem; }
+        .email-subject { color: #eaeaea; font-size: 0.95rem; margin-top: 2px; }
+        .task-list, .habit-list { list-style: none; margin-top: 10px; }
+        .task-list li, .habit-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .task-list li:last-child, .habit-list li:last-child { border-bottom: none; }
+        .habit-pending { color: #ef0107; }
+        .habit-done { color: #64ffda; text-decoration: line-through; opacity: 0.7; }
+        .arsenal-card {
+            background: linear-gradient(135deg, rgba(239, 1, 7, 0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-left: 4px solid #ef0107;
+        }
+        .news-list { list-style: none; margin-top: 10px; }
+        .news-list li {
+            padding: 8px 0;
+            color: #ffd700;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .news-list li:last-child { border-bottom: none; }
         .footer {
             text-align: center;
             padding: 30px;
             color: #8892b0;
             font-size: 0.9rem;
         }
-        .task-list { list-style: none; margin-top: 10px; }
-        .task-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .task-list li:last-child { border-bottom: none; }
-        .refresh-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            margin-top: 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        .refresh-btn:hover { opacity: 0.9; }
         @media (max-width: 600px) {
             h1 { font-size: 1.8rem; }
             .weather-main { font-size: 2rem; }
@@ -172,33 +183,36 @@ cat > "$INDEX_FILE" << HTML
 
         <div class="card">
             <div class="card-header">
-                <span class="icon">📊</span>
-                Daily Snapshot
+                <span class="icon">📆</span>
+                Today's Agenda <span class="badge">$EMAIL_COUNT emails</span>
             </div>
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-number">$EMAIL_COUNT</div>
-                    <div class="stat-label">Unread Emails</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">$TODO_COUNT</div>
-                    <div class="stat-label">Tasks Due</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">$HABITICA_PENDING</div>
-                    <div class="stat-label">Habits Pending</div>
-                </div>
+            $NEEL_LIST
+            <div class="event">
+                <div class="event-time">7:00 AM</div>
+                <div class="event-title">Wake up</div>
             </div>
+            <div class="event">
+                <div class="event-time">8:45 AM</div>
+                <div class="event-title">Drop Neel off</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">📧</span>
+                Emails <span class="badge pending">$EMAIL_COUNT unread</span>
+            </div>
+            $EMAIL_LIST
         </div>
 HTML
 
-# Add tasks section if there are tasks
+# Add tasks section
 if [ "$TODO_COUNT" -gt 0 ]; then
 cat >> "$INDEX_FILE" << HTML
         <div class="card">
             <div class="card-header">
                 <span class="icon">✅</span>
-                Tasks
+                Tasks <span class="badge pending">$TODO_COUNT due</span>
             </div>
             <ul class="task-list">
                 $TODO_LIST
@@ -207,10 +221,51 @@ cat >> "$INDEX_FILE" << HTML
 HTML
 fi
 
+# Add habits section
+if [ -n "$HABIT_PENDING" ] || [ -n "$HABIT_DONE" ]; then
+cat >> "$INDEX_FILE" << HTML
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">🎯</span>
+                Habits
+            </div>
+            <ul class="habit-list">
+HTML
+    if [ -n "$HABIT_PENDING" ]; then
+        echo "$HABIT_PENDING" | while read habit; do
+            [ -n "$habit" ] && echo "                <li class=\"habit-pending\">☐ $habit</li>" >> "$INDEX_FILE"
+        done
+    fi
+    if [ -n "$HABIT_DONE" ]; then
+        echo "$HABIT_DONE" | while read habit; do
+            [ -n "$habit" ] && echo "                <li class=\"habit-done\">☑ $habit</li>" >> "$INDEX_FILE"
+        done
+    fi
+cat >> "$INDEX_FILE" << HTML
+            </ul>
+        </div>
+HTML
+fi
+
+# Add Arsenal section
+if [ -n "$ARSEBLOG" ]; then
+cat >> "$INDEX_FILE" << HTML
+        <div class="card arsenal-card">
+            <div class="card-header">
+                <span class="icon">🔴</span>
+                Arsenal FC
+            </div>
+            <ul class="news-list">
+                $ARSEBLOG
+            </ul>
+        </div>
+HTML
+fi
+
 cat >> "$INDEX_FILE" << HTML
         <div class="footer">
             Last updated: $TIME<br>
-            <a href="https://github.com/nikhilist/morning-brief" class="refresh-btn">View on GitHub</a>
+            <a href="https://github.com/nikhilist/morning-brief" style="color: #64ffda;">github.com/nikhilist/morning-brief</a>
         </div>
     </div>
 </body>
@@ -220,12 +275,11 @@ HTML
 # Copy to brief.html too
 cp "$INDEX_FILE" "$OUTPUT_FILE"
 
-# Commit and push to GitHub Pages
+# Commit and push
 cd /home/nik/.openclaw/workspace
 git add index.html brief.html
 git commit -m "Update brief: $DATE $TIME" 2>/dev/null || true
-git push origin main 2>&1 || echo "Push failed - may need manual intervention"
+git push origin main 2>&1 || echo "Push failed"
 
-echo "Brief generated and deployed"
-echo "Local: $OUTPUT_FILE"
+echo "Full brief generated and deployed"
 echo "GitHub Pages: https://nikhilist.github.io/morning-brief/"
