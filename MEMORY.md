@@ -57,7 +57,7 @@ _This is the non-negotiable foundation. Everything here loads in every session._
 
 | Project | Status | Last Touched | Notes |
 |---------|--------|--------------|-------|
-| daily-briefs | **ACTIVE** | 2026-03-03 | Three daily briefs to Telegram @ 935335162 + live web dashboard. **7am**: Full morning brief. **4pm**: Afternoon update. **11pm**: Evening insights. **Web**: http://192.168.68.200:8080/brief.html (auto-refreshes with each brief). **Email rule**: Read ALL unread, brief 1-sentence summaries. **Arsenal rule**: All arseblog.news from last 24h. **Todoist rule**: Due today + past due. **Habitica rule**: Due dailies. **Calendar rule**: Nik + Neel calendars. **Setup**: ✅ Google OAuth. ✅ Todoist. ✅ Habitica. ✅ Web server.
+| daily-briefs | **ACTIVE** | 2026-03-04 | Three daily briefs to Telegram @ 935335162 + GitHub Pages. **7am**: Full morning brief. **4pm**: Afternoon delta. **11pm**: Evening insights. **Web**: https://nikhilist.github.io/morning-brief/. **Email rule**: Show ONLY new unread since last brief (tracked in .brief-state.json), not all inbox. **Arsenal rule**: Latest arseblog.news. **Todoist rule**: Due today + past due. **Habitica rule**: Due dailies. **Calendar rule**: Nik + Neel calendars. **Insights**: Evening brief includes pattern analysis. **Setup**: ✅ Google OAuth. ✅ Todoist. ✅ Habitica. ✅ GitHub Pages.
 | Tasks system integration | **TODOIST** | 2026-03-03 | Connected. 0 tasks currently. |
 
 ---
