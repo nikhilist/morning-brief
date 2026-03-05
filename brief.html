@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nik's Morning Brief</title>
+    <title>Nik's Evening Brief</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -64,8 +64,7 @@
             font-size: 0.85rem;
             margin-left: 10px;
         }
-        .badge.due { background: rgba(239, 1, 7, 0.2); color: #ff6b6b; }
-        .badge.overdue { background: rgba(255, 165, 0, 0.2); color: #ffa500; }
+        .badge.new { background: rgba(239, 1, 7, 0.2); color: #ff6b6b; }
         .event {
             display: flex;
             align-items: flex-start;
@@ -88,9 +87,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .task-list li:last-child, .habit-list li:last-child { border-bottom: none; }
-        .task-due { color: #ff6b6b; font-weight: 500; }
-        .task-overdue { color: #ffa500; }
-        .habit-pending { color: #ff6b6b; }
+        .habit-pending { color: #ef0107; }
         .habit-done { color: #64ffda; text-decoration: line-through; opacity: 0.7; }
         .arsenal-card {
             background: linear-gradient(135deg, rgba(239, 1, 7, 0.1) 0%, rgba(255,255,255,0.05) 100%);
@@ -110,7 +107,7 @@
         .news-list { list-style: none; margin-top: 10px; }
         .news-list li {
             padding: 8px 0;
-            color: #eaeaea;
+            color: #ffd700;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .news-list li:last-child { border-bottom: none; }
@@ -125,11 +122,8 @@
             color: #8892b0;
             margin-left: 10px;
         }
-        .note {
-            color: #8892b0;
-            font-style: italic;
-            padding: 10px 0;
-        }
+        .win { color: #64ffda; font-weight: 600; }
+        .miss { color: #ef0107; }
         @media (max-width: 600px) {
             h1 { font-size: 1.8rem; }
             .weather-main { font-size: 2rem; }
@@ -141,7 +135,7 @@
     <div class="container">
         <header>
             <div class="date">Wednesday, March 4, 2026</div>
-            <h1>Morning Brief</h1>
+            <h1>🌙 Evening Brief</h1>
             <div class="location">📍 Princeton, NJ</div>
         </header>
 
@@ -152,49 +146,53 @@
             </div>
             <div class="weather-card">
                 <div>
-                    <div class="weather-main">47°F</div>
-                    <div class="weather-desc">Wind 11.6 mph</div>
+                    <div class="weather-main">45°F</div>
+                    <div class="weather-desc">Feels like 42°F · Cloudy</div>
                 </div>
-                <div class="weather-icon">🌤️</div>
+                <div class="weather-icon">☁️</div>
             </div>
         </div>
 
         <div class="card">
             <div class="card-header">
                 <span class="icon">📆</span>
-                Today's Agenda
+                Today's Recap
             </div>
-            <div class="note">Calendar not connected (gog auth required)</div>
+            <div class="event">
+                <div class="event-time">Morning</div>
+                <div class="event-title">Wacky Day @ School <span class="win">✓</span></div>
+            </div>
+            <div class="event">
+                <div class="event-time">2:30 PM</div>
+                <div class="event-title">Brighton 0-1 Arsenal — Saka 9' <span class="win">✓ WIN</span></div>
+            </div>
         </div>
 
         <div class="card">
             <div class="card-header">
                 <span class="icon">📧</span>
-                New Emails
-                <span class="delta-note">(Gmail not connected)</span>
+                Emails
+                <span class="badge">1 unread</span>
+                <span class="delta-note">(0 new since 4 PM)</span>
             </div>
-            <div class="note">gog auth required for Gmail access</div>
+            <p style="color: #8892b0; font-size: 0.9rem;">Inbox quiet since your afternoon brief. The 16 new emails from earlier were mostly noise — Google alerts, newsletters, promotions.</p>
         </div>
 
         <div class="card">
             <div class="card-header">
                 <span class="icon">✅</span>
-                Todoist Tasks <span class="badge due">1 due today</span>
+                Tasks
             </div>
-            <ul class="task-list">
-                <li class="task-due">📞 Call up Goldfish to re-enroll Neel (Due: Today)</li>
-                <li class="task-overdue">👁️ Get the contact lens prescription updated (Due: Mar 3 - Overdue)</li>
-            </ul>
+            <p style="color: #64ffda;">No tasks due today. All clear.</p>
         </div>
 
         <div class="card">
             <div class="card-header">
                 <span class="icon">🎯</span>
-                Habitica Dailies
+                Habits
             </div>
             <ul class="habit-list">
-                <li class="habit-pending">☐ Vitamin D - 50000IU</li>
-                <li class="habit-done">☑ Vitamin B12 + Calcium</li>
+                <li class="habit-pending">☐ Vitamin B12 + Calcium</li>
             </ul>
         </div>
 
@@ -203,14 +201,24 @@
                 <span class="icon">🔴</span>
                 Arsenal FC
             </div>
-            <ul class="news-list">
-                <li><strong>Arsenal 2-1 Chelsea</strong> (Sun, Mar 1) - Goals from Timber and Saliba restored 5-point lead at top</li>
-                <li>Pedro Neto sent off for Chelsea in the match</li>
-            </ul>
+            <p style="margin-bottom: 10px;"><strong>Brighton 0-1 Arsenal</strong> — Bukayo Saka with the winner in the 9th minute. Gunners extend their lead at the top of the Premier League table.</p>
+            <p style="color: #8892b0; font-size: 0.9rem;">Seven points clear. Title race very much on.</p>
+        </div>
+
+        <div class="card insights-card">
+            <div class="card-header">
+                <span class="icon">💭</span>
+                Evening Insights
+            </div>
+            <p class="insight-text">You got Neel through Wacky Day. That's the win that matters.</p>
+            <p class="insight-text">Arsenal delivered — Saka's early goal held up, and the defense stood firm without Saliba. Seven points clear at the top. Enjoy that.</p>
+            <p class="insight-text">The Vitamin B12 habit is still unchecked. Evening supplements are easy to forget — maybe move it to breakfast tomorrow?</p>
+            <p class="insight-text">Email stayed quiet this evening. The afternoon batch of 16 was mostly noise anyway. You're not missing anything urgent.</p>
+            <p class="insight-text"><strong>Tomorrow:</strong> Thursday, no calendar events. Clean slate. Knock out that habit first thing.</p>
         </div>
 
         <div class="footer">
-            Last updated: 4:00 PM<br>
+            Last updated: 11:00 PM<br>
             <a href="https://github.com/nikhilist/morning-brief" style="color: #64ffda;">github.com/nikhilist/morning-brief</a>
         </div>
     </div>
