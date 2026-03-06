@@ -44,6 +44,7 @@ Things like:
 - **Evening Brief** — 10:00 PM EDT (2:00 AM UTC next day)
   - Cron ID: `939d9e12-4519-4667-8edd-b0bff4fb41a8`
   - Insights: day review, patterns, tomorrow prep
+  - **Habit Streaks:** Shows current streak for all habits (only in evening brief)
 
 - **Telegram Delivery**: @Nikhoshi (chat ID: 935335162)
 - **GitHub Pages Dashboard**: https://nikhilist.github.io/morning-brief/
