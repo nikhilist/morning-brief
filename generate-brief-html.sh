@@ -81,8 +81,8 @@ HABITICA_OUT=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh l
 HABIT_PENDING=$(echo "$HABITICA_OUT" | grep "value: 0" | sed 's/.*\[daily\] //;s/ (value:.*//' || echo "")
 HABIT_DONE=$(echo "$HABITICA_OUT" | grep "value: 1" | sed 's/.*\[daily\] //;s/ (value:.*//' || echo "")
 
-# Get Arsenal news (simple approach)
-ARSEBLOG_RAW=$(curl -s https://arseblog.news/ | grep -E '<h2|<h3' | grep -oE '>([^<]+)<' | tr -d '><' | head -5 || echo "")
+# Get Arsenal news - parse article titles from arseblog.news entry-title h3 tags
+ARSEBLOG_RAW=$(curl -s https://arseblog.news/ | grep -oE '<h3[^>]*class="[^"]*entry-title[^"]*"[^>]*>.*?</h3>' | sed 's/<[^>]*>//g' | head -5 || echo "")
 ARSEBLOG=""
 if [ -n "$ARSEBLOG_RAW" ]; then
     ARSEBLOG=$(echo "$ARSEBLOG_RAW" | sed 's/^/<li>/;s/$/<\/li>/')
