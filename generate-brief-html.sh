@@ -1,5 +1,9 @@
 #!/bin/bash
 # Generate full HTML brief page with insights and delta tracking
+# LOG FILE for debugging cron issues
+LOG_FILE="/home/nik/.openclaw/workspace/.brief-generate.log"
+exec 1> >(tee -a "$LOG_FILE") 2>&1
+echo "=== Starting brief generation: $(date) ==="
 
 OUTPUT_FILE="/home/nik/.openclaw/workspace/brief.html"
 INDEX_FILE="/home/nik/.openclaw/workspace/index.html"
@@ -17,13 +21,15 @@ else
     BRIEF_TYPE="Evening"
 fi
 
-# Setup env
-export PATH=$PATH:$HOME/.local/bin
+# Setup env - full path for cron
+export PATH="/usr/local/bin:/usr/bin:/bin:$HOME/.local/bin:$HOME/.npm-global/bin"
+export HOME="/home/nik"
 export GOG_KEYRING_BACKEND=file
 export GOG_KEYRING_PASSWORD=""
 export GOG_ACCOUNT=nikhilist@gmail.com
 export HABITICA_USER_ID="404a4487-6eea-4ed3-b60b-03f82092b29a"
 export HABITICA_API_TOKEN="e3470ee9-56d7-49f4-bd56-4f3f175bd804"
+export TODOIST_API_TOKEN="81d341953323302cf0919e4ec8a8d9531ea6f881"
 
 # Load previous state
 PREV_EMAILS=""
@@ -66,7 +72,7 @@ NEEL_EVENTS=$(gog calendar events "8tdo49s92dr6h34pcros8a17k8@group.calendar.goo
 NEEL_LIST=$(echo "$NEEL_EVENTS" | jq -r '.events[] | "<div class=\"event\"><div class=\"event-time\">\(.start.date // (.start.dateTime | split("T")[1][:5]))</div><div class=\"event-title\">\(.summary)</div></div>"' 2>/dev/null || echo "")
 
 # Get Todoist tasks
-TODO_JSON=$(todoist tasks --json 2>/dev/null || echo '[]')
+TODO_JSON=$(/home/nik/.npm-global/bin/todoist tasks --json 2>/dev/null || echo '[]')
 TODO_COUNT=$(echo "$TODO_JSON" | jq 'length')
 TODO_LIST=$(echo "$TODO_JSON" | jq -r '.[] | "<li>\(.content)</li>"' 2>/dev/null || echo "")
 
@@ -365,3 +371,4 @@ git push origin main 2>&1 || echo "Push failed"
 
 echo "$BRIEF_TYPE brief generated with delta tracking"
 echo "GitHub Pages: https://nikhilist.github.io/morning-brief/"
+echo "=== Finished: $(date) ==="
