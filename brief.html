@@ -3,551 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nik's Evening Brief — March 5, 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Morning Brief - March 7, 2026</title>
     <style>
-        :root {
-            --bg-primary: #0f0f1a;
-            --bg-secondary: #1a1a2e;
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --text-primary: #eaeaea;
-            --text-secondary: #a0a0b0;
-            --accent-teal: #64ffda;
-            --accent-purple: #a855f7;
-            --accent-pink: #ec4899;
-            --accent-arsenal: #ef0107;
-            --accent-gold: #ffd700;
-            --border: rgba(255, 255, 255, 0.08);
-        }
-        
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e4e4e4;
             min-height: 100vh;
-            line-height: 1.6;
+            padding: 20px;
         }
-        
-        .container {
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        /* Header */
-        header {
+        .container { max-width: 800px; margin: 0 auto; }
+        .header {
             text-align: center;
-            padding: 40px 0;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             margin-bottom: 30px;
         }
-        
-        .greeting {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 12px;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-purple) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-        
-        .date-location {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-        
-        .date-location span {
-            color: var(--accent-teal);
-        }
-        
-        /* Cards */
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; color: #fff; }
+        .header .date { color: #888; font-size: 1.1em; }
+        .header .location { color: #64b5f6; margin-top: 5px; }
         .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 28px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(20px);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .card-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            background: rgba(100, 255, 218, 0.1);
-        }
-        
-        .card-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
-        /* Weather Card */
-        .weather-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .weather-main {
-            font-size: 4rem;
-            font-weight: 300;
-            color: var(--text-primary);
-        }
-        
-        .weather-details {
-            text-align: right;
-        }
-        
-        .weather-feels {
-            color: var(--text-secondary);
-            font-size: 0.9375rem;
-        }
-        
-        .weather-desc {
-            font-size: 1.25rem;
-            color: var(--accent-teal);
-            margin-top: 4px;
-        }
-        
-        /* Recap */
-        .recap-item {
-            display: flex;
-            align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .recap-item:last-child {
-            border-bottom: none;
-        }
-        
-        .recap-time {
-            min-width: 90px;
-            color: var(--accent-teal);
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-        
-        .recap-text {
-            flex: 1;
-            color: var(--text-primary);
-        }
-        
-        .recap-status {
-            color: var(--accent-teal);
-            font-weight: 600;
-        }
-        
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-        
-        .stat-box {
-            text-align: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255,255,255,0.05);
             border-radius: 16px;
-            border: 1px solid var(--border);
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent-teal);
-        }
-        
-        .stat-label {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-        
-        /* Habits */
-        .habit-item {
+        .card h2 {
+            color: #64b5f6;
+            font-size: 1.3em;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border);
+            gap: 10px;
         }
-        
-        .habit-status {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 16px;
-            font-size: 0.875rem;
+        .card h2 .icon { font-size: 1.2em; }
+        .weather-main {
+            font-size: 1.5em;
+            color: #fff;
+            margin-bottom: 10px;
         }
-        
-        .habit-done .habit-status {
-            background: rgba(100, 255, 218, 0.2);
-            color: var(--accent-teal);
+        .empty-state {
+            color: #666;
+            font-style: italic;
         }
-        
-        .habit-pending .habit-status {
-            background: rgba(239, 1, 7, 0.1);
-            color: var(--accent-arsenal);
-        }
-        
-        .habit-info {
-            flex: 1;
-        }
-        
-        .habit-name {
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-        
-        .habit-streak {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-        
-        .streak-fire {
-            color: #ff6b35;
-        }
-        
-        .streak-star {
-            color: var(--accent-gold);
-        }
-        
-        .streak-trophy {
-            color: var(--accent-purple);
-        }
-        
-        /* Arsenal Card */
-        .arsenal-card {
-            background: linear-gradient(135deg, rgba(239, 1, 7, 0.08) 0%, var(--bg-card) 100%);
-            border-left: 4px solid var(--accent-arsenal);
-        }
-        
-        .arsenal-card .card-icon {
-            background: rgba(239, 1, 7, 0.15);
-        }
-        
-        .arsenal-news {
-            color: var(--text-primary);
-            line-height: 1.7;
-        }
-        
-        .arsenal-news strong {
-            color: var(--accent-gold);
-        }
-        
-        /* Tech Roundup */
-        .tech-card .card-icon {
-            background: rgba(168, 85, 247, 0.15);
-        }
-        
-        .tech-item {
-            padding: 16px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .tech-item:last-child {
-            border-bottom: none;
-        }
-        
-        .tech-rank {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            background: var(--accent-purple);
-            color: white;
-            border-radius: 6px;
-            text-align: center;
-            font-size: 0.75rem;
-            font-weight: 700;
-            line-height: 24px;
-            margin-right: 12px;
-        }
-        
-        .tech-title {
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-        
-        .tech-source {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-        
-        /* Insights */
-        .insights-card {
-            background: linear-gradient(135deg, rgba(100, 255, 218, 0.05) 0%, var(--bg-card) 100%);
-            border-left: 4px solid var(--accent-teal);
-        }
-        
-        .insights-card .card-icon {
-            background: rgba(100, 255, 218, 0.15);
-        }
-        
-        .insight-text {
-            color: var(--text-secondary);
+        .task-item, .email-item, .event-item, .news-item {
             padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-            line-height: 1.7;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
         }
-        
-        .insight-text:last-child {
+        .task-item:last-child, .email-item:last-child, .event-item:last-child, .news-item:last-child {
             border-bottom: none;
         }
-        
-        .insight-text strong {
-            color: var(--text-primary);
-        }
-        
-        /* Tomorrow Preview */
-        .tomorrow-item {
-            display: flex;
-            align-items: center;
-            padding: 14px 0;
-            color: var(--text-secondary);
-        }
-        
-        .tomorrow-item::before {
-            content: "•";
-            color: var(--accent-teal);
-            margin-right: 12px;
-            font-size: 1.5rem;
-            line-height: 0;
-        }
-        
-        /* Footer */
-        footer {
+        .bullet { color: #64b5f6; font-weight: bold; }
+        .overdue { color: #ff6b6b; }
+        .task-content { flex: 1; }
+        .task-date { color: #888; font-size: 0.9em; }
+        .news-title { color: #fff; font-weight: 500; }
+        .news-title a { color: #64b5f6; text-decoration: none; }
+        .news-title a:hover { text-decoration: underline; }
+        .news-meta { color: #888; font-size: 0.85em; margin-top: 4px; }
+        .footer {
             text-align: center;
-            padding: 40px 0;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9em;
         }
-        
-        footer a {
-            color: var(--accent-teal);
-            text-decoration: none;
-        }
-        
-        /* Mobile */
-        @media (max-width: 600px) {
-            h1 { font-size: 1.875rem; }
-            .weather-main { font-size: 3rem; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .card { padding: 20px; }
-        }
+        .status-good { color: #4caf50; }
+        .status-warn { color: #ff9800; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <header>
-            <div class="greeting">Good Evening</div>
-            <h1>Nik's Brief</h1>
-            <div class="date-location">
-                Thursday, March 5, 2026 · <span>Princeton, NJ</span>
-            </div>
-        </header>
+        <div class="header">
+            <h1>🌅 Morning Brief</h1>
+            <div class="date">Saturday, March 7, 2026</div>
+            <div class="location">📍 Princeton, NJ</div>
+        </div>
 
-        <!-- Weather -->
         <div class="card">
-            <div class="card-header">
-                <div class="card-icon">🌙</div>
-                <div class="card-title">Weather</div>
-            </div>
-            <div class="weather-content">
-                <div class="weather-main">39°F</div>
-                <div class="weather-details">
-                    <div class="weather-feels">Feels like 32°F</div>
-                    <div class="weather-desc">Cold night</div>
-                </div>
-            </div>
+            <h2><span class="icon">🌤️</span> Weather</h2>
+            <div class="weather-main">Fetching weather data...</div>
+            <p>Weather service temporarily unavailable. Check <a href="https://wttr.in/Princeton,NJ" style="color:#64b5f6;">wttr.in/Princeton,NJ</a></p>
         </div>
 
-        <!-- Today's Recap -->
         <div class="card">
-            <div class="card-header">
-                <div class="card-icon">📆</div>
-                <div class="card-title">Today's Recap</div>
-            </div>
-            <div class="recap-item">
-                <div class="recap-time">Morning</div>
-                <div class="recap-text">Quiet start, no calendar events</div>
-            </div>
-            <div class="recap-item">
-                <div class="recap-time">Afternoon</div>
-                <div class="recap-text">Still quiet — no emails, no tasks</div>
-            </div>
-            <div class="recap-item">
-                <div class="recap-time">Evening</div>
-                <div class="recap-text">Habit done <span class="recap-status">✓</span></div>
-            </div>
+            <h2><span class="icon">📅</span> Today's Calendar</h2>
+            <div class="empty-state">No events scheduled for today on Nik's or Neel's calendars.</div>
         </div>
 
-        <!-- Stats -->
         <div class="card">
-            <div class="card-header">
-                <div class="card-icon">📊</div>
-                <div class="card-title">Daily Stats</div>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Unread Emails</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Tasks Due</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value">1</div>
-                    <div class="stat-label">Habits Done</div>
-                </div>
-            </div>
+            <h2><span class="icon">📧</span> Unread Emails</h2>
+            <div class="status-good">✅ No unread emails in inbox</div>
         </div>
 
-        <!-- Habit Streaks -->
         <div class="card">
-            <div class="card-header">
-                <div class="card-icon">🔥</div>
-                <div class="card-title">Habit Streaks</div>
-            </div>
-            <div class="habit-item habit-done">
-                <div class="habit-status">✓</div>
-                <div class="habit-info">
-                    <div class="habit-name">Vitamin B12 + Calcium</div>
-                    <div class="habit-streak"><span class="streak-fire">🔥</span> 3-day streak · Completed today</div>
+            <h2><span class="icon">✅</span> Todoist Tasks</h2>
+            <div class="task-item">
+                <span class="bullet">•</span>
+                <div class="task-content">
+                    <div>Call up Goldfish to re-enroll Neel</div>
+                    <div class="task-date overdue">Due: Mar 4 (overdue)</div>
                 </div>
             </div>
-            <div class="habit-item habit-pending">
-                <div class="habit-status">○</div>
-                <div class="habit-info">
-                    <div class="habit-name">Vitamin D - 50000IU</div>
-                    <div class="habit-streak">0-day streak · Not due today</div>
+            <div class="task-item">
+                <span class="bullet">•</span>
+                <div class="task-content">
+                    <div>Get the contact lens prescription updated</div>
+                    <div class="task-date overdue">Due: Mar 3 (overdue)</div>
                 </div>
             </div>
         </div>
 
-        <!-- Arsenal -->
-        <div class="card arsenal-card">
-            <div class="card-header">
-                <div class="card-icon">🔴</div>
-                <div class="card-title">Arsenal FC</div>
-            </div>
-            <div class="arsenal-news">
-                <strong>Brighton 0-1 Arsenal</strong> — Saka's 9th-minute winner. Seven points clear at the top.<br><br>
-                • April fixtures moved for TV scheduling<br>
-                • David Raya new deal in progress<br>
-                • Charles Sagoe Jr loaned to Kalmar FF
-            </div>
-        </div>
-
-        <!-- Tech Roundup -->
-        <div class="card tech-card">
-            <div class="card-header">
-                <div class="card-icon">💻</div>
-                <div class="card-title">Tech Roundup</div>
-            </div>
-            <div class="tech-item">
-                <span class="tech-rank">1</span>
-                <span class="tech-title">GPT-5.4 Released</span>
-                <div class="tech-source">OpenAI · 683 points, 599 comments</div>
-            </div>
-            <div class="tech-item">
-                <span class="tech-rank">2</span>
-                <span class="tech-title">Anthropic on AI & War</span>
-                <div class="tech-source">Anthropic · 256 points</div>
-            </div>
-            <div class="tech-item">
-                <span class="tech-rank">3</span>
-                <span class="tech-title">10% of Firefox crashes are bitflips</span>
-                <div class="tech-source">Hacker News · 350 points</div>
-            </div>
-            <div class="tech-item">
-                <span class="tech-rank">4</span>
-                <span class="tech-title">The Brand Age — Paul Graham</span>
-                <div class="tech-source">paulgraham.com · 263 points</div>
-            </div>
-            <div class="tech-item">
-                <span class="tech-rank">5</span>
-                <span class="tech-title">Labor market impacts of AI</span>
-                <div class="tech-source">Anthropic Research · 88 points</div>
-            </div>
-        </div>
-
-        <!-- Insights -->
-        <div class="card insights-card">
-            <div class="card-header">
-                <div class="card-icon">💭</div>
-                <div class="card-title">Evening Insights</div>
-            </div>
-            <div class="insight-text">
-                Today was a quiet one — no meetings, no deadlines, no emergencies. Sometimes that's exactly what you need.
-            </div>
-            <div class="insight-text">
-                You kept the habit streak alive. <strong>3 days and climbing.</strong> That's consistency.
-            </div>
-            <div class="insight-text">
-                Inbox stayed at zero all day. Either you're on top of things or the world is giving you space. Either way, enjoy it.
-            </div>
-            <div class="insight-text">
-                <strong>Tomorrow:</strong> Friday, no calendar events. Back-to-back open days. Use it to wrap up the week strong.
-            </div>
-        </div>
-
-        <!-- Tomorrow Preview -->
         <div class="card">
-            <div class="card-header">
-                <div class="card-icon">🌅</div>
-                <div class="card-title">Tomorrow — Friday, March 6</div>
+            <h2><span class="icon">🎮</span> Habitica Dailies</h2>
+            <div class="task-item">
+                <span class="bullet">•</span>
+                <span>Nutty Nuts</span>
             </div>
-            <div class="tomorrow-item"><strong>Neel:</strong> Book Character Dressup @ school (all day)</div>
-            <div class="tomorrow-item"><strong>Neel:</strong> Read @ School — 10:30 AM</div>
-            <div class="tomorrow-item"><strong>Neel:</strong> Salon Meg — 3:30 PM</div>
-            <div class="tomorrow-item" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);"><strong>You:</strong> No events — wrap up the week</div>
+            <div class="task-item">
+                <span class="bullet">•</span>
+                <span>Vitamin D - 50000IU</span>
+            </div>
+            <div class="task-item">
+                <span class="bullet">•</span>
+                <span>Vitamin B12 + Calcium</span>
+            </div>
         </div>
 
-        <!-- Footer -->
-        <footer>
-            <p>Last updated: 9:00 PM EDT</p>
-            <p style="margin-top: 8px;"><a href="https://nikhilist.github.io/morning-brief/">nikhilist.github.io/morning-brief</a></p>
-        </footer>
+        <div class="card">
+            <h2><span class="icon">⚽</span> Arsenal News</h2>
+            <div class="news-item">
+                <div>
+                    <div class="news-title"><a href="https://arseblog.news/2025/10/report-raya-set-for-new-deal/">Report: Raya set for new deal</a></div>
+                    <div class="news-meta">October 7, 2025 • 42 comments</div>
+                </div>
+            </div>
+            <div class="news-item">
+                <div>
+                    <div class="news-title"><a href="https://arseblog.news/2025/08/hamstrings-havertz-and-holding-it-together/">Hamstrings, Havertz and Holding It Together</a></div>
+                    <div class="news-meta">August 2025</div>
+                </div>
+            </div>
+            <div class="news-item">
+                <div>
+                    <div class="news-title"><a href="https://arseblog.news/2026/02/sagoe-jr-kalmar-mccarron-dungannon/">Sagoe Jr heads to Sweden on loan</a></div>
+                    <div class="news-meta">February 2026</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Generated by Gunner • <a href="https://nikhilist.github.io/morning-brief/" style="color:#64b5f6;">View Online</a>
+        </div>
     </div>
 </body>
 </html>
