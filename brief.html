@@ -3,161 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morning Brief - March 7, 2026</title>
+    <title>Nik's Afternoon Brief</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e4e4e4;
+            color: #eaeaea;
             min-height: 100vh;
             padding: 20px;
         }
         .container { max-width: 800px; margin: 0 auto; }
-        .header {
+        header {
             text-align: center;
             padding: 30px 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             margin-bottom: 30px;
         }
-        .header h1 { font-size: 2.5em; margin-bottom: 10px; color: #fff; }
-        .header .date { color: #888; font-size: 1.1em; }
-        .header .location { color: #64b5f6; margin-top: 5px; }
+        .date {
+            font-size: 0.9rem;
+            color: #8892b0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .location { color: #64ffda; font-size: 1.1rem; }
         .card {
             background: rgba(255,255,255,0.05);
             border-radius: 16px;
-            padding: 24px;
+            padding: 25px;
             margin-bottom: 20px;
             border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
         }
-        .card h2 {
-            color: #64b5f6;
-            font-size: 1.3em;
-            margin-bottom: 16px;
+        .card-header {
             display: flex;
             align-items: center;
-            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
-        .card h2 .icon { font-size: 1.2em; }
-        .weather-main {
-            font-size: 1.5em;
-            color: #fff;
-            margin-bottom: 10px;
+        .card-header .icon { font-size: 1.5rem; margin-right: 10px; }
+        .weather-card { display: flex; align-items: center; justify-content: space-between; }
+        .weather-main { font-size: 3rem; font-weight: 300; }
+        .weather-desc { color: #8892b0; margin-top: 5px; }
+        .weather-icon { font-size: 4rem; }
+        .badge {
+            display: inline-block;
+            background: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-left: 10px;
         }
-        .empty-state {
-            color: #666;
-            font-style: italic;
-        }
-        .task-item, .email-item, .event-item, .news-item {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+        .badge.new { background: rgba(239, 1, 7, 0.2); color: #ff6b6b; }
+        .event {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .task-item:last-child, .email-item:last-child, .event-item:last-child, .news-item:last-child {
-            border-bottom: none;
+        .event:last-child { border-bottom: none; }
+        .event-time { min-width: 80px; color: #64ffda; font-size: 0.85rem; }
+        .event-title { flex: 1; }
+        .email-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .bullet { color: #64b5f6; font-weight: bold; }
-        .overdue { color: #ff6b6b; }
-        .task-content { flex: 1; }
-        .task-date { color: #888; font-size: 0.9em; }
-        .news-title { color: #fff; font-weight: 500; }
-        .news-title a { color: #64b5f6; text-decoration: none; }
-        .news-title a:hover { text-decoration: underline; }
-        .news-meta { color: #888; font-size: 0.85em; margin-top: 4px; }
+        .email-item:last-child { border-bottom: none; }
+        .email-sender { color: #64ffda; font-weight: 500; font-size: 0.9rem; }
+        .email-subject { color: #eaeaea; font-size: 0.95rem; margin-top: 2px; }
+        .task-list, .habit-list { list-style: none; margin-top: 10px; }
+        .task-list li, .habit-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .task-list li:last-child, .habit-list li:last-child { border-bottom: none; }
+        .habit-pending { color: #ef0107; }
+        .habit-done { color: #64ffda; text-decoration: line-through; opacity: 0.7; }
+        .arsenal-card {
+            background: linear-gradient(135deg, rgba(239, 1, 7, 0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-left: 4px solid #ef0107;
+        }
+        .insights-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-left: 4px solid #667eea;
+        }
+        .insight-text {
+            color: #b8c5d6;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        .insight-text:last-child { margin-bottom: 0; }
+        .news-list { list-style: none; margin-top: 10px; }
+        .news-list li {
+            padding: 8px 0;
+            color: #ffd700;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .news-list li:last-child { border-bottom: none; }
         .footer {
             text-align: center;
             padding: 30px;
-            color: #666;
-            font-size: 0.9em;
+            color: #8892b0;
+            font-size: 0.9rem;
         }
-        .status-good { color: #4caf50; }
-        .status-warn { color: #ff9800; }
+        .delta-note {
+            font-size: 0.85rem;
+            color: #8892b0;
+            margin-left: 10px;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .weather-main { font-size: 2rem; }
+            .card { padding: 20px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🌅 Morning Brief</h1>
+        <header>
             <div class="date">Saturday, March 7, 2026</div>
+            <h1>Afternoon Brief</h1>
             <div class="location">📍 Princeton, NJ</div>
-        </div>
+        </header>
 
         <div class="card">
-            <h2><span class="icon">🌤️</span> Weather</h2>
-            <div class="weather-main">Fetching weather data...</div>
-            <p>Weather service temporarily unavailable. Check <a href="https://wttr.in/Princeton,NJ" style="color:#64b5f6;">wttr.in/Princeton,NJ</a></p>
-        </div>
-
-        <div class="card">
-            <h2><span class="icon">📅</span> Today's Calendar</h2>
-            <div class="empty-state">No events scheduled for today on Nik's or Neel's calendars.</div>
-        </div>
-
-        <div class="card">
-            <h2><span class="icon">📧</span> Unread Emails</h2>
-            <div class="status-good">✅ No unread emails in inbox</div>
-        </div>
-
-        <div class="card">
-            <h2><span class="icon">✅</span> Todoist Tasks</h2>
-            <div class="task-item">
-                <span class="bullet">•</span>
-                <div class="task-content">
-                    <div>Call up Goldfish to re-enroll Neel</div>
-                    <div class="task-date overdue">Due: Mar 4 (overdue)</div>
-                </div>
+            <div class="card-header">
+                <span class="icon">🌤️</span>
+                Weather
             </div>
-            <div class="task-item">
-                <span class="bullet">•</span>
-                <div class="task-content">
-                    <div>Get the contact lens prescription updated</div>
-                    <div class="task-date overdue">Due: Mar 3 (overdue)</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2><span class="icon">🎮</span> Habitica Dailies</h2>
-            <div class="task-item">
-                <span class="bullet">•</span>
-                <span>Nutty Nuts</span>
-            </div>
-            <div class="task-item">
-                <span class="bullet">•</span>
-                <span>Vitamin D - 50000IU</span>
-            </div>
-            <div class="task-item">
-                <span class="bullet">•</span>
-                <span>Vitamin B12 + Calcium</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2><span class="icon">⚽</span> Arsenal News</h2>
-            <div class="news-item">
+            <div class="weather-card">
                 <div>
-                    <div class="news-title"><a href="https://arseblog.news/2025/10/report-raya-set-for-new-deal/">Report: Raya set for new deal</a></div>
-                    <div class="news-meta">October 7, 2025 • 42 comments</div>
+                    <div class="weather-main">39°F</div>
+                    <div class="weather-desc">Feels like 34°F</div>
                 </div>
+                <div class="weather-icon">☁️</div>
             </div>
-            <div class="news-item">
-                <div>
-                    <div class="news-title"><a href="https://arseblog.news/2025/08/hamstrings-havertz-and-holding-it-together/">Hamstrings, Havertz and Holding It Together</a></div>
-                    <div class="news-meta">August 2025</div>
-                </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">📆</span>
+                Today's Agenda
             </div>
-            <div class="news-item">
-                <div>
-                    <div class="news-title"><a href="https://arseblog.news/2026/02/sagoe-jr-kalmar-mccarron-dungannon/">Sagoe Jr heads to Sweden on loan</a></div>
-                    <div class="news-meta">February 2026</div>
-                </div>
+            
+            <div class="event">
+                <div class="event-time">7:00 AM</div>
+                <div class="event-title">Wake up</div>
             </div>
+            <div class="event">
+                <div class="event-time">8:45 AM</div>
+                <div class="event-title">Drop Neel off</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">✅</span>
+                Tasks <span class="badge pending">2 due</span>
+            </div>
+            <ul class="task-list">
+                <li>Call up Goldfish to re-enroll Neel</li>
+<li>Get the contact lens prescription updated</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">🎯</span>
+                Habits
+            </div>
+            <ul class="habit-list">
+                <li class="habit-pending">☐ Vitamin D - 50000IU</li>
+                <li class="habit-done">☑ Nutty Nuts</li>
+                <li class="habit-done">☑ Vitamin B12 + Calcium</li>
+            </ul>
+        </div>
+        <div class="card arsenal-card">
+            <div class="card-header">
+                <span class="icon">🔴</span>
+                Arsenal FC
+            </div>
+            <ul class="news-list">
+                <li>.tdi_51 .tdm-title{background-color:#cc0000;-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Oswald!important;font-size:21px!important}html[class*='ie'] .tdi_51 .tdm-title{background:none;color:#cc0000}body .tdi_51 .tdm-title-line:after{background-color:#dddddd}.tdi_51 .tdm-title-line{width:100%;height:10px}.tdi_51 .tdm-title-line:after{height:1px;bottom:-100%}@media (min-width:1019px) and (max-width:1140px){.tdi_51 .tdm-title-line{height:8px}.tdi_51 .tdm-title{font-size:19px!important}}@media (min-width:768px) and (max-width:1018px){.tdi_51 .tdm-title-line{height:6px}.tdi_51 .tdm-title{font-size:18px!important}}@media (max-width:767px){.tdi_51 .tdm-title-line{height:8px}.tdi_51 .tdm-title{font-size:19px!important}}</li>
+<li>MATCHES & TEAM NEWS</li>
+<li>Arteta: It was a proper FA Cup game</li>
+<li>Mansfield 1-2 Arsenal &#8211; player ratings</li>
+<li>Report: Mansfield 1-2 Arsenal (inc. goals)</li>
+            </ul>
         </div>
 
         <div class="footer">
-            Generated by Gunner • <a href="https://nikhilist.github.io/morning-brief/" style="color:#64b5f6;">View Online</a>
+            Last updated: 03:13 PM<br>
+            <a href="https://github.com/nikhilist/morning-brief" style="color: #64ffda;">github.com/nikhilist/morning-brief</a>
         </div>
     </div>
 </body>
