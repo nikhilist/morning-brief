@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morning Brief - March 8, 2026</title>
+    <title>Afternoon Brief - March 8, 2026</title>
     <style>
         :root {
             --bg: #0d1117;
@@ -13,6 +13,7 @@
             --accent: #58a6ff;
             --success: #238636;
             --warning: #f0883e;
+            --delta: #3fb950;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -41,19 +42,15 @@
             align-items: center;
             gap: 8px;
         }
-        .weather-main { font-size: 1.1rem; margin-bottom: 8px; }
-        .weather-details { color: var(--muted); font-size: 0.9rem; }
+        .delta { color: var(--delta); font-size: 0.85rem; }
         .empty { color: var(--muted); font-style: italic; }
-        .task, .event, .email, .news-item {
+        .task, .event {
             padding: 8px 0;
             border-bottom: 1px solid #21262d;
         }
-        .task:last-child, .event:last-child, .email:last-child, .news-item:last-child {
-            border-bottom: none;
-        }
+        .task:last-child, .event:last-child { border-bottom: none; }
         .overdue { color: var(--warning); }
-        .news-title { color: var(--accent); text-decoration: none; }
-        .news-title:hover { text-decoration: underline; }
+        .unchanged { color: var(--muted); }
         .footer {
             text-align: center;
             color: var(--muted);
@@ -63,56 +60,48 @@
     </style>
 </head>
 <body>
-    <h1>🌅 Morning Brief</h1>
-    <div class="date">Sunday, March 8, 2026 · 7:00 AM ET</div>
+    <h1>☀️ Afternoon Brief</h1>
+    <div class="date">Sunday, March 8, 2026 · 3:00 PM ET</div>
 
     <div class="card">
-        <h2>🌤️ Weather · Princeton, NJ</h2>
-        <div class="weather-main">Mostly cloudy, high near 68°F</div>
-        <div class="weather-details">
-            Slight chance of showers before 11am. Patchy fog clears by 9am.<br>
-            West wind 5-10 mph, gusts to 20 mph.<br>
-            Tonight: Mostly clear, low around 41°F.
+        <h2>📊 What's Changed Since 7AM</h2>
+        <div class="unchanged">✓ No new emails</div>
+        <div class="unchanged">✓ No new calendar events</div>
+        <div class="unchanged">✓ Tasks unchanged (2 remaining)</div>
+        <div class="unchanged">✓ Dailies status unchanged</div>
+    </div>
+
+    <div class="card">
+        <h2>🌤️ Tonight & Tomorrow</h2>
+        <div style="margin-bottom: 12px;">
+            <strong>Tonight:</strong> Mostly clear, low around 41°F.
+        </div>
+        <div>
+            <strong>Monday:</strong> Sunny, high near 68°F. Light southwest wind.
         </div>
     </div>
 
     <div class="card">
-        <h2>📅 Calendar · Today</h2>
-        <div class="empty">No events scheduled for today.</div>
+        <h2>📅 Calendar · Rest of Today</h2>
+        <div class="empty">No more events today.</div>
     </div>
 
     <div class="card">
-        <h2>📧 Unread Emails</h2>
-        <div class="empty">No new unread emails since last brief.</div>
-    </div>
-
-    <div class="card">
-        <h2>✅ Todoist Tasks</h2>
+        <h2>✅ Todoist · Still Pending</h2>
         <div class="task overdue">📞 Call up Goldfish to re-enroll Neel (due Mar 4)</div>
         <div class="task">👁️ Get the contact lens prescription updated (Mar 3)</div>
     </div>
 
     <div class="card">
         <h2>🎯 Habitica Dailies</h2>
-        <div class="task">🥜 Nutty Nuts</div>
-        <div class="task overdue">💊 Vitamin D - 50000IU (missed)</div>
-        <div class="task">💊 Vitamin B12 + Calcium</div>
+        <div class="task">🥜 Nutty Nuts — completed</div>
+        <div class="task overdue">💊 Vitamin D - 50000IU — still pending</div>
+        <div class="task">💊 Vitamin B12 + Calcium — completed</div>
     </div>
 
     <div class="card">
-        <h2>⚽ Arsenal News</h2>
-        <div class="news-item">
-            <a href="https://arseblog.news/2025/10/report-raya-set-for-new-deal/" class="news-title">Report: Raya set for new deal</a>
-            <div style="color: var(--muted); font-size: 0.85rem;">BBC's Sami Mokbel reports Arsenal set to agree new terms with David Raya after impressive form.</div>
-        </div>
-        <div class="news-item">
-            <a href="https://arseblog.news/2025/08/hamstrings-havertz-and-holding-it-together/" class="news-title">Hamstrings, Havertz and Holding It Together</a>
-            <div style="color: var(--muted); font-size: 0.85rem;">Analysis on squad depth and injury concerns.</div>
-        </div>
-        <div class="news-item">
-            <a href="https://arseblog.news/2026/02/sagoe-jr-kalmar-mccarron-dungannon/" class="news-title">Sagoe Jr heads to Sweden on loan</a>
-            <div style="color: var(--muted); font-size: 0.85rem;">Charles Sagoe Jr joins Kalmar FF on loan until January.</div>
-        </div>
+        <h2>💡 Evening Suggestion</h2>
+        <p>Still a few hours to knock out that Vitamin D and make the Goldfish call before the week starts. Monday's looking sunny and 68°F — good day for the commute or any outdoor time.</p>
     </div>
 
     <div class="footer">
