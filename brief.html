@@ -3,109 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Afternoon Brief - March 8, 2026</title>
+    <title>Nik's Morning Brief</title>
     <style>
-        :root {
-            --bg: #0d1117;
-            --card: #161b22;
-            --text: #c9d1d9;
-            --muted: #8b949e;
-            --accent: #58a6ff;
-            --success: #238636;
-            --warning: #f0883e;
-            --delta: #3fb950;
-        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eaeaea;
+            min-height: 100vh;
             padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
         }
-        h1 { font-size: 1.5rem; margin-bottom: 4px; }
-        .date { color: var(--muted); font-size: 0.9rem; margin-bottom: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+        .date {
+            font-size: 0.9rem;
+            color: #8892b0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .location { color: #64ffda; font-size: 1.1rem; }
         .card {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid #30363d;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
         }
-        .card h2 {
-            font-size: 1rem;
-            color: var(--accent);
-            margin-bottom: 12px;
+        .card-header {
             display: flex;
             align-items: center;
-            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
-        .delta { color: var(--delta); font-size: 0.85rem; }
-        .empty { color: var(--muted); font-style: italic; }
-        .task, .event {
+        .card-header .icon { font-size: 1.5rem; margin-right: 10px; }
+        .weather-card { display: flex; align-items: center; justify-content: space-between; }
+        .weather-main { font-size: 3rem; font-weight: 300; }
+        .weather-desc { color: #8892b0; margin-top: 5px; }
+        .weather-icon { font-size: 4rem; }
+        .badge {
+            display: inline-block;
+            background: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-left: 10px;
+        }
+        .badge.new { background: rgba(239, 1, 7, 0.2); color: #ff6b6b; }
+        .event {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .event:last-child { border-bottom: none; }
+        .event-time { min-width: 80px; color: #64ffda; font-size: 0.85rem; }
+        .event-title { flex: 1; }
+        .email-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .email-item:last-child { border-bottom: none; }
+        .email-sender { color: #64ffda; font-weight: 500; font-size: 0.9rem; }
+        .email-subject { color: #eaeaea; font-size: 0.95rem; margin-top: 2px; }
+        .task-list, .habit-list { list-style: none; margin-top: 10px; }
+        .task-list li, .habit-list li {
             padding: 8px 0;
-            border-bottom: 1px solid #21262d;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .task:last-child, .event:last-child { border-bottom: none; }
-        .overdue { color: var(--warning); }
-        .unchanged { color: var(--muted); }
+        .task-list li:last-child, .habit-list li:last-child { border-bottom: none; }
+        .habit-pending { color: #ef0107; }
+        .habit-done { color: #64ffda; text-decoration: line-through; opacity: 0.7; }
+        .arsenal-card {
+            background: linear-gradient(135deg, rgba(239, 1, 7, 0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-left: 4px solid #ef0107;
+        }
+        .insights-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-left: 4px solid #667eea;
+        }
+        .insight-text {
+            color: #b8c5d6;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        .insight-text:last-child { margin-bottom: 0; }
+        .news-list { list-style: none; margin-top: 10px; }
+        .news-list li {
+            padding: 8px 0;
+            color: #ffd700;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .news-list li:last-child { border-bottom: none; }
         .footer {
             text-align: center;
-            color: var(--muted);
-            font-size: 0.8rem;
-            margin-top: 20px;
+            padding: 30px;
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+        .delta-note {
+            font-size: 0.85rem;
+            color: #8892b0;
+            margin-left: 10px;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .weather-main { font-size: 2rem; }
+            .card { padding: 20px; }
         }
     </style>
 </head>
 <body>
-    <h1>☀️ Afternoon Brief</h1>
-    <div class="date">Sunday, March 8, 2026 · 3:00 PM ET</div>
+    <div class="container">
+        <header>
+            <div class="date">Monday, March 9, 2026</div>
+            <h1>Morning Brief</h1>
+            <div class="location">📍 Princeton, NJ</div>
+        </header>
 
-    <div class="card">
-        <h2>📊 What's Changed Since 7AM</h2>
-        <div class="unchanged">✓ No new emails</div>
-        <div class="unchanged">✓ No new calendar events</div>
-        <div class="unchanged">✓ Tasks unchanged (2 remaining)</div>
-        <div class="unchanged">✓ Dailies status unchanged</div>
-    </div>
-
-    <div class="card">
-        <h2>🌤️ Tonight & Tomorrow</h2>
-        <div style="margin-bottom: 12px;">
-            <strong>Tonight:</strong> Mostly clear, low around 41°F.
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">🌤️</span>
+                Weather
+            </div>
+            <div class="weather-card">
+                <div>
+                    <div class="weather-main">55°F</div>
+                    <div class="weather-desc">Feels like 51°F</div>
+                </div>
+                <div class="weather-icon">☁️</div>
+            </div>
         </div>
-        <div>
-            <strong>Monday:</strong> Sunny, high near 68°F. Light southwest wind.
+
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">📆</span>
+                Today's Agenda
+            </div>
+            <div class="event"><div class="event-time">07:15</div><div class="event-title">BW@Princeton</div></div>
+<div class="event"><div class="event-time">15:30</div><div class="event-title">Karate Neel</div></div>
+            <div class="event">
+                <div class="event-time">7:00 AM</div>
+                <div class="event-title">Wake up</div>
+            </div>
+            <div class="event">
+                <div class="event-time">8:45 AM</div>
+                <div class="event-title">Drop Neel off</div>
+            </div>
         </div>
-    </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">📧</span>
+                New Emails <span class="badge new">10 new</span>
+                <span class="delta-note">(10 total unread)</span>
+            </div>
+            <div class="email-item"><div class="email-sender">Chase <no.reply.alerts@chase.com></div><div class="email-subject">Your credit card payment is scheduled</div></div>
+<div class="email-item"><div class="email-sender">Touch of Modern <hello@p.touchofmodern.com></div><div class="email-subject">BUGATTI. Need We Say More?</div></div>
+<div class="email-item"><div class="email-sender">ebill@airtel.com</div><div class="email-subject">Bill for your Airtel Mobile 81473XXXXX - March'26</div></div>
+<div class="email-item"><div class="email-sender">Google <no-reply@accounts.google.com></div><div class="email-subject">Security alert</div></div>
+<div class="email-item"><div class="email-sender">Barclays Arrival Plus <alerts@services.barclaysus.com></div><div class="email-subject">Your weekly account snapshot</div></div>
+<div class="email-item"><div class="email-sender">"Amazon.com" <auto-confirm@amazon.com></div><div class="email-subject">Ordered: "CARFIA Retro Acetate..." and 2 more items</div></div>
+<div class="email-item"><div class="email-sender">Quince Men <hello@mail.quince.com></div><div class="email-subject">A major men’s drop just hit</div></div>
+<div class="email-item"><div class="email-sender">Monarch <email@email.monarch.com></div><div class="email-subject">🛠️ Access Expired</div></div>
+<div class="email-item"><div class="email-sender">ClassDojo <parent@classdojo.com></div><div class="email-subject">Upcoming: 5 days until Annual Science Fair: Rose Classroom</div></div>
+<div class="email-item"><div class="email-sender">Huckberry <yo@hb.huckberry.com></div><div class="email-subject">Proof's first-ever collab shoe just dropped</div></div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">✅</span>
+                Tasks <span class="badge pending">3 due</span>
+            </div>
+            <ul class="task-list">
+                <li>Call up Goldfish to re-enroll Neel</li>
+<li>Get the contact lens prescription updated</li>
+<li>Enroll Neel in Soccer class</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">🎯</span>
+                Habits
+            </div>
+            <ul class="habit-list">
+                <li class="habit-pending">☐ Vitamin D - 50000IU</li>
+                <li class="habit-done">☑ Nutty Nuts</li>
+            </ul>
+        </div>
+        <div class="card arsenal-card">
+            <div class="card-header">
+                <span class="icon">🔴</span>
+                Arsenal FC
+            </div>
+            <ul class="news-list">
+                <li>Post-Mansfield quotes round-up: Arteta, Clough, Eze, Kepa, Oates, Keown &#038; more</li>
+<li>Arteta: It was a proper FA Cup game</li>
+<li>Mansfield 1-2 Arsenal &#8211; player ratings</li>
+<li>Report: Mansfield 1-2 Arsenal (inc. goals)</li>
+<li>Dowman and Salmon start: Mansfield Town v Arsenal team news</li>
+            </ul>
+        </div>
 
-    <div class="card">
-        <h2>📅 Calendar · Rest of Today</h2>
-        <div class="empty">No more events today.</div>
-    </div>
-
-    <div class="card">
-        <h2>✅ Todoist · Still Pending</h2>
-        <div class="task overdue">📞 Call up Goldfish to re-enroll Neel (due Mar 4)</div>
-        <div class="task">👁️ Get the contact lens prescription updated (Mar 3)</div>
-    </div>
-
-    <div class="card">
-        <h2>🎯 Habitica Dailies</h2>
-        <div class="task">🥜 Nutty Nuts — completed</div>
-        <div class="task overdue">💊 Vitamin D - 50000IU — still pending</div>
-        <div class="task">💊 Vitamin B12 + Calcium — completed</div>
-    </div>
-
-    <div class="card">
-        <h2>💡 Evening Suggestion</h2>
-        <p>Still a few hours to knock out that Vitamin D and make the Goldfish call before the week starts. Monday's looking sunny and 68°F — good day for the commute or any outdoor time.</p>
-    </div>
-
-    <div class="footer">
-        Generated by Gunner · <a href="https://nikhilist.github.io/morning-brief/" style="color: var(--accent);">View online</a>
+        <div class="footer">
+            Last updated: 02:02 AM<br>
+            <a href="https://github.com/nikhilist/morning-brief" style="color: #64ffda;">github.com/nikhilist/morning-brief</a>
+        </div>
     </div>
 </body>
 </html>
