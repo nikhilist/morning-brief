@@ -71,8 +71,8 @@ fi
 NEEL_EVENTS=$(gog calendar events "8tdo49s92dr6h34pcros8a17k8@group.calendar.google.com" --from $(date '+%Y-%m-%d') --to $(date -d '+1 day' '+%Y-%m-%d' 2>/dev/null || date -v+1d '+%Y-%m-%d') --json 2>/dev/null || echo '{"events":[]}')
 NEEL_LIST=$(echo "$NEEL_EVENTS" | jq -r '.events[] | "<div class=\"event\"><div class=\"event-time\">\(.start.date // (.start.dateTime | split("T")[1][:5]))</div><div class=\"event-title\">\(.summary)</div></div>"' 2>/dev/null || echo "")
 
-# Get Todoist tasks
-TODO_JSON=$(/home/nik/.npm-global/bin/todoist tasks --json 2>/dev/null || echo '[]')
+# Get Todoist tasks - use 'today' command for due/overdue tasks
+TODO_JSON=$(/home/nik/.npm-global/bin/todoist today --json 2>/dev/null || echo '[]')
 TODO_COUNT=$(echo "$TODO_JSON" | jq 'length')
 TODO_LIST=$(echo "$TODO_JSON" | jq -r '.[] | "<li>\(.content)</li>"' 2>/dev/null || echo "")
 
@@ -81,8 +81,14 @@ HABITICA_OUT=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh l
 HABIT_PENDING=$(echo "$HABITICA_OUT" | grep "value: 0" | sed 's/.*\[daily\] //;s/ (value:.*//' || echo "")
 HABIT_DONE=$(echo "$HABITICA_OUT" | grep "value: 1" | sed 's/.*\[daily\] //;s/ (value:.*//' || echo "")
 
-# Get Arsenal news - parse article titles from arseblog.news entry-title h3 tags
-ARSEBLOG_RAW=$(curl -s https://arseblog.news/ | grep -oE '<h3[^>]*class="[^"]*entry-title[^"]*"[^>]*>.*?</h3>' | sed 's/<[^>]*>//g' | head -5 || echo "")
+# Get Arsenal news - fetch actual latest articles from 2026 (not featured/pinned old posts)
+# First try to get 2026 articles from the main feed, fallback to h3 parsing
+ARSEBLOG_HTML=$(curl -s https://arseblog.news/)
+ARSEBLOG_RAW=$(echo "$ARSEBLOG_HTML" | grep -oP 'href="https://arseblog\.news/2026/[^"]+"[^>]*rel="bookmark"[^>]*>[^<]+' | sed 's/.*>//' | head -5)
+# If no 2026 articles found, fallback to h3 parsing
+if [ -z "$ARSEBLOG_RAW" ]; then
+    ARSEBLOG_RAW=$(echo "$ARSEBLOG_HTML" | grep -oE '<h3[^>]*class="[^"]*entry-title[^"]*"[^>]*>.*?</h3>' | sed 's/<[^>]*>//g' | head -5)
+fi
 ARSEBLOG=""
 if [ -n "$ARSEBLOG_RAW" ]; then
     ARSEBLOG=$(echo "$ARSEBLOG_RAW" | sed 's/^/<li>/;s/$/<\/li>/')

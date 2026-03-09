@@ -104,6 +104,10 @@
             background: #ff9800;
             color: white;
         }
+        .badge-overdue {
+            background: #f44336;
+            color: white;
+        }
         .task-item {
             display: flex;
             align-items: center;
@@ -115,6 +119,10 @@
             height: 18px;
             border: 2px solid #64b5f6;
             border-radius: 4px;
+            flex-shrink: 0;
+        }
+        .task-overdue {
+            color: #ff6b6b;
         }
         .news-item {
             padding: 12px 0;
@@ -124,20 +132,19 @@
             border-bottom: none;
         }
         .news-title {
-            color: #64b5f6;
+            color: #ef0107;
             text-decoration: none;
             font-size: 0.95rem;
-        }
-        .news-date {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 4px;
+            font-weight: 500;
         }
         .footer {
             text-align: center;
             padding: 30px;
             color: #555;
             font-size: 0.8rem;
+        }
+        .arsenal-card {
+            border-left: 3px solid #ef0107;
         }
     </style>
 </head>
@@ -189,8 +196,19 @@
         </div>
 
         <div class="card">
-            <h2>✅ Todoist Tasks</h2>
-            <div class="empty-state">No tasks due today</div>
+            <h2>✅ Todoist Tasks <span class="badge badge-overdue">3 OVERDUE</span></h2>
+            <div class="task-item task-overdue">
+                <div class="task-checkbox"></div>
+                <span>Call up Goldfish to re-enroll Neel (due Mar 4)</span>
+            </div>
+            <div class="task-item task-overdue">
+                <div class="task-checkbox"></div>
+                <span>Get the contact lens prescription updated (due Mar 3)</span>
+            </div>
+            <div class="task-item task-overdue">
+                <div class="task-checkbox"></div>
+                <span>Enroll Neel in Soccer class (due Mar 8)</span>
+            </div>
         </div>
 
         <div class="card">
@@ -209,24 +227,27 @@
             </div>
         </div>
 
-        <div class="card">
-            <h2>🔴 Arsenal News</h2>
+        <div class="card arsenal-card">
+            <h2>🔴 Arsenal News — March 2026</h2>
             <div class="news-item">
-                <a href="https://arseblog.news/2025/10/report-raya-set-for-new-deal/" class="news-title">Report: Raya set for new deal</a>
-                <div class="news-date">October 7, 2025</div>
+                <div class="news-title">Eze ready to help "special" Dowman fulfil his potential</div>
             </div>
             <div class="news-item">
-                <a href="https://arseblog.news/2025/08/hamstrings-havertz-and-holding-it-together/" class="news-title">Hamstrings, Havertz and Holding It Together</a>
-                <div class="news-date">August 2025</div>
+                <div class="news-title">Dixon takes another step forwards with Arsenal senior debut</div>
             </div>
             <div class="news-item">
-                <a href="https://arseblog.news/2026/02/sagoe-jr-kalmar-mccarron-dungannon/" class="news-title">Sagoe Jr heads to Sweden on loan</a>
-                <div class="news-date">February 2026</div>
+                <div class="news-title">Post-Mansfield quotes round-up: Arteta, Clough, Eze, Kepa, Oates, Keown & more</div>
+            </div>
+            <div class="news-item">
+                <div class="news-title">Arteta: It was a proper FA Cup game</div>
+            </div>
+            <div class="news-item">
+                <div class="news-title">Mansfield 1-2 Arsenal – player ratings</div>
             </div>
         </div>
 
         <div class="footer">
-            Generated at 11:00 AM UTC • <a href="https://nikhilist.github.io/morning-brief/" style="color:#64b5f6">View Online</a>
+            Updated at 12:03 PM UTC • <a href="https://nikhilist.github.io/morning-brief/" style="color:#64b5f6">View Online</a>
         </div>
     </div>
 </body>
