@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morning Brief - March 9, 2026</title>
+    <title>Afternoon Brief - March 9, 2026</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -50,6 +50,11 @@
             align-items: center;
             gap: 8px;
         }
+        .delta-new {
+            color: #4caf50;
+            font-size: 0.75rem;
+            margin-left: auto;
+        }
         .weather-temp {
             font-size: 3rem;
             font-weight: 200;
@@ -58,13 +63,6 @@
         .weather-desc {
             color: #aaa;
             font-size: 1.1rem;
-        }
-        .weather-details {
-            display: flex;
-            gap: 20px;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: #888;
         }
         .empty-state {
             color: #666;
@@ -96,16 +94,12 @@
             background: #4caf50;
             color: white;
         }
-        .badge-update {
-            background: #2196f3;
-            color: white;
-        }
-        .badge-promo {
-            background: #ff9800;
-            color: white;
-        }
         .badge-overdue {
             background: #f44336;
+            color: white;
+        }
+        .badge-today {
+            background: #ff9800;
             color: white;
         }
         .task-item {
@@ -124,18 +118,12 @@
         .task-overdue {
             color: #ff6b6b;
         }
-        .news-item {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+        .task-today {
+            color: #ff9800;
         }
-        .news-item:last-child {
-            border-bottom: none;
-        }
-        .news-title {
-            color: #ef0107;
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
+        .habit-done {
+            color: #4caf50;
+            text-decoration: line-through;
         }
         .footer {
             text-align: center;
@@ -143,79 +131,77 @@
             color: #555;
             font-size: 0.8rem;
         }
-        .arsenal-card {
-            border-left: 3px solid #ef0107;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>☀️ MORNING BRIEF</h1>
-            <div class="date">Monday, March 9, 2026</div>
+            <h1>🌤️ AFTERNOON BRIEF</h1>
+            <div class="date">Monday, March 9, 2026 — 3:00 PM EDT</div>
         </div>
 
         <div class="card">
-            <h2>🌤️ Weather — Princeton, NJ</h2>
-            <div class="weather-temp">4°C</div>
-            <div class="weather-desc">Light rain</div>
-            <div class="weather-details">
-                <span>Feels like 1°C</span>
-                <span>•</span>
-                <span>High: 6° / Low: 0°</span>
-            </div>
+            <h2>📊 What's Changed Since Morning</h2>
+            <p style="color: #aaa; line-height: 1.6;">
+                • <strong>4 new emails</strong> arrived<br>
+                • <strong>1 new task</strong> due today (Sriram trip)<br>
+                • <strong>1 habit completed</strong> (Nutty Nuts)<br>
+                • Weather cleared up — abundant sunshine, high 72°F
+            </p>
         </div>
 
         <div class="card">
-            <h2>📅 Calendar Today</h2>
-            <div class="empty-state">No events scheduled for today</div>
+            <h2>🌤️ Weather Update — Princeton, NJ</h2>
+            <div class="weather-temp">22°C / 72°F</div>
+            <div class="weather-desc">Abundant sunshine</div>
+            <p style="color: #888; margin-top: 10px; font-size: 0.9rem;">Much better than this morning's rain!</p>
         </div>
 
         <div class="card">
-            <h2>✉️ Unread Emails (10 total, 3 new)</h2>
+            <h2>✉️ New Emails Since Morning <span class="badge badge-new">4 NEW</span></h2>
             <div class="email-item">
-                <div class="email-from">The Athletic FC</div>
-                <div class="email-subject">Outcry over Grok posts on stadium deaths <span class="badge badge-new">NEW</span></div>
-            </div>
-            <div class="email-item">
-                <div class="email-from">Todoist</div>
-                <div class="email-subject">3 overdue tasks for today <span class="badge badge-update">NEW</span></div>
+                <div class="email-from">Arsecast Extra</div>
+                <div class="email-subject">Episode 685 - 09.03.2026 (ad-free) <span class="badge badge-new">NEW</span></div>
             </div>
             <div class="email-item">
                 <div class="email-from">Chase</div>
-                <div class="email-subject">Credit card payment scheduled <span class="badge badge-update">NEW</span></div>
+                <div class="email-subject">Prime Visa automatic payment scheduled <span class="badge badge-new">NEW</span></div>
             </div>
             <div class="email-item">
-                <div class="email-from">Amazon</div>
-                <div class="email-subject">Order confirmed: CARFIA Retro Acetate...</div>
+                <div class="email-from">NTPC LIMITED</div>
+                <div class="email-subject">Dividend remittance intimation <span class="badge badge-new">NEW</span></div>
             </div>
             <div class="email-item">
-                <div class="email-from">Barclays Arrival Plus</div>
-                <div class="email-subject">Weekly account snapshot</div>
+                <div class="email-from">Nippon India Mutual Fund</div>
+                <div class="email-subject">Monthly Portfolio Disclosure - February 2026 <span class="badge badge-new">NEW</span></div>
             </div>
         </div>
 
         <div class="card">
-            <h2>✅ Todoist Tasks <span class="badge badge-overdue">3 OVERDUE</span></h2>
+            <h2>✅ Todoist Tasks <span class="badge badge-overdue">4 DUE</span></h2>
             <div class="task-item task-overdue">
                 <div class="task-checkbox"></div>
-                <span>Call up Goldfish to re-enroll Neel (due Mar 4)</span>
+                <span>Call up Goldfish to re-enroll Neel (due: Mar 4)</span>
             </div>
             <div class="task-item task-overdue">
                 <div class="task-checkbox"></div>
-                <span>Get the contact lens prescription updated (due Mar 3)</span>
+                <span>Get the contact lens prescription updated (due: Mar 3)</span>
             </div>
             <div class="task-item task-overdue">
                 <div class="task-checkbox"></div>
-                <span>Enroll Neel in Soccer class (due Mar 8)</span>
+                <span>Enroll Neel in Soccer class (due: Mar 8)</span>
+            </div>
+            <div class="task-item task-today">
+                <div class="task-checkbox"></div>
+                <span>Check with Sriram about trip <span class="badge badge-today">DUE TODAY</span></span>
             </div>
         </div>
 
         <div class="card">
             <h2>🎯 Habitica Dailies</h2>
-            <div class="task-item">
-                <div class="task-checkbox"></div>
-                <span>Nutty Nuts</span>
+            <div class="task-item habit-done">
+                <div class="task-checkbox" style="background: #4caf50; border-color: #4caf50;"></div>
+                <span>☑ Nutty Nuts (completed)</span>
             </div>
             <div class="task-item">
                 <div class="task-checkbox"></div>
@@ -227,27 +213,8 @@
             </div>
         </div>
 
-        <div class="card arsenal-card">
-            <h2>🔴 Arsenal News — March 2026</h2>
-            <div class="news-item">
-                <div class="news-title">Eze ready to help "special" Dowman fulfil his potential</div>
-            </div>
-            <div class="news-item">
-                <div class="news-title">Dixon takes another step forwards with Arsenal senior debut</div>
-            </div>
-            <div class="news-item">
-                <div class="news-title">Post-Mansfield quotes round-up: Arteta, Clough, Eze, Kepa, Oates, Keown & more</div>
-            </div>
-            <div class="news-item">
-                <div class="news-title">Arteta: It was a proper FA Cup game</div>
-            </div>
-            <div class="news-item">
-                <div class="news-title">Mansfield 1-2 Arsenal – player ratings</div>
-            </div>
-        </div>
-
         <div class="footer">
-            Updated at 12:03 PM UTC • <a href="https://nikhilist.github.io/morning-brief/" style="color:#64b5f6">View Online</a>
+            Updated at 8:00 PM UTC • <a href="https://nikhilist.github.io/morning-brief/" style="color:#64b5f6">View Online</a>
         </div>
     </div>
 </body>
