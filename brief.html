@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Afternoon Brief - March 9, 2026</title>
+    <title>Evening Brief - March 9, 2026</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
             color: #e8e8e8;
             min-height: 100vh;
             padding: 20px;
@@ -50,57 +50,52 @@
             align-items: center;
             gap: 8px;
         }
-        .delta-new {
-            color: #4caf50;
-            font-size: 0.75rem;
-            margin-left: auto;
+        .insights-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(255,255,255,0.05) 100%);
+            border-left: 3px solid #667eea;
         }
-        .weather-temp {
-            font-size: 3rem;
-            font-weight: 200;
-            margin: 10px 0;
-        }
-        .weather-desc {
-            color: #aaa;
-            font-size: 1.1rem;
-        }
-        .empty-state {
-            color: #666;
-            font-style: italic;
-        }
-        .email-item {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .email-item:last-child {
-            border-bottom: none;
-        }
-        .email-from {
-            font-size: 0.85rem;
-            color: #888;
-        }
-        .email-subject {
+        .insight-text {
+            color: #b8c5d6;
+            line-height: 1.7;
+            margin-bottom: 14px;
             font-size: 0.95rem;
-            margin-top: 4px;
         }
-        .badge {
-            display: inline-block;
-            padding: 2px 8px;
+        .insight-text:last-child {
+            margin-bottom: 0;
+        }
+        .highlight {
+            color: #64ffda;
+            font-weight: 500;
+        }
+        .warning {
+            color: #ff6b6b;
+        }
+        .success {
+            color: #4caf50;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .stat-box {
+            background: rgba(255,255,255,0.03);
             border-radius: 12px;
-            font-size: 0.7rem;
-            margin-left: 8px;
+            padding: 15px;
+            text-align: center;
         }
-        .badge-new {
-            background: #4caf50;
-            color: white;
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: #64b5f6;
         }
-        .badge-overdue {
-            background: #f44336;
-            color: white;
-        }
-        .badge-today {
-            background: #ff9800;
-            color: white;
+        .stat-label {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .task-item {
             display: flex;
@@ -108,22 +103,13 @@
             gap: 10px;
             padding: 8px 0;
         }
-        .task-checkbox {
-            width: 18px;
-            height: 18px;
-            border: 2px solid #64b5f6;
-            border-radius: 4px;
-            flex-shrink: 0;
-        }
         .task-overdue {
             color: #ff6b6b;
         }
-        .task-today {
-            color: #ff9800;
-        }
-        .habit-done {
+        .habit-streak {
             color: #4caf50;
-            text-decoration: line-through;
+            font-size: 0.85rem;
+            margin-left: auto;
         }
         .footer {
             text-align: center;
@@ -136,85 +122,97 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌤️ AFTERNOON BRIEF</h1>
-            <div class="date">Monday, March 9, 2026 — 3:00 PM EDT</div>
+            <h1>🌙 EVENING BRIEF</h1>
+            <div class="date">Monday, March 9, 2026 — Day's End</div>
         </div>
 
-        <div class="card">
-            <h2>📊 What's Changed Since Morning</h2>
-            <p style="color: #aaa; line-height: 1.6;">
-                • <strong>4 new emails</strong> arrived<br>
-                • <strong>1 new task</strong> due today (Sriram trip)<br>
-                • <strong>1 habit completed</strong> (Nutty Nuts)<br>
-                • Weather cleared up — abundant sunshine, high 72°F
+        <div class="card insights-card">
+            <h2>💭 Today's Insights</h2>
+            <p class="insight-text">
+                <span class="success">✓</span> You got through Monday. Neel had his day, you handled work, and the sun actually came out this afternoon. That's a win.
+            </p>
+            <p class="insight-text">
+                <span class="warning">→</span> <strong>The pattern:</strong> Three tasks are now 5+ days overdue. They're not hard — Goldfish call, contact lens prescription, soccer enrollment. They're <em>boring</em>. Consider batching them first thing tomorrow morning before email.
+            </p>
+            <p class="insight-text">
+                <span class="highlight">⚡</span> <strong>Habit streaks:</strong> Vitamin B12+Calcium is on a 4-day streak. Nutty Nuts got done today. The vitamins are becoming automatic — good.
+            </p>
+            <p class="insight-text">
+                <span class="highlight">📧</span> 16 unread emails accumulated today. Most are alerts, notifications, newsletters — noise, not signal. The 3-day rule applies: if no one follows up, it wasn't important.
             </p>
         </div>
 
         <div class="card">
-            <h2>🌤️ Weather Update — Princeton, NJ</h2>
-            <div class="weather-temp">22°C / 72°F</div>
-            <div class="weather-desc">Abundant sunshine</div>
-            <p style="color: #888; margin-top: 10px; font-size: 0.9rem;">Much better than this morning's rain!</p>
-        </div>
-
-        <div class="card">
-            <h2>✉️ New Emails Since Morning <span class="badge badge-new">4 NEW</span></h2>
-            <div class="email-item">
-                <div class="email-from">Arsecast Extra</div>
-                <div class="email-subject">Episode 685 - 09.03.2026 (ad-free) <span class="badge badge-new">NEW</span></div>
-            </div>
-            <div class="email-item">
-                <div class="email-from">Chase</div>
-                <div class="email-subject">Prime Visa automatic payment scheduled <span class="badge badge-new">NEW</span></div>
-            </div>
-            <div class="email-item">
-                <div class="email-from">NTPC LIMITED</div>
-                <div class="email-subject">Dividend remittance intimation <span class="badge badge-new">NEW</span></div>
-            </div>
-            <div class="email-item">
-                <div class="email-from">Nippon India Mutual Fund</div>
-                <div class="email-subject">Monthly Portfolio Disclosure - February 2026 <span class="badge badge-new">NEW</span></div>
+            <h2>📊 Day in Numbers</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">1/3</div>
+                    <div class="stat-label">Habits Done</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">0/3</div>
+                    <div class="stat-label">Overdue Tasks</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">+6</div>
+                    <div class="stat-label">New Emails</div>
+                </div>
             </div>
         </div>
 
         <div class="card">
-            <h2>✅ Todoist Tasks <span class="badge badge-overdue">4 DUE</span></h2>
+            <h2>✅ Still Pending Tonight</h2>
             <div class="task-item task-overdue">
-                <div class="task-checkbox"></div>
-                <span>Call up Goldfish to re-enroll Neel (due: Mar 4)</span>
+                <span>☐</span>
+                <span>Call up Goldfish to re-enroll Neel <em>(5 days overdue)</em></span>
             </div>
             <div class="task-item task-overdue">
-                <div class="task-checkbox"></div>
-                <span>Get the contact lens prescription updated (due: Mar 3)</span>
+                <span>☐</span>
+                <span>Get contact lens prescription updated <em>(6 days overdue)</em></span>
             </div>
             <div class="task-item task-overdue">
-                <div class="task-checkbox"></div>
-                <span>Enroll Neel in Soccer class (due: Mar 8)</span>
+                <span>☐</span>
+                <span>Enroll Neel in Soccer class <em>(1 day overdue)</em></span>
             </div>
-            <div class="task-item task-today">
-                <div class="task-checkbox"></div>
-                <span>Check with Sriram about trip <span class="badge badge-today">DUE TODAY</span></span>
+            <div class="task-item task-overdue">
+                <span>☐</span>
+                <span>Check with Sriram about trip <em>(due today)</em></span>
             </div>
         </div>
 
         <div class="card">
-            <h2>🎯 Habitica Dailies</h2>
-            <div class="task-item habit-done">
-                <div class="task-checkbox" style="background: #4caf50; border-color: #4caf50;"></div>
-                <span>☑ Nutty Nuts (completed)</span>
+            <h2>🎯 Habit Streaks</h2>
+            <div class="task-item">
+                <span>Nutty Nuts</span>
+                <span class="habit-streak">✓ Done today</span>
             </div>
             <div class="task-item">
-                <div class="task-checkbox"></div>
                 <span>Vitamin D - 50000IU</span>
+                <span class="habit-streak">1 day streak</span>
             </div>
             <div class="task-item">
-                <div class="task-checkbox"></div>
                 <span>Vitamin B12 + Calcium</span>
+                <span class="habit-streak">🔥 4 day streak</span>
             </div>
+        </div>
+
+        <div class="card">
+            <h2>🌤️ Tomorrow (Tuesday, March 10)</h2>
+            <p style="color: #aaa;">No calendar events scheduled. Clean slate to tackle those overdue tasks.</p>
+            <p style="color: #64b5f6; margin-top: 15px; font-size: 0.9rem;">
+                <strong>Suggestion:</strong> Block 30 minutes tomorrow morning for the "boring but necessary" batch — Goldfish, contact lens, soccer enrollment. Get them off the list before they hit a week overdue.
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>🎮 Habitica Status</h2>
+            <p style="color: #aaa;">Warrior Level 3 — 39/75 XP (52% to Level 4)</p>
+            <p style="color: #888; font-size: 0.85rem; margin-top: 8px;">HP: 50/50 | MP: 36/36 | Gold: 19</p>
         </div>
 
         <div class="footer">
-            Updated at 8:00 PM UTC • <a href="https://nikhilist.github.io/morning-brief/" style="color:#64b5f6">View Online</a>
+            Rest well. Tomorrow is a new day. 🌙<br>
+            Updated at 9:00 PM EDT
         </div>
     </div>
 </body>
