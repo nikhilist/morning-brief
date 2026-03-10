@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morning Brief - March 10, 2026</title>
+    <title>Afternoon Brief - March 10, 2026</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -39,45 +39,23 @@
             gap: 10px;
         }
         .card h2 .icon { font-size: 1.4rem; }
-        .weather-main {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            font-size: 3rem;
-            font-weight: 300;
-        }
-        .weather-main .temp { font-size: 4rem; }
-        .weather-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .weather-detail {
-            text-align: center;
-            padding: 15px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-        }
-        .weather-detail .label { font-size: 0.85rem; color: #888; margin-bottom: 5px; }
-        .weather-detail .value { font-size: 1.3rem; font-weight: 500; }
         .empty-state {
             color: #666;
             font-style: italic;
             padding: 20px 0;
         }
-        .event-item, .email-item, .task-item, .article-item {
+        .event-item, .email-item, .task-item, .article-item, .update-item {
             padding: 14px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .event-item:last-child, .email-item:last-child, .task-item:last-child, .article-item:last-child {
+        .event-item:last-child, .email-item:last-child, .task-item:last-child, .article-item:last-child, .update-item:last-child {
             border-bottom: none;
         }
-        .event-title, .email-subject, .task-text, .article-title {
+        .event-title, .email-subject, .task-text, .article-title, .update-title {
             font-weight: 500;
             margin-bottom: 4px;
         }
-        .event-time, .email-from, .task-meta, .article-meta {
+        .event-time, .email-from, .task-meta, .article-meta, .update-meta {
             font-size: 0.9rem;
             color: #888;
         }
@@ -90,6 +68,10 @@
             border-radius: 4px;
             margin-right: 10px;
             vertical-align: middle;
+        }
+        .task-checkbox.checked {
+            background: #4caf50;
+            border-color: #4caf50;
         }
         .footer {
             text-align: center;
@@ -107,74 +89,49 @@
             font-size: 0.75rem;
             margin-left: 10px;
         }
-        .badge.warning { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .badge.new { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+        .delta-section { margin-bottom: 20px; }
+        .delta-title { font-size: 0.9rem; color: #888; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>☀️ Morning Brief</h1>
-            <div class="date">Tuesday, March 10, 2026</div>
+            <h1>🌤️ Afternoon Update</h1>
+            <div class="date">Tuesday, March 10, 2026 — 3:00 PM EDT</div>
         </div>
 
         <div class="card">
-            <h2><span class="icon">🌤️</span> Weather — Princeton, NJ</h2>
-            <div class="weather-main">
-                <span>☀️</span>
-                <span class="temp">43°F</span>
+            <h2><span class="icon">📧</span> New Since Morning <span class="badge new">5 new</span></h2>
+            <div class="email-item">
+                <div class="email-subject">Don't snooze on these sleep resources</div>
+                <div class="email-from">From: <span>Cigna</span> • 2:38 PM</div>
             </div>
-            <div class="weather-details">
-                <div class="weather-detail">
-                    <div class="label">High</div>
-                    <div class="value">79°F</div>
-                </div>
-                <div class="weather-detail">
-                    <div class="label">Low</div>
-                    <div class="value">43°F</div>
-                </div>
-                <div class="weather-detail">
-                    <div class="label">Conditions</div>
-                    <div class="value">Clear</div>
-                </div>
+            <div class="email-item">
+                <div class="email-subject">What in the Australian GP was that</div>
+                <div class="email-from">From: <span>Prime Tire / The Athletic</span> • 2:23 PM</div>
+            </div>
+            <div class="email-item">
+                <div class="email-subject">Your weekly progress report from Fitbit!</div>
+                <div class="email-from">From: <span>Fitbit</span> • 2:21 PM</div>
+            </div>
+            <div class="email-item">
+                <div class="email-subject">Delivered: "CARFIA Retro Acetate..." and 2 more items</div>
+                <div class="email-from">From: <span>Amazon</span> • 2:21 PM</div>
+            </div>
+            <div class="email-item">
+                <div class="email-subject">New from Tim — "Jim Collins — What to Make of a Life..."</div>
+                <div class="email-from">From: <span>Tim Ferriss</span> • 11:09 AM</div>
             </div>
         </div>
 
         <div class="card">
-            <h2><span class="icon">📅</span> Calendar Today</h2>
+            <h2><span class="icon">📅</span> Calendar</h2>
             <div class="empty-state">No events scheduled for today.</div>
         </div>
 
         <div class="card">
-            <h2><span class="icon">📧</span> Unread Emails <span class="badge">10 new</span></h2>
-            <div class="email-item">
-                <div class="email-subject">💌 Your Day Ahead 03/10/2026</div>
-                <div class="email-from">From: <span>nikhilist+cc@gmail.com</span> • Today 11:00</div>
-            </div>
-            <div class="email-item">
-                <div class="email-subject">The anarchy of 23 red cards in one game</div>
-                <div class="email-from">From: <span>The Athletic FC</span> • Today 10:28</div>
-            </div>
-            <div class="email-item">
-                <div class="email-subject">We've received your Chase Sapphire Reserve Visa payment</div>
-                <div class="email-from">From: <span>Chase</span> • Today 08:53</div>
-            </div>
-            <div class="email-item">
-                <div class="email-subject">nikhilist's task(s) for 10 Mar 2026 → 3 overdue</div>
-                <div class="email-from">From: <span>Todoist</span> • Today 08:47</div>
-            </div>
-            <div class="email-item">
-                <div class="email-subject">Relwen Spring '26</div>
-                <div class="email-from">From: <span>Huckberry</span> • Today 06:36</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2><span class="icon">✅</span> Todoist Tasks</h2>
-            <div class="empty-state">No tasks due today.</div>
-        </div>
-
-        <div class="card">
-            <h2><span class="icon">⚔️</span> Habitica Dailies</h2>
+            <h2><span class="icon">✅</span> Habitica Dailies <span class="badge">3 pending</span></h2>
             <div class="task-item">
                 <span class="task-checkbox"></span>
                 <span class="task-text">Nutty Nuts</span>
@@ -190,23 +147,15 @@
         </div>
 
         <div class="card">
-            <h2><span class="icon">🔴</span> Arsenal News</h2>
+            <h2><span class="icon">🔴</span> Arsenal Update</h2>
             <div class="article-item">
-                <div class="article-title">Report: Raya set for new deal</div>
-                <div class="article-meta">October 7, 2025 • BBC's Sami Mokbel reports Arsenal set to agree new terms with David Raya</div>
-            </div>
-            <div class="article-item">
-                <div class="article-title">Hamstrings, Havertz and Holding It Together</div>
-                <div class="article-meta">August 2025 • On Pep roulette, team selection unpredictability</div>
-            </div>
-            <div class="article-item">
-                <div class="article-title">Sagoe Jr heads to Sweden on loan</div>
-                <div class="article-meta">February 2026 • Charles Sagoe Jr joins Kalmar FF on loan until January</div>
+                <div class="article-title">Arteta & Heinze: The Partnership Driving Arsenal's Title Push</div>
+                <div class="article-meta">BBC Sport • Matt Spiro on how Gabriel Heinze's arrival as assistant coach may be the key signing of the summer</div>
             </div>
         </div>
 
         <div class="footer">
-            <p>Generated Tuesday, March 10, 2026 at 7:00 AM EDT</p>
+            <p>Updated Tuesday, March 10, 2026 at 3:00 PM EDT</p>
             <p style="margin-top: 10px;"><a href="https://nikhilist.github.io/morning-brief/">View Online →</a></p>
         </div>
     </div>
