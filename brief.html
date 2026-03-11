@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Afternoon Brief - March 10, 2026</title>
+    <title>Evening Brief - March 10, 2026</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -39,40 +39,41 @@
             gap: 10px;
         }
         .card h2 .icon { font-size: 1.4rem; }
+        .insight-box {
+            background: rgba(74, 158, 255, 0.1);
+            border-left: 3px solid #4a9eff;
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 16px;
+        }
+        .insight-box h3 {
+            color: #4a9eff;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
         .empty-state {
             color: #666;
             font-style: italic;
             padding: 20px 0;
         }
-        .event-item, .email-item, .task-item, .article-item, .update-item {
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { color: #888; }
+        .stat-value { font-weight: 500; }
+        .stat-value.good { color: #4ade80; }
+        .stat-value.warning { color: #fbbf24; }
+        .article-item {
             padding: 14px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .event-item:last-child, .email-item:last-child, .task-item:last-child, .article-item:last-child, .update-item:last-child {
-            border-bottom: none;
-        }
-        .event-title, .email-subject, .task-text, .article-title, .update-title {
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-        .event-time, .email-from, .task-meta, .article-meta, .update-meta {
-            font-size: 0.9rem;
-            color: #888;
-        }
-        .email-from span { color: #4a9eff; }
-        .task-checkbox {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2px solid #666;
-            border-radius: 4px;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-        .task-checkbox.checked {
-            background: #4caf50;
-            border-color: #4caf50;
-        }
+        .article-item:last-child { border-bottom: none; }
+        .article-title { font-weight: 500; margin-bottom: 4px; }
+        .article-meta { font-size: 0.9rem; color: #888; }
         .footer {
             text-align: center;
             padding: 40px 20px;
@@ -80,6 +81,12 @@
             font-size: 0.9rem;
         }
         .footer a { color: #4a9eff; text-decoration: none; }
+        .weather-tomorrow {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.5rem;
+        }
         .badge {
             display: inline-block;
             padding: 4px 10px;
@@ -89,73 +96,86 @@
             font-size: 0.75rem;
             margin-left: 10px;
         }
-        .badge.new { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
-        .delta-section { margin-bottom: 20px; }
-        .delta-title { font-size: 0.9rem; color: #888; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌤️ Afternoon Update</h1>
-            <div class="date">Tuesday, March 10, 2026 — 3:00 PM EDT</div>
+            <h1>🌙 Evening Brief</h1>
+            <div class="date">Tuesday, March 10, 2026</div>
         </div>
 
         <div class="card">
-            <h2><span class="icon">📧</span> New Since Morning <span class="badge new">5 new</span></h2>
-            <div class="email-item">
-                <div class="email-subject">Don't snooze on these sleep resources</div>
-                <div class="email-from">From: <span>Cigna</span> • 2:38 PM</div>
+            <h2><span class="icon">📊</span> Day in Review</h2>
+            <div class="insight-box">
+                <h3>What happened today</h3>
+                <p>No calendar events — a quiet day with space to focus. 17 emails arrived, mostly newsletters and updates. Amazon delivery completed. Chase payment processed.</p>
             </div>
-            <div class="email-item">
-                <div class="email-subject">What in the Australian GP was that</div>
-                <div class="email-from">From: <span>Prime Tire / The Athletic</span> • 2:23 PM</div>
-            </div>
-            <div class="email-item">
-                <div class="email-subject">Your weekly progress report from Fitbit!</div>
-                <div class="email-from">From: <span>Fitbit</span> • 2:21 PM</div>
-            </div>
-            <div class="email-item">
-                <div class="email-subject">Delivered: "CARFIA Retro Acetate..." and 2 more items</div>
-                <div class="email-from">From: <span>Amazon</span> • 2:21 PM</div>
-            </div>
-            <div class="email-item">
-                <div class="email-subject">New from Tim — "Jim Collins — What to Make of a Life..."</div>
-                <div class="email-from">From: <span>Tim Ferriss</span> • 11:09 AM</div>
+            <div class="insight-box">
+                <h3>What's pending</h3>
+                <p>Todoist is clear, but Habitica shows 3 incomplete dailies: Nutty Nuts, Vitamin D, and B12 + Calcium. These have been pending for multiple days now.</p>
             </div>
         </div>
 
         <div class="card">
-            <h2><span class="icon">📅</span> Calendar</h2>
-            <div class="empty-state">No events scheduled for today.</div>
+            <h2><span class="icon">🎯</span> Today's Stats</h2>
+            <div class="stat-row">
+                <span class="stat-label">Calendar Events</span>
+                <span class="stat-value good">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Emails Received</span>
+                <span class="stat-value">17</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Unread Emails</span>
+                <span class="stat-value warning">~12</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Todoist Tasks</span>
+                <span class="stat-value good">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Habitica Dailies Done</span>
+                <span class="stat-value warning">0/3</span>
+            </div>
         </div>
 
         <div class="card">
-            <h2><span class="icon">✅</span> Habitica Dailies <span class="badge">3 pending</span></h2>
-            <div class="task-item">
-                <span class="task-checkbox"></span>
-                <span class="task-text">Nutty Nuts</span>
-            </div>
-            <div class="task-item">
-                <span class="task-checkbox"></span>
-                <span class="task-text">Vitamin D - 50000IU</span>
-            </div>
-            <div class="task-item">
-                <span class="task-checkbox"></span>
-                <span class="task-text">Vitamin B12 + Calcium</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2><span class="icon">🔴</span> Arsenal Update</h2>
+            <h2><span class="icon">🔴</span> Arsenal News</h2>
             <div class="article-item">
-                <div class="article-title">Arteta & Heinze: The Partnership Driving Arsenal's Title Push</div>
-                <div class="article-meta">BBC Sport • Matt Spiro on how Gabriel Heinze's arrival as assistant coach may be the key signing of the summer</div>
+                <div class="article-title">Arteta & Heinze: The Partnership Behind Arsenal's Success</div>
+                <div class="article-meta">BBC Sport • Gabriel Heinze's fiery presence is complementing Arteta's calmer approach as Arsenal chase the title</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🌤️</span> Tomorrow's Weather</h2>
+            <div class="weather-tomorrow">
+                <span>🌧️</span>
+                <span>82°F / 53°F</span>
+                <span style="font-size: 1rem; color: #888;">Rain expected</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Insights & Patterns</h2>
+            <div class="insight-box">
+                <h3>Habit streak at risk</h3>
+                <p>Your Habitica dailies have been pending for several days. The streak values (4, 1, 5) suggest you've been inconsistent. Consider setting a specific time to knock these out — maybe right after dropping Neel off?</p>
+            </div>
+            <div class="insight-box">
+                <h3>Email accumulation</h3>
+                <p>Unread count is climbing. The newsletters (Arseblog, The Athletic, Tim Ferriss) are piling up. Consider a 10-minute sweep in the morning or archive what you won't read.</p>
+            </div>
+            <div class="insight-box">
+                <h3>Tomorrow prep</h3>
+                <p>Rain is coming — 82°F high but wet. No calendar events scheduled yet. Good day to tackle those pending habits and clear some email backlog.</p>
             </div>
         </div>
 
         <div class="footer">
-            <p>Updated Tuesday, March 10, 2026 at 3:00 PM EDT</p>
+            <p>Generated Tuesday, March 10, 2026 at 10:00 PM EDT</p>
             <p style="margin-top: 10px;"><a href="https://nikhilist.github.io/morning-brief/">View Online →</a></p>
         </div>
     </div>
