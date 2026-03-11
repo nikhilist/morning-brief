@@ -81,17 +81,38 @@ HABITICA_OUT=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh l
 HABIT_PENDING=$(echo "$HABITICA_OUT" | grep "value: 0" | sed 's/.*\[daily\] //;s/ (value:.*//' || echo "")
 HABIT_DONE=$(echo "$HABITICA_OUT" | grep "value: 1" | sed 's/.*\[daily\] //;s/ (value:.*//' || echo "")
 
-# Get Arsenal news - fetch actual latest articles from 2026 (not featured/pinned old posts)
-# First try to get 2026 articles from the main feed, fallback to h3 parsing
-ARSEBLOG_HTML=$(curl -s https://arseblog.news/)
-ARSEBLOG_RAW=$(echo "$ARSEBLOG_HTML" | grep -oP 'href="https://arseblog\.news/2026/[^"]+"[^>]*rel="bookmark"[^>]*>[^<]+' | sed 's/.*>//' | head -5)
-# If no 2026 articles found, fallback to h3 parsing
-if [ -z "$ARSEBLOG_RAW" ]; then
-    ARSEBLOG_RAW=$(echo "$ARSEBLOG_HTML" | grep -oE '<h3[^>]*class="[^"]*entry-title[^"]*"[^>]*>.*?</h3>' | sed 's/<[^>]*>//g' | head -5)
-fi
+# Get Arsenal news from Arseblog RSS feed
+# Parse RSS and get articles from last 24 hours
+RSS_XML=$(curl -s "https://arseblog.com/feed/")
 ARSEBLOG=""
-if [ -n "$ARSEBLOG_RAW" ]; then
-    ARSEBLOG=$(echo "$ARSEBLOG_RAW" | sed 's/^/<li>/;s/$/<\/li>/')
+if [ -n "$RSS_XML" ]; then
+    # Extract items published within last 24 hours
+    CURRENT_TIME=$(date +%s)
+    ONE_DAY_AGO=$((CURRENT_TIME - 86400))
+    
+    # Parse RSS: get title, link, and pubDate for each item
+    ARSEBLOG=$(echo "$RSS_XML" | grep -oE '<item>.*?</item>' | while read -r item; do
+        title=$(echo "$item" | grep -oE '<title>.*?</title>' | sed 's/<title>//;s/<\/title>//' | sed 's/<!\[CDATA\[//;s/\]\]>//' | sed 's/&#8211;/-/g;s/&#8230;/.../g')
+        link=$(echo "$item" | grep -oE '<link>.*?</link>' | sed 's/<link>//;s/<\/link>//')
+        pubdate=$(echo "$item" | grep -oE '<pubDate>.*?</pubDate>' | sed 's/<pubDate>//;s/<\/pubDate>//')
+        
+        # Convert pubDate to timestamp (RFC 2822 format)
+        item_time=$(date -d "$pubdate" +%s 2>/dev/null || echo "0")
+        
+        # Only include if within last 24 hours
+        if [ "$item_time" -gt "$ONE_DAY_AGO" ] 2>/dev/null; then
+            echo "<li><a href=\"$link\" style=\"color: #ffd700; text-decoration: none;\">$title</a></li>"
+        fi
+    done | head -5)
+fi
+
+# Fallback: if no recent articles, get the 3 latest regardless of date
+if [ -z "$ARSEBLOG" ]; then
+    ARSEBLOG=$(echo "$RSS_XML" | grep -oE '<item>.*?</item>' | head -3 | while read -r item; do
+        title=$(echo "$item" | grep -oE '<title>.*?</title>' | sed 's/<title>//;s/<\/title>//' | sed 's/<!\[CDATA\[//;s/\]\]>//' | sed 's/&#8211;/-/g;s/&#8230;/.../g')
+        link=$(echo "$item" | grep -oE '<link>.*?</link>' | sed 's/<link>//;s/<\/link>//')
+        echo "<li><a href=\"$link\" style=\"color: #ffd700; text-decoration: none;\">$title</a></li>"
+    done)
 fi
 
 # Save current state
