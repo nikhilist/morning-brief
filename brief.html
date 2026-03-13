@@ -1,148 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morning Brief - March 13, 2026</title>
-    <style>
-        :root {
-            --bg: #0d1117;
-            --surface: #161b22;
-            --border: #30363d;
-            --text: #c9d1d9;
-            --text-muted: #8b949e;
-            --accent: #58a6ff;
-            --success: #238636;
-            --warning: #d29922;
-        }
-        * { box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            margin: 0;
-            padding: 1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
-        .date { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
-        .section {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        .section h2 {
-            font-size: 1rem;
-            margin: 0 0 0.75rem 0;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .empty { color: var(--text-muted); font-style: italic; }
-        .task, .email, .article {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .task:last-child, .email:last-child, .article:last-child { border-bottom: none; }
-        .task-title, .email-subject { font-weight: 500; }
-        .task-meta, .email-from { color: var(--text-muted); font-size: 0.85rem; }
-        .weather-temp { font-size: 2rem; font-weight: bold; }
-        .weather-desc { color: var(--text-muted); }
-        .badge {
-            display: inline-block;
-            padding: 0.15rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            background: var(--warning);
-            color: #000;
-            margin-left: 0.5rem;
-        }
-        a { color: var(--accent); text-decoration: none; }
-        a:hover { text-decoration: underline; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Morning Brief - March 13, 2026</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --good: #3fb950;
+      --warn: #d29922;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+      line-height: 1.5;
+      max-width: 860px;
+      margin-inline: auto;
+    }
+    h1 { margin: 0 0 8px; font-size: 32px; }
+    .sub { color: var(--muted); margin-bottom: 24px; }
+    .grid { display: grid; gap: 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+    h2 { margin: 0 0 12px; font-size: 18px; color: var(--accent); }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 6px 0; }
+    .muted { color: var(--muted); }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(88,166,255,0.15);
+      color: var(--accent);
+      font-size: 12px;
+      margin-left: 6px;
+    }
+  </style>
 </head>
 <body>
-    <h1>🌅 Morning Brief</h1>
-    <div class="date">Friday, March 13, 2026 · 7:00 AM EDT</div>
+  <h1>🌅 Morning Brief</h1>
+  <div class="sub">Friday, March 13, 2026 · Test run at 1:12 PM ET</div>
 
-    <div class="section">
-        <h2>🌤️ Weather · Princeton, NJ</h2>
-        <div class="weather-temp">49°F</div>
-        <div class="weather-desc">Increasing clouds · High near 49°F</div>
-        <p>Light southwest wind becoming south 10-15 mph. Gusts up to 30 mph.</p>
-        <p><strong>Tonight:</strong> Slight chance of rain 10-11pm. Low 38°F. South wind 15 mph, gusts to 25 mph.</p>
-        <p><strong>Weekend:</strong> Saturday sunny, high 52°F (breezy). Sunday mostly cloudy, high 52°F.</p>
-    </div>
+  <div class="grid">
+    <section class="card">
+      <h2>Weather</h2>
+      <p><strong>This afternoon:</strong> Mostly cloudy, high near 49°F. South wind 10–15 mph.</p>
+      <p><strong>Tonight:</strong> Slight chance of rain before 9pm, then gradual clearing. Low around 38°F. Gusts up to 25 mph.</p>
+      <p><strong>Weekend:</strong> Saturday sunny and breezy, high 52°F. Sunday cloudy, high 51°F. Rain arrives Sunday night.</p>
+    </section>
 
-    <div class="section">
-        <h2>📅 Calendar Today</h2>
-        <div class="empty">No events scheduled for Nik or Neel today.</div>
-    </div>
+    <section class="card">
+      <h2>Calendar <span class="pill">Nik + Neel</span></h2>
+      <p class="muted">No events today.</p>
+    </section>
 
-    <div class="section">
-        <h2>📧 Unread Emails <span class="badge">20</span></h2>
-        <div class="email">
-            <div class="email-subject">💌 Your Day Ahead 03/13/2026</div>
-            <div class="email-from">nikhilist+cc@gmail.com · 11:00 AM</div>
-        </div>
-        <div class="email">
-            <div class="email-subject">'Like a python': Experts' view of Arsenal</div>
-            <div class="email-from">The Athletic FC · 10:27 AM</div>
-        </div>
-        <div class="email">
-            <div class="email-subject">nikhilist's task(s) for 13 Mar 2026 → 2 overdue</div>
-            <div class="email-from">Todoist · 8:48 AM</div>
-        </div>
-        <div class="email">
-            <div class="email-subject">📥 Transactions need review in Monarch</div>
-            <div class="email-from">Monarch · 4:28 AM</div>
-        </div>
-        <div class="email">
-            <div class="email-subject">Annual Science Fair: Rose Classroom tomorrow</div>
-            <div class="email-from">ClassDojo · 7:00 PM yesterday</div>
-        </div>
-        <div style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">+ 15 more unread</div>
-    </div>
+    <section class="card">
+      <h2>Unread Email <span class="pill">new snapshot</span></h2>
+      <ul>
+        <li><strong>ClassDojo:</strong> Mrs. Smith added a new event to Neel's school</li>
+        <li><strong>Arseblog:</strong> ArseMail No.66</li>
+        <li><strong>The Athletic:</strong> 'Like a python': Experts' view of Arsenal</li>
+        <li><strong>Todoist:</strong> 2 overdue tasks reminder</li>
+        <li><strong>Monarch:</strong> Account balance activity for Mar 12th</li>
+      </ul>
+    </section>
 
-    <div class="section">
-        <h2>✅ Todoist Tasks <span class="badge">2 overdue</span></h2>
-        <div class="task">
-            <div class="task-title">Enroll Neel in Soccer class</div>
-            <div class="task-meta">Due: March 8 (overdue)</div>
-        </div>
-        <div class="task">
-            <div class="task-title">Check with Sriram about trip</div>
-            <div class="task-meta">Due: March 9 (overdue)</div>
-        </div>
-    </div>
+    <section class="card">
+      <h2>Todoist</h2>
+      <ul>
+        <li>Enroll Neel in Soccer class — overdue since Mar 8</li>
+        <li>Check with Sriram about trip — overdue since Mar 9</li>
+      </ul>
+    </section>
 
-    <div class="section">
-        <h2>🎯 Habitica Dailies</h2>
-        <div class="task">
-            <div class="task-title">🥜 Nutty Nuts</div>
-        </div>
-        <div class="task">
-            <div class="task-title">💊 Vitamin D - 50000IU</div>
-        </div>
-        <div class="task">
-            <div class="task-title">💊 Vitamin B12 + Calcium</div>
-        </div>
-    </div>
+    <section class="card">
+      <h2>Habitica Dailies</h2>
+      <ul>
+        <li>Nutty Nuts</li>
+        <li>Vitamin D - 50000IU</li>
+        <li>Vitamin B12 + Calcium</li>
+      </ul>
+    </section>
 
-    <div class="section">
-        <h2>⚽ Arsenal News</h2>
-        <div class="article">
-            <div class="task-title">Champions League: Arsenal 1-1 Leverkusen</div>
-            <p>After 10 changes and rested key players, Arsenal limped out of Leverkusen with a 1-1 draw. The emotional deprioritisation in Europe is understandable with the title challenge absorbing most energy, but the quality was irrelevant without full effort. This draw is an opening Arsenal might wait years for again.</p>
-        </div>
-    </div>
-
-    <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 2rem;">
-        <a href="https://nikhilist.github.io/morning-brief/">View on GitHub Pages</a>
-    </div>
+    <section class="card">
+      <h2>Arsenal</h2>
+      <p>Fresh BBC team-news snapshot is loading cleanly. Current coverage is focused on Arsenal vs Leverkusen lineups and availability, with Arteta back to a strong XI and Schick only fit enough for the bench for Leverkusen.</p>
+    </section>
+  </div>
 </body>
 </html>
