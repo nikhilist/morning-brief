@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morning Brief - March 12, 2026</title>
+    <title>Evening Brief - March 12, 2026</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -55,63 +55,44 @@
         .card h2 .icon {
             font-size: 1.5rem;
         }
-        .weather-main {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            font-size: 2rem;
-        }
-        .weather-temp {
-            font-size: 3rem;
-            font-weight: 200;
-        }
-        .weather-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .weather-stat {
-            background: rgba(255,255,255,0.05);
-            padding: 12px;
+        .highlight-box {
+            background: rgba(102, 126, 234, 0.15);
+            border-left: 4px solid #667eea;
+            padding: 16px;
             border-radius: 8px;
-            text-align: center;
+            margin: 16px 0;
         }
-        .weather-stat .label {
-            font-size: 0.85rem;
-            color: #888;
-            text-transform: uppercase;
+        .insight-box {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
         }
-        .weather-stat .value {
-            font-size: 1.2rem;
-            font-weight: 500;
-            margin-top: 4px;
-        }
-        .empty-state {
-            color: #666;
-            font-style: italic;
-            padding: 20px 0;
-        }
-        .task-list, .email-list, .news-list {
+        .task-list {
             list-style: none;
         }
-        .task-list li, .email-list li, .news-list li {
+        .task-list li {
             padding: 12px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             display: flex;
             align-items: flex-start;
             gap: 12px;
         }
-        .task-list li:last-child, .email-list li:last-child, .news-list li:last-child {
+        .task-list li:last-child {
             border-bottom: none;
         }
-        .task-list .checkbox {
+        .checkbox {
             width: 20px;
             height: 20px;
             border: 2px solid #667eea;
             border-radius: 4px;
             flex-shrink: 0;
             margin-top: 2px;
+        }
+        .checkbox.done {
+            background: #4caf50;
+            border-color: #4caf50;
         }
         .task-text {
             flex: 1;
@@ -120,29 +101,27 @@
             color: #ff6b6b;
             font-size: 0.85rem;
         }
-        .email-sender {
-            font-weight: 500;
-            color: #fff;
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
         }
-        .email-subject {
-            color: #aaa;
-            font-size: 0.95rem;
+        .stat-box {
+            background: rgba(255,255,255,0.05);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
         }
-        .email-time {
-            color: #666;
-            font-size: 0.85rem;
-            white-space: nowrap;
-        }
-        .news-item a {
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 600;
             color: #667eea;
-            text-decoration: none;
         }
-        .news-item a:hover {
-            text-decoration: underline;
-        }
-        .news-date {
-            color: #666;
+        .stat-label {
             font-size: 0.85rem;
+            color: #888;
+            margin-top: 4px;
         }
         .habit-item {
             display: flex;
@@ -153,159 +132,151 @@
         .habit-icon {
             font-size: 1.3rem;
         }
+        .streak {
+            color: #4caf50;
+            font-size: 0.9rem;
+        }
         .footer {
             text-align: center;
             padding: 40px 20px;
             color: #666;
             font-size: 0.9rem;
         }
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            .weather-temp { font-size: 2rem; }
-            .card { padding: 16px; }
+        .tomorrow-prep {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .tomorrow-prep h3 {
+            color: #4caf50;
+            margin-bottom: 12px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🌅 Morning Brief</h1>
+            <h1>🌙 Evening Brief</h1>
             <div class="date">Thursday, March 12, 2026</div>
         </header>
 
         <div class="card">
-            <h2><span class="icon">🌤️</span> Weather - Princeton, NJ</h2>
-            <div class="weather-main">
-                <span>Fog</span>
-                <span class="weather-temp">59°F</span>
-            </div>
-            <div class="weather-details">
-                <div class="weather-stat">
-                    <div class="label">Humidity</div>
-                    <div class="value">96%</div>
+            <h2><span class="icon">📊</span> Day in Review</h2>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Task Completed</div>
                 </div>
-                <div class="weather-stat">
-                    <div class="label">Wind</div>
-                    <div class="value">→15mph</div>
+                <div class="stat-box">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">Still Pending</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">20</div>
+                    <div class="stat-label">Unread Emails</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Calendar Events</div>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <h2><span class="icon">📅</span> Today's Calendar</h2>
-            <p class="empty-state">No events scheduled for today.</p>
+            <h2><span class="icon">✅</span> What Got Done</h2>
+            <div class="highlight-box">
+                <strong>✓ Call up Goldfish to re-enroll Neel</strong><br>
+                One less thing on the overdue list. Good progress on the family admin front.
+            </div>
         </div>
 
         <div class="card">
-            <h2><span class="icon">✉️</span> New Unread Emails (5)</h2>
-            <ul class="email-list">
-                <li>
-                    <div style="flex:1">
-                        <div class="email-sender">The Athletic FC</div>
-                        <div class="email-subject">A golden touch that made Man City melt</div>
-                    </div>
-                    <div class="email-time">10:26 AM</div>
-                </li>
-                <li>
-                    <div style="flex:1">
-                        <div class="email-sender">Todoist</div>
-                        <div class="email-subject">nikhilist's task(s) for 12 Mar 2026 → 3 overdue</div>
-                    </div>
-                    <div class="email-time">8:48 AM</div>
-                </li>
-                <li>
-                    <div style="flex:1">
-                        <div class="email-sender">Swiggy</div>
-                        <div class="email-subject">Nikhil, win up to ₹600 today! 🤑</div>
-                    </div>
-                    <div class="email-time">7:10 AM</div>
-                </li>
-                <li>
-                    <div style="flex:1">
-                        <div class="email-sender">Huckberry</div>
-                        <div class="email-subject">New Gear On Sale | 03.12.2026</div>
-                    </div>
-                    <div class="email-time">6:37 AM</div>
-                </li>
-                <li>
-                    <div style="flex:1">
-                        <div class="email-sender">ICICI Bank</div>
-                        <div class="email-subject">Update on your ICICI Bank Savings Account XX478</div>
-                    </div>
-                    <div class="email-time">5:33 AM</div>
-                </li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h2><span class="icon">✅</span> Todoist Tasks (3 overdue)</h2>
+            <h2><span class="icon">⏳</span> What's Pending</h2>
             <ul class="task-list">
                 <li>
                     <div class="checkbox"></div>
                     <div class="task-text">
-                        Call up Goldfish to re-enroll Neel
-                        <div class="task-date">Due: March 4 (overdue)</div>
-                    </div>
-                </li>
-                <li>
-                    <div class="checkbox"></div>
-                    <div class="task-text">
                         Enroll Neel in Soccer class
-                        <div class="task-date">Due: March 8 (overdue)</div>
+                        <div class="task-date">Overdue since March 8 (4 days)</div>
                     </div>
                 </li>
                 <li>
                     <div class="checkbox"></div>
                     <div class="task-text">
                         Check with Sriram about trip
-                        <div class="task-date">Due: March 9 (overdue)</div>
+                        <div class="task-date">Overdue since March 9 (3 days)</div>
                     </div>
+                </li>
+            </ul>
+            <div class="insight-box">
+                <strong>Pattern:</strong> Both remaining tasks involve external coordination (soccer enrollment, checking with Sriram). These tend to linger because they require reaching out to others. Consider blocking 15 minutes tomorrow morning to batch these calls/emails.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎯</span> Habit Streaks</h2>
+            <div class="habit-item">
+                <span class="habit-icon">🥜</span>
+                <span>Nutty Nuts</span>
+                <span class="streak">🔥 4 days</span>
+            </div>
+            <div class="habit-item">
+                <span class="habit-icon">💊</span>
+                <span>Vitamin D - 50000IU</span>
+                <span class="streak">🔥 1 day</span>
+            </div>
+            <div class="habit-item">
+                <span class="habit-icon">💊</span>
+                <span>Vitamin B12 + Calcium</span>
+                <span class="streak">🔥 5 days</span>
+            </div>
+            <div class="insight-box" style="margin-top: 16px;">
+                Vitamin D streak is fragile at 1 day — easy to forget. Consider setting a phone reminder or linking it to a consistent daily anchor (like morning coffee).
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📧</span> Notable Emails Today</h2>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <strong>ClassDojo:</strong> Neel's Science Fair is tomorrow (Rose Classroom)
+                </li>
+                <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <strong>GitHub:</strong> Personal access token expiring soon — may need renewal
+                </li>
+                <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <strong>E-Trade:</strong> Executed: Bought 20 RBRK @ $56.50
+                </li>
+                <li style="padding: 8px 0;">
+                    <strong>Warby Parker:</strong> Order placed + delivery in progress
                 </li>
             </ul>
         </div>
 
         <div class="card">
-            <h2><span class="icon">🎯</span> Habitica Dailies</h2>
-            <div class="habit-item">
-                <span class="habit-icon">🥜</span>
-                <span>Nutty Nuts (streak: 4)</span>
+            <h2><span class="icon">🧠</span> Insights & Patterns</h2>
+            <div class="highlight-box">
+                <strong>Task Velocity:</strong> You started with 3 overdue tasks and cleared 1. The remaining 2 are both "coordination tasks" — they require reaching out to others rather than solo work. This is a common pattern: administrative tasks get done, but communication tasks linger.
             </div>
-            <div class="habit-item">
-                <span class="habit-icon">💊</span>
-                <span>Vitamin D - 50000IU (streak: 1)</span>
-            </div>
-            <div class="habit-item">
-                <span class="habit-icon">💊</span>
-                <span>Vitamin B12 + Calcium (streak: 5)</span>
+            <div class="insight-box">
+                <strong>Email Volume:</strong> 20 unread emails accumulated today. Most are promotional (Huckberry, Claude, Google Store). Consider unsubscribing from low-value newsletters to reduce noise.
             </div>
         </div>
 
-        <div class="card">
-            <h2><span class="icon">⚽</span> Arsenal News</h2>
-            <ul class="news-list">
-                <li class="news-item">
-                    <div>
-                        <a href="https://arseblog.news/2026/03/arsenal-women-arsecast-episode-156-if-you-know-your-history/">Arsenal Women Arsecast Episode 156: If you know your history</a>
-                        <div class="news-date">March 4, 2026</div>
-                    </div>
-                </li>
-                <li class="news-item">
-                    <div>
-                        <a href="https://arseblog.news/2026/03/new-date-for-arsenal-women-away-at-brighton/">New date for Arsenal Women away at Brighton</a>
-                        <div class="news-date">March 3, 2026 - Rearranged for Wed, May 6 at 7:45pm</div>
-                    </div>
-                </li>
-                <li class="news-item">
-                    <div>
-                        <a href="https://arseblog.news/2026/03/dixon-takes-another-step-forwards-with-arsenal-senior-debut/">Dixon takes another step forwards with Arsenal senior debut</a>
-                        <div class="news-date">March 8, 2026</div>
-                    </div>
-                </li>
+        <div class="tomorrow-prep">
+            <h3>🌅 Tomorrow Prep (Friday, March 13)</h3>
+            <ul style="list-style: none; padding: 0; margin-top: 12px;">
+                <li style="padding: 6px 0;">📋 <strong>Neel's Science Fair</strong> — Rose Classroom (per ClassDojo)</li>
+                <li style="padding: 6px 0;">☎️ <strong>Batch calls:</strong> Soccer enrollment + Sriram trip check</li>
+                <li style="padding: 6px 0;">💊 <strong>Habit check:</strong> Vitamin D streak needs protection</li>
+                <li style="padding: 6px 0;">🔑 <strong>GitHub token:</strong> May need renewal soon</li>
             </ul>
         </div>
 
         <div class="footer">
-            Generated at 11:00 AM UTC • <a href="https://nikhilist.github.io/morning-brief/" style="color:#667eea">View on GitHub Pages</a>
+            Generated at 10:00 PM EDT • Good evening, Nik
         </div>
     </div>
 </body>
