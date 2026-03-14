@@ -4,6 +4,9 @@ set -euo pipefail
 LOG_FILE="/home/nik/.openclaw/workspace/.brief-generate.log"
 exec 1> >(tee -a "$LOG_FILE") 2>&1
 
+TZ="America/New_York"
+export TZ
+
 echo "=== Starting brief generation: $(date) ==="
 
 OUTPUT_FILE="/home/nik/.openclaw/workspace/brief.html"
@@ -12,9 +15,6 @@ STATE_FILE="/home/nik/.openclaw/workspace/.brief-state.json"
 RSS_FILE="/home/nik/.openclaw/workspace/.arseblog-feed.xml"
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"' EXIT
-
-TZ="America/New_York"
-export TZ
 
 DATE=$(date '+%A, %B %-d, %Y')
 TIME=$(date '+%I:%M %p %Z')
