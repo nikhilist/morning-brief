@@ -24,14 +24,19 @@ STATE_FILE="$WORKSPACE/.brief-state.json"
 DATE=$(date '+%A, %B %-d, %Y')
 TIME=$(date '+%I:%M %p %Z')
 HOUR=$(date '+%H')
+PREV_STATE=$(cat "$STATE_FILE" 2>/dev/null || echo '{}')
 
 if [ "$HOUR" -lt 12 ]; then
   BRIEF_TYPE="Morning"
+  BRIEF_MODE="full"
 elif [ "$HOUR" -lt 20 ]; then
   BRIEF_TYPE="Afternoon"
+  BRIEF_MODE="delta"
 else
   BRIEF_TYPE="Evening"
+  BRIEF_MODE="delta"
 fi
+export BRIEF_MODE
 
 run_module() {
   local script="$1"

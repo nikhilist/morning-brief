@@ -4,6 +4,7 @@ export TZ="America/New_York"
 export GOG_KEYRING_BACKEND=file
 export GOG_KEYRING_PASSWORD=""
 export GOG_ACCOUNT=nikhilist@gmail.com
+source /home/nik/.openclaw/workspace/brief-lib.sh
 
 STATE_FILE="/home/nik/.openclaw/workspace/.brief-state.json"
 TMP_DIR=$(mktemp -d)
@@ -48,25 +49,43 @@ render_email_bucket() {
 EMAIL_NEEDS_HTML=$(render_email_bucket "$NEEDS_JSON")
 EMAIL_NOTING_HTML=$(render_email_bucket "$NOTING_JSON")
 
-cat <<HTML
+if [ "$(brief_mode)" = "delta" ]; then
+  cat <<HTML
+<section class="card">
+  <h2>Inbox Delta</h2>
+  <p><strong>${NEW_COUNT}</strong> new unread since the last brief.</p>
+HTML
+  if [ "$NEW_COUNT" -gt 0 ] && [ -n "$EMAIL_NEEDS_HTML" ]; then
+    cat <<HTML
+  <p><strong>New signal</strong></p>
+  <ul>$EMAIL_NEEDS_HTML</ul>
+HTML
+  fi
+  cat <<HTML
+  <p class="muted">Total unread now: $EMAIL_COUNT.</p>
+</section>
+HTML
+else
+  cat <<HTML
 <section class="card">
   <h2>Inbox Triage</h2>
 HTML
-if [ -n "$EMAIL_NEEDS_HTML" ]; then
-cat <<HTML
+  if [ -n "$EMAIL_NEEDS_HTML" ]; then
+    cat <<HTML
   <p><strong>Needs attention</strong></p>
   <ul>$EMAIL_NEEDS_HTML</ul>
 HTML
-fi
-if [ -n "$EMAIL_NOTING_HTML" ]; then
-cat <<HTML
+  fi
+  if [ -n "$EMAIL_NOTING_HTML" ]; then
+    cat <<HTML
   <p><strong>Worth noting</strong></p>
   <ul>$EMAIL_NOTING_HTML</ul>
 HTML
-fi
-cat <<HTML
+  fi
+  cat <<HTML
   <p class="muted">Ignore bucket: $IGNORE_COUNT items. Total unread: $EMAIL_COUNT.</p>
 </section>
-__SUMMARY__${NEW_COUNT} new unread emails since the last brief; most should be triaged, not read end-to-end.
-__EMAIL_IDS__$(jq -R -s -c 'split("\n")[:-1]' "$CURRENT_EMAILS_FILE")
 HTML
+fi
+brief_meta SUMMARY "${NEW_COUNT} new unread emails since the last brief; most should be triaged, not read end-to-end."
+brief_meta EMAIL_IDS "$(jq -R -s -c 'split("\n")[:-1]' "$CURRENT_EMAILS_FILE")"
