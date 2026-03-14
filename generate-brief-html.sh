@@ -13,8 +13,11 @@ RSS_FILE="/home/nik/.openclaw/workspace/.arseblog-feed.xml"
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"' EXIT
 
+TZ="America/New_York"
+export TZ
+
 DATE=$(date '+%A, %B %-d, %Y')
-TIME=$(date '+%I:%M %p')
+TIME=$(date '+%I:%M %p %Z')
 HOUR=$(date '+%H')
 TODAY_START=$(date '+%Y-%m-%d')
 TODAY_END=$(date -d '+1 day' '+%Y-%m-%d' 2>/dev/null || date -v+1d '+%Y-%m-%d')
@@ -142,7 +145,7 @@ fi
 # Habits
 HABITICA_OUT=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh list dailys 2>/dev/null || true)
 HABIT_PENDING_NAMES=$(echo "$HABITICA_OUT" | awk 'BEGIN{pending=0} /^\[daily\]/{getline; if ($0 ~ /^  /) print substr($0,3)}')
-HABIT_PENDING_COUNT=$(echo "$HABIT_PENDING_NAMES" | grep -c . 2>/dev/null || echo 0)
+HABIT_PENDING_COUNT=$(printf '%s\n' "$HABIT_PENDING_NAMES" | sed '/^$/d' | wc -l | tr -d ' ')
 HABIT_LIST_HTML=""
 if [ -n "$HABIT_PENDING_NAMES" ]; then
   while IFS= read -r habit; do
