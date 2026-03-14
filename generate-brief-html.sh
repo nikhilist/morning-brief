@@ -86,7 +86,8 @@ EMAILS_JSON=$(gog gmail search 'is:unread' --json 2>/dev/null || echo '{"threads
 echo "$EMAILS_JSON" | jq -r '.threads[]?.id' | sort -u > "$CURRENT_EMAILS_FILE"
 comm -23 "$CURRENT_EMAILS_FILE" "$PREV_EMAILS_FILE" > "$NEW_EMAILS_FILE" || :
 EMAIL_COUNT=$(echo "$EMAILS_JSON" | jq '.threads | length')
-NEW_COUNT=$(grep -c . "$NEW_EMAILS_FILE" 2>/dev/null || echo 0)
+NEW_COUNT=$(wc -l < "$NEW_EMAILS_FILE" 2>/dev/null | tr -d ' ')
+NEW_COUNT=${NEW_COUNT:-0}
 
 echo "$EMAILS_JSON" | jq '
   .threads // [] |
