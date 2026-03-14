@@ -160,65 +160,10 @@ else
   HABIT_PATTERN="Personal maintenance looks under control."
 fi
 
-# Arsenal: upcoming match first, then Arseblog RSS
-ARSENAL_MATCH_JSON=$(echo "$ARSENAL_EVENTS" | jq -c '
-  .events
-  | map(select((.summary // "") | test("Arsenal"; "i")))
-  | sort_by(.start.dateTime // .start.date // "")
-  | .[0] // empty
-' 2>/dev/null || true)
-
-ARSENAL_MATCH_HTML=""
-ARSENAL_MATCH_SUMMARY=""
-if [ -n "$ARSENAL_MATCH_JSON" ] && [ "$ARSENAL_MATCH_JSON" != "null" ]; then
-  ARSENAL_MATCH_TIME=$(echo "$ARSENAL_MATCH_JSON" | jq -r 'if .start.dateTime then (.start.dateTime | split("T")[1] | sub(":00([+-].*)?$"; "") | sub("([+-].*)$"; "")) else (.start.date // "All day") end')
-  ARSENAL_MATCH_TITLE=$(echo "$ARSENAL_MATCH_JSON" | jq -r '.summary // "Arsenal match"')
-  ARSENAL_MATCH_LOCATION=$(echo "$ARSENAL_MATCH_JSON" | jq -r '.location // empty')
-  ARSENAL_MATCH_DESC=$(echo "$ARSENAL_MATCH_JSON" | jq -r '.description // empty' | head -c 220)
-  ARSENAL_MATCH_SUMMARY="$ARSENAL_MATCH_TITLE at $ARSENAL_MATCH_TIME"
-  ARSENAL_MATCH_HTML="<li><strong>Next match:</strong> $(printf '%s' "$ARSENAL_MATCH_TITLE" | escape_html) <span class=\"muted\">— $ARSENAL_MATCH_TIME</span>"
-  if [ -n "$ARSENAL_MATCH_LOCATION" ]; then
-    ARSENAL_MATCH_HTML+="<br><span class=\"muted\">$(printf '%s' "$ARSENAL_MATCH_LOCATION" | escape_html)</span>"
-  fi
-  if [ -n "$ARSENAL_MATCH_DESC" ]; then
-    ARSENAL_MATCH_HTML+="<br><span class=\"muted\">$(printf '%s' "$ARSENAL_MATCH_DESC" | escape_html)</span>"
-  fi
-  ARSENAL_MATCH_HTML+="</li>"
-fi
-
-curl -sL "https://arseblog.news/feed/" -o "$RSS_FILE" || true
-python3 - "$RSS_FILE" "$TMP_DIR/arsenal.json" <<'PY'
-import sys, json, re, html, email.utils, time
-from xml.etree import ElementTree as ET
-rss_path, out_path = sys.argv[1], sys.argv[2]
-items = []
-try:
-    root = ET.parse(rss_path).getroot()
-    channel = root.find('channel')
-    now = time.time()
-    if channel is not None:
-        for item in channel.findall('item')[:8]:
-            title = (item.findtext('title') or '').strip()
-            pub = (item.findtext('pubDate') or '').strip()
-            desc = item.findtext('description') or ''
-            desc = re.sub(r'<[^>]+>', ' ', desc)
-            desc = html.unescape(re.sub(r'\s+', ' ', desc)).strip()
-            ts = 0
-            try:
-                ts = email.utils.mktime_tz(email.utils.parsedate_tz(pub))
-            except Exception:
-                pass
-            items.append({"title": title, "desc": desc[:280], "ts": ts})
-    fresh = [x for x in items if x.get('ts', 0) and x['ts'] >= now - 86400]
-    out = fresh[:3] if fresh else items[:3]
-except Exception:
-    out = []
-with open(out_path, 'w') as f:
-    json.dump(out, f)
-PY
-ARSENAL_NEWS_HTML=$(jq -r '.[] | "<li><strong>" + .title + "</strong><br><span class=""muted"">" + .desc + "</span></li>"' "$TMP_DIR/arsenal.json" 2>/dev/null || true)
-ARSENAL_HTML="$ARSENAL_MATCH_HTML$ARSENAL_NEWS_HTML"
-ARSENAL_SUMMARY=$(if [ -n "$ARSENAL_MATCH_SUMMARY" ]; then printf '%s' "$ARSENAL_MATCH_SUMMARY"; else jq -r 'if length == 0 then "No fresh Arseblog posts surfaced." else .[0].title end' "$TMP_DIR/arsenal.json" 2>/dev/null; fi)
+# Arsenal module
+ARSENAL_SECTION_HTML=$(/home/nik/.openclaw/workspace/arsenal-brief.sh 2>/dev/null || echo '<section class="card arsenal"><h2>Arsenal</h2><p class="muted">Arsenal module failed.</p></section>')
+ARSENAL_SUMMARY=$(printf '%s\n' "$ARSENAL_SECTION_HTML" | sed -n 's/.*<strong>What matters:<\/strong> \(.*\)<\/p>.*/\1/p' | head -n1)
+ARSENAL_SUMMARY=${ARSENAL_SUMMARY:-Arsenal module active.}
 
 # Pattern recognition
 PATTERN_TEXT=""
@@ -400,10 +345,7 @@ cat >> "$INDEX_FILE" <<HTML
 HTML
 
 cat >> "$INDEX_FILE" <<HTML
-    <section class="card arsenal">
-      <h2>Arsenal</h2>
-      <ul>${ARSENAL_HTML:-<li class="muted">No fresh Arseblog items pulled.</li>}</ul>
-    </section>
+    ${ARSENAL_SECTION_HTML}
 HTML
 
 cat >> "$INDEX_FILE" <<HTML
