@@ -73,3 +73,13 @@ To github.com:nikhilist/morning-brief.git
 Morning brief generated
 GitHub Pages: https://nikhilist.github.io/morning-brief/
 === Finished: Sat Mar 14 02:59:13 AM UTC 2026 ===
+=== Starting brief generation: Sat Mar 14 03:02:40 AM UTC 2026 ===
+/home/nik/.openclaw/workspace/generate-brief-html.sh: line 195: [: 0
+0: integer expression expected
+[main 86df8ca] Rewrite Morning brief structure: Saturday, March 14, 2026 03:02 AM
+ 4 files changed, 20 insertions(+), 14 deletions(-)
+To github.com:nikhilist/morning-brief.git
+   e734799..86df8ca  main -> main
+Morning brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Sat Mar 14 03:02:48 AM UTC 2026 ===
