@@ -1,27 +1,34 @@
 #!/bin/bash
-# Generate full HTML brief page with insights and delta tracking
-# LOG FILE for debugging cron issues
+set -euo pipefail
+
 LOG_FILE="/home/nik/.openclaw/workspace/.brief-generate.log"
 exec 1> >(tee -a "$LOG_FILE") 2>&1
+
 echo "=== Starting brief generation: $(date) ==="
 
 OUTPUT_FILE="/home/nik/.openclaw/workspace/brief.html"
 INDEX_FILE="/home/nik/.openclaw/workspace/index.html"
 STATE_FILE="/home/nik/.openclaw/workspace/.brief-state.json"
+RSS_FILE="/home/nik/.openclaw/workspace/.arseblog-feed.xml"
+TMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TMP_DIR"' EXIT
+
 DATE=$(date '+%A, %B %-d, %Y')
 TIME=$(date '+%I:%M %p')
 HOUR=$(date '+%H')
+TODAY_START=$(date '+%Y-%m-%d')
+TODAY_END=$(date -d '+1 day' '+%Y-%m-%d' 2>/dev/null || date -v+1d '+%Y-%m-%d')
+TOMORROW_START=$(date -d '+1 day' '+%Y-%m-%d' 2>/dev/null || date -v+1d '+%Y-%m-%d')
+TOMORROW_END=$(date -d '+2 day' '+%Y-%m-%d' 2>/dev/null || date -v+2d '+%Y-%m-%d')
 
-# Determine brief type
 if [ "$HOUR" -lt 12 ]; then
-    BRIEF_TYPE="Morning"
+  BRIEF_TYPE="Morning"
 elif [ "$HOUR" -lt 20 ]; then
-    BRIEF_TYPE="Afternoon"
+  BRIEF_TYPE="Afternoon"
 else
-    BRIEF_TYPE="Evening"
+  BRIEF_TYPE="Evening"
 fi
 
-# Setup env - full path for cron
 export PATH="/usr/local/bin:/usr/bin:/bin:$HOME/.local/bin:$HOME/.npm-global/bin"
 export HOME="/home/nik"
 export GOG_KEYRING_BACKEND=file
@@ -31,371 +38,381 @@ export HABITICA_USER_ID="404a4487-6eea-4ed3-b60b-03f82092b29a"
 export HABITICA_API_TOKEN="e3470ee9-56d7-49f4-bd56-4f3f175bd804"
 export TODOIST_API_TOKEN="81d341953323302cf0919e4ec8a8d9531ea6f881"
 
-# Load previous state
-PREV_EMAILS=""
-PREV_TASKS=""
+escape_html() {
+  python3 -c 'import html,sys; print(html.escape(sys.stdin.read()), end="")'
+}
+
+# Previous state
+PREV_EMAILS_FILE="$TMP_DIR/prev_emails.txt"
+CURRENT_EMAILS_FILE="$TMP_DIR/current_emails.txt"
+NEW_EMAILS_FILE="$TMP_DIR/new_emails.txt"
 if [ -f "$STATE_FILE" ]; then
-    PREV_EMAILS=$(jq -r '.emails // empty' "$STATE_FILE" 2>/dev/null)
-    PREV_TASKS=$(jq -r '.tasks // empty' "$STATE_FILE" 2>/dev/null)
-fi
-
-# Get weather
-WEATHER_JSON=$(curl -s "https://api.open-meteo.com/v1/forecast?latitude=40.3573&longitude=-74.6672&current=temperature_2m,apparent_temperature,weather_code&timezone=America/New_York")
-TEMP=$(echo "$WEATHER_JSON" | jq -r '.current.temperature_2m')
-FEELS_LIKE=$(echo "$WEATHER_JSON" | jq -r '.current.apparent_temperature')
-TEMP_F=$(echo "scale=0; ($TEMP * 9/5) + 32" | bc -l 2>/dev/null || echo "31")
-FEELS_F=$(echo "scale=0; ($FEELS_LIKE * 9/5) + 32" | bc -l 2>/dev/null || echo "26")
-
-# Get ALL current emails
-EMAILS_JSON=$(gog gmail search 'is:unread' --json 2>/dev/null || echo '{"threads":[]}')
-ALL_EMAILS=$(echo "$EMAILS_JSON" | jq -r '.threads[].id' 2>/dev/null | sort)
-EMAIL_COUNT=$(echo "$ALL_EMAILS" | wc -l)
-
-# Find NEW emails (not in previous state)
-NEW_EMAILS=""
-NEW_EMAIL_LIST=""
-if [ -n "$PREV_EMAILS" ]; then
-    NEW_EMAILS=$(comm -23 <(echo "$ALL_EMAILS") <(echo "$PREV_EMAILS") 2>/dev/null)
-    NEW_COUNT=$(echo "$NEW_EMAILS" | grep -c '^' 2>/dev/null || echo "0")
+  jq -r '.emails[]? // empty' "$STATE_FILE" 2>/dev/null | sort -u > "$PREV_EMAILS_FILE" || :
 else
-    NEW_EMAILS="$ALL_EMAILS"
-    NEW_COUNT="$EMAIL_COUNT"
+  : > "$PREV_EMAILS_FILE"
 fi
 
-# Build email list (only NEW emails since last run)
-if [ -n "$NEW_EMAILS" ]; then
-    NEW_EMAIL_LIST=$(echo "$EMAILS_JSON" | jq --arg new "$NEW_EMAILS" -r '.threads[] | select(.id as $id | $new | contains($id)) | "<div class=\"email-item\"><div class=\"email-sender\">\(.from)</div><div class=\"email-subject\">\(.subject)</div></div>"' 2>/dev/null)
+# Weather
+WEATHER_JSON=$(curl -s "https://api.open-meteo.com/v1/forecast?latitude=40.3573&longitude=-74.6672&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=3&timezone=America%2FNew_York")
+TEMP=$(echo "$WEATHER_JSON" | jq -r '.current.temperature_2m // 0')
+FEELS_LIKE=$(echo "$WEATHER_JSON" | jq -r '.current.apparent_temperature // 0')
+WIND_KMH=$(echo "$WEATHER_JSON" | jq -r '.current.wind_speed_10m // 0')
+TODAY_HIGH_C=$(echo "$WEATHER_JSON" | jq -r '.daily.temperature_2m_max[0] // 0')
+TODAY_LOW_C=$(echo "$WEATHER_JSON" | jq -r '.daily.temperature_2m_min[0] // 0')
+TOMORROW_HIGH_C=$(echo "$WEATHER_JSON" | jq -r '.daily.temperature_2m_max[1] // 0')
+TOMORROW_LOW_C=$(echo "$WEATHER_JSON" | jq -r '.daily.temperature_2m_min[1] // 0')
+TOMORROW_PRECIP=$(echo "$WEATHER_JSON" | jq -r '.daily.precipitation_probability_max[1] // 0')
+TEMP_F=$(echo "scale=0; ($TEMP * 9/5) + 32" | bc -l 2>/dev/null | cut -d. -f1)
+FEELS_F=$(echo "scale=0; ($FEELS_LIKE * 9/5) + 32" | bc -l 2>/dev/null | cut -d. -f1)
+TODAY_HIGH_F=$(echo "scale=0; ($TODAY_HIGH_C * 9/5) + 32" | bc -l 2>/dev/null | cut -d. -f1)
+TODAY_LOW_F=$(echo "scale=0; ($TODAY_LOW_C * 9/5) + 32" | bc -l 2>/dev/null | cut -d. -f1)
+TOMORROW_HIGH_F=$(echo "scale=0; ($TOMORROW_HIGH_C * 9/5) + 32" | bc -l 2>/dev/null | cut -d. -f1)
+TOMORROW_LOW_F=$(echo "scale=0; ($TOMORROW_LOW_C * 9/5) + 32" | bc -l 2>/dev/null | cut -d. -f1)
+WIND_MPH=$(echo "scale=0; $WIND_KMH * 0.621371" | bc -l 2>/dev/null | cut -d. -f1)
+
+if [ "$WIND_MPH" -ge 18 ] 2>/dev/null; then
+  WEATHER_CALL="Windy enough to be annoying."
+elif [ "$TOMORROW_PRECIP" -ge 60 ] 2>/dev/null; then
+  WEATHER_CALL="Tomorrow has real rain risk."
+else
+  WEATHER_CALL="Nothing weather-wise should get in your way."
 fi
 
-# Get calendar events
-NEEL_EVENTS=$(gog calendar events "8tdo49s92dr6h34pcros8a17k8@group.calendar.google.com" --from $(date '+%Y-%m-%d') --to $(date -d '+1 day' '+%Y-%m-%d' 2>/dev/null || date -v+1d '+%Y-%m-%d') --json 2>/dev/null || echo '{"events":[]}')
-NEEL_LIST=$(echo "$NEEL_EVENTS" | jq -r '.events[] | "<div class=\"event\"><div class=\"event-time\">\(.start.date // (.start.dateTime | split("T")[1][:5]))</div><div class=\"event-title\">\(.summary)</div></div>"' 2>/dev/null || echo "")
+# Email
+EMAILS_JSON=$(gog gmail search 'is:unread' --json 2>/dev/null || echo '{"threads":[]}')
+echo "$EMAILS_JSON" | jq -r '.threads[]?.id' | sort -u > "$CURRENT_EMAILS_FILE"
+comm -23 "$CURRENT_EMAILS_FILE" "$PREV_EMAILS_FILE" > "$NEW_EMAILS_FILE" || :
+EMAIL_COUNT=$(echo "$EMAILS_JSON" | jq '.threads | length')
+NEW_COUNT=$(grep -c . "$NEW_EMAILS_FILE" 2>/dev/null || echo 0)
 
-# Get Todoist tasks - use 'today' command for due/overdue tasks
+echo "$EMAILS_JSON" | jq '
+  .threads // [] |
+  map(. + {
+    signal: (
+      (if ((.from // "") | test("ClassDojo|Google Voice|Monarch|school|teacher|calendar|doctor|daycare|parent"; "i")) then 100 else 0 end) +
+      (if ((.subject // "") | test("event|message|update|reminder|invoice|statement|text"; "i")) then 20 else 0 end) +
+      (if ((.from // "") | test("Huckberry|The Athletic|Nothing Technology|Paumanok|E\\*TRADE|ArseMail|promo|noreply"; "i")) then -40 else 0 end)
+    )
+  }) |
+  map(. + {bucket: (if .signal >= 80 then "needs" elif .signal >= 20 then "noting" else "ignore" end)})
+' > "$TMP_DIR/scored_emails.json"
+
+NEEDS_JSON=$(jq '[.[] | select(.bucket == "needs")][0:3]' "$TMP_DIR/scored_emails.json")
+NOTING_JSON=$(jq '[.[] | select(.bucket == "noting")][0:3]' "$TMP_DIR/scored_emails.json")
+IGNORE_COUNT=$(jq '[.[] | select(.bucket == "ignore")] | length' "$TMP_DIR/scored_emails.json")
+
+# Calendars: Nik + Neel + Arsenal
+NIK_EVENTS=$(gog calendar events "nikhilist@gmail.com" --from "$TODAY_START" --to "$TODAY_END" --json 2>/dev/null || echo '{"events":[]}')
+NEEL_EVENTS=$(gog calendar events "8tdo49s92dr6h34pcros8a17k8@group.calendar.google.com" --from "$TODAY_START" --to "$TODAY_END" --json 2>/dev/null || echo '{"events":[]}')
+ARSENAL_EVENTS=$(gog calendar events "08ac8665d76573fd7cfcb0e0cb13ed3a951e59b7b1c4c6eabc9adaae8a74e615@group.calendar.google.com" --from "$TODAY_START" --to "$TODAY_END" --json 2>/dev/null || echo '{"events":[]}')
+ALL_EVENTS=$(jq -s '{events: (.[0].events + .[1].events + .[2].events)}' <(echo "$NIK_EVENTS") <(echo "$NEEL_EVENTS") <(echo "$ARSENAL_EVENTS") 2>/dev/null || echo '{"events":[]}')
+EVENT_COUNT=$(echo "$ALL_EVENTS" | jq '.events | length')
+EVENT_LIST_HTML=$(echo "$ALL_EVENTS" | jq -r '.events | sort_by(.start.dateTime // .start.date // "")[] | "<div class=""event""><div class=""event-time"">" + (.start.date // ((.start.dateTime | split("T")[1])[:5])) + "</div><div class=""event-title""><span class=""calendar-tag"">" + (.organizer.email // "calendar") + "</span> " + (.summary // "Untitled") + "</div></div>"' 2>/dev/null || true)
+DAY_SHAPE=$(echo "$ALL_EVENTS" | jq -r '
+  .events | sort_by(.start.dateTime // .start.date // "") |
+  if length == 0 then "No real calendar constraints today."
+  else map(.summary) | join(" • ") end
+' 2>/dev/null)
+
+TOMORROW_EVENTS=$(jq -s '{events: (.[0].events + .[1].events + .[2].events)}' \
+  <(gog calendar events "nikhilist@gmail.com" --from "$TOMORROW_START" --to "$TOMORROW_END" --json 2>/dev/null || echo '{"events":[]}') \
+  <(gog calendar events "8tdo49s92dr6h34pcros8a17k8@group.calendar.google.com" --from "$TOMORROW_START" --to "$TOMORROW_END" --json 2>/dev/null || echo '{"events":[]}') \
+  <(gog calendar events "08ac8665d76573fd7cfcb0e0cb13ed3a951e59b7b1c4c6eabc9adaae8a74e615@group.calendar.google.com" --from "$TOMORROW_START" --to "$TOMORROW_END" --json 2>/dev/null || echo '{"events":[]}') 2>/dev/null || echo '{"events":[]}')
+TOMORROW_SHAPE=$(echo "$TOMORROW_EVENTS" | jq -r '
+  .events | sort_by(.start.dateTime // .start.date // "") |
+  if length == 0 then "Tomorrow is open right now."
+  else map(.summary) | join(" • ") end
+' 2>/dev/null)
+
+# Tasks
 TODO_JSON=$(/home/nik/.npm-global/bin/todoist today --json 2>/dev/null || echo '[]')
 TODO_COUNT=$(echo "$TODO_JSON" | jq 'length')
-TODO_LIST=$(echo "$TODO_JSON" | jq -r '.[] | "<li>\(.content)</li>"' 2>/dev/null || echo "")
-
-# Get Habitica dailies
-HABITICA_OUT=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh list dailys 2>/dev/null)
-HABIT_PENDING=$(echo "$HABITICA_OUT" | grep "value: 0" | sed 's/.*\[daily\] //;s/ (value:.*//' || echo "")
-HABIT_DONE=$(echo "$HABITICA_OUT" | grep "value: 1" | sed 's/.*\[daily\] //;s/ (value:.*//' || echo "")
-
-# Get Arsenal news from Arseblog RSS feed
-# Parse RSS and get articles from last 24 hours
-RSS_XML=$(curl -s "https://arseblog.com/feed/")
-ARSEBLOG=""
-if [ -n "$RSS_XML" ]; then
-    # Extract items published within last 24 hours
-    CURRENT_TIME=$(date +%s)
-    ONE_DAY_AGO=$((CURRENT_TIME - 86400))
-    
-    # Parse RSS: get title, link, and pubDate for each item
-    ARSEBLOG=$(echo "$RSS_XML" | grep -oE '<item>.*?</item>' | while read -r item; do
-        title=$(echo "$item" | grep -oE '<title>.*?</title>' | sed 's/<title>//;s/<\/title>//' | sed 's/<!\[CDATA\[//;s/\]\]>//' | sed 's/&#8211;/-/g;s/&#8230;/.../g')
-        link=$(echo "$item" | grep -oE '<link>.*?</link>' | sed 's/<link>//;s/<\/link>//')
-        pubdate=$(echo "$item" | grep -oE '<pubDate>.*?</pubDate>' | sed 's/<pubDate>//;s/<\/pubDate>//')
-        
-        # Convert pubDate to timestamp (RFC 2822 format)
-        item_time=$(date -d "$pubdate" +%s 2>/dev/null || echo "0")
-        
-        # Only include if within last 24 hours
-        if [ "$item_time" -gt "$ONE_DAY_AGO" ] 2>/dev/null; then
-            echo "<li><a href=\"$link\" style=\"color: #ffd700; text-decoration: none;\">$title</a></li>"
-        fi
-    done | head -5)
+TOP_TASK=$(echo "$TODO_JSON" | jq -r 'sort_by(.due.date // "9999-12-31") | .[0].content // empty')
+TODO_LIST=$(echo "$TODO_JSON" | jq -r '.[] | "<li><strong>" + (.content|tostring) + "</strong>" + (if .due.date then " <span class=""muted"">— due " + .due.date + "</span>" else "" end) + "</li>"' 2>/dev/null || true)
+if [ "$TODO_COUNT" -gt 0 ]; then
+  PRIORITY_MUST="$TOP_TASK"
+  PRIORITY_SHOULD=$(echo "$TODO_JSON" | jq -r '.[1].content // empty')
+  PRIORITY_IF=$(echo "$TODO_JSON" | jq -r '.[2].content // empty')
+else
+  PRIORITY_MUST="Keep the day clear for what is actually scheduled."
+  PRIORITY_SHOULD=""
+  PRIORITY_IF=""
 fi
 
-# Fallback: if no recent articles, get the 3 latest regardless of date
-if [ -z "$ARSEBLOG" ]; then
-    ARSEBLOG=$(echo "$RSS_XML" | grep -oE '<item>.*?</item>' | head -3 | while read -r item; do
-        title=$(echo "$item" | grep -oE '<title>.*?</title>' | sed 's/<title>//;s/<\/title>//' | sed 's/<!\[CDATA\[//;s/\]\]>//' | sed 's/&#8211;/-/g;s/&#8230;/.../g')
-        link=$(echo "$item" | grep -oE '<link>.*?</link>' | sed 's/<link>//;s/<\/link>//')
-        echo "<li><a href=\"$link\" style=\"color: #ffd700; text-decoration: none;\">$title</a></li>"
-    done)
+# Habits
+HABITICA_OUT=$(~/.openclaw/workspace/skills/habitica-skill/scripts/habitica.sh list dailys 2>/dev/null || true)
+HABIT_PENDING_NAMES=$(echo "$HABITICA_OUT" | awk 'BEGIN{pending=0} /^\[daily\]/{getline; if ($0 ~ /^  /) print substr($0,3)}')
+HABIT_PENDING_COUNT=$(echo "$HABIT_PENDING_NAMES" | grep -c . 2>/dev/null || echo 0)
+HABIT_LIST_HTML=""
+if [ -n "$HABIT_PENDING_NAMES" ]; then
+  while IFS= read -r habit; do
+    [ -n "$habit" ] && HABIT_LIST_HTML+="<li>$habit</li>"
+  done <<< "$HABIT_PENDING_NAMES"
 fi
 
-# Save current state
-echo "{\"emails\":$(echo "$ALL_EMAILS" | jq -R -s -c 'split("\n")[:-1]'),\"tasks\":$TODO_COUNT,\"timestamp\":\"$(date -Iseconds)\"}" > "$STATE_FILE"
-
-# Generate insights based on brief type
-INSIGHTS=""
-if [ "$BRIEF_TYPE" = "Evening" ]; then
-    INSIGHTS="<div class=\"card insights-card\">
-            <div class=\"card-header\">
-                <span class=\"icon\">💭</span>
-                Insights
-            </div>
-            <p class=\"insight-text\">You got Neel through $([ -n \"\$NEEL_LIST\" ] && echo \"his day\" || echo \"the day\"). That's the win that matters.</p>
-            <p class=\"insight-text\">$(if [ \"$TODO_COUNT\" -gt 0 ]; then echo \"The contact lens prescription is still there. It's not hard—just boring. Knock it out first thing tomorrow.\"; else echo \"Tasks are clear. Good.\"; fi)</p>
-            <p class=\"insight-text\">$(if [ -n \"\$HABIT_PENDING\" ]; then echo \"Same habit missed again. Either the timing doesn't work or you need a different trigger. Morning coffee?\"; else echo \"Habits on track.\"; fi)</p>
-            <p class=\"insight-text\">The $EMAIL_COUNT unread emails aren't urgent—they're noise. Consider the 3-day rule: if no follow-up, it's not important.</p>
-        </div>"
+if [ "$HABIT_PENDING_COUNT" -ge 3 ] 2>/dev/null; then
+  HABIT_PATTERN="Basics are still open late, which usually means the trigger is weak, not the intention."
+else
+  HABIT_PATTERN="Personal maintenance looks under control."
 fi
 
-cat > "$INDEX_FILE" << HTML
+# Arsenal from Arseblog RSS
+curl -sL "https://arseblog.news/feed/" -o "$RSS_FILE" || true
+python3 - "$RSS_FILE" "$TMP_DIR/arsenal.json" <<'PY'
+import sys, json, re, html, email.utils, time
+from xml.etree import ElementTree as ET
+rss_path, out_path = sys.argv[1], sys.argv[2]
+items = []
+try:
+    root = ET.parse(rss_path).getroot()
+    channel = root.find('channel')
+    now = time.time()
+    if channel is not None:
+        for item in channel.findall('item')[:8]:
+            title = (item.findtext('title') or '').strip()
+            pub = (item.findtext('pubDate') or '').strip()
+            desc = item.findtext('description') or ''
+            desc = re.sub(r'<[^>]+>', ' ', desc)
+            desc = html.unescape(re.sub(r'\s+', ' ', desc)).strip()
+            ts = 0
+            try:
+                ts = email.utils.mktime_tz(email.utils.parsedate_tz(pub))
+            except Exception:
+                pass
+            items.append({"title": title, "desc": desc[:280], "ts": ts})
+    fresh = [x for x in items if x.get('ts', 0) and x['ts'] >= now - 86400]
+    out = fresh[:3] if fresh else items[:3]
+except Exception:
+    out = []
+with open(out_path, 'w') as f:
+    json.dump(out, f)
+PY
+ARSENAL_HTML=$(jq -r '.[] | "<li><strong>" + .title + "</strong><br><span class=""muted"">" + .desc + "</span></li>"' "$TMP_DIR/arsenal.json" 2>/dev/null || true)
+ARSENAL_SUMMARY=$(jq -r 'if length == 0 then "No fresh Arseblog posts surfaced." else .[0].title end' "$TMP_DIR/arsenal.json" 2>/dev/null)
+
+# Pattern recognition
+PATTERN_TEXT=""
+if [ "$TODO_COUNT" -gt 0 ] && [ "$NEW_COUNT" -gt 5 ]; then
+  PATTERN_TEXT="Admin backlog and inbox noise are competing for the same attention. That is usually a sign to clear one annoying real-world task before opening the inbox too far."
+elif [ "$TODO_COUNT" -gt 0 ]; then
+  PATTERN_TEXT="The tasks hanging around look more nuisance-driven than difficult. That usually means they need an early slot, not more thought."
+elif [ "$NEW_COUNT" -gt 5 ]; then
+  PATTERN_TEXT="The inbox is active, but most of the volume is ambient noise rather than meaningful demand."
+else
+  PATTERN_TEXT="The day looks structurally calm; the challenge is choosing the right first move."
+fi
+
+# Recommended next move
+if [ "$BRIEF_TYPE" = "Morning" ]; then
+  NEXT_MOVE=${PRIORITY_MUST:-"Use the open morning to clear one real task before the day fragments."}
+elif [ "$BRIEF_TYPE" = "Afternoon" ]; then
+  NEXT_MOVE="Recalibrate now: finish one concrete task, then stop pretending the inbox is a plan."
+else
+  NEXT_MOVE="Set up tomorrow by deciding the first real task tonight, so the morning starts clean."
+fi
+
+# Executive summary
+SUMMARY_HTML=""
+add_summary() {
+  SUMMARY_HTML+="<li>$(printf '%s' "$1" | escape_html)</li>"
+}
+add_summary "$DAY_SHAPE"
+add_summary "Top priority: ${PRIORITY_MUST:-Keep the day simple.}"
+if [ "$NEW_COUNT" -gt 0 ] 2>/dev/null; then add_summary "$NEW_COUNT new unread emails since the last brief; most should be triaged, not read end-to-end."; fi
+add_summary "$WEATHER_CALL"
+add_summary "Arsenal watch: $ARSENAL_SUMMARY"
+
+# Email HTML sections
+render_email_bucket() {
+  local json="$1"
+  echo "$json" | jq -r '.[] | "<li><strong>" + (.from // "Unknown") + "</strong> — " + (.subject // "(no subject)") + "</li>"' 2>/dev/null || true
+}
+EMAIL_NEEDS_HTML=$(render_email_bucket "$NEEDS_JSON")
+EMAIL_NOTING_HTML=$(render_email_bucket "$NOTING_JSON")
+
+cat > "$INDEX_FILE" <<HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nik's $BRIEF_TYPE Brief</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #eaeaea;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container { max-width: 800px; margin: 0 auto; }
-        header {
-            text-align: center;
-            padding: 30px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 30px;
-        }
-        .date {
-            font-size: 0.9rem;
-            color: #8892b0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin: 10px 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .location { color: #64ffda; font-size: 1.1rem; }
-        .card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-        }
-        .card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        .card-header .icon { font-size: 1.5rem; margin-right: 10px; }
-        .weather-card { display: flex; align-items: center; justify-content: space-between; }
-        .weather-main { font-size: 3rem; font-weight: 300; }
-        .weather-desc { color: #8892b0; margin-top: 5px; }
-        .weather-icon { font-size: 4rem; }
-        .badge {
-            display: inline-block;
-            background: rgba(100, 255, 218, 0.1);
-            color: #64ffda;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-left: 10px;
-        }
-        .badge.new { background: rgba(239, 1, 7, 0.2); color: #ff6b6b; }
-        .event {
-            display: flex;
-            align-items: flex-start;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .event:last-child { border-bottom: none; }
-        .event-time { min-width: 80px; color: #64ffda; font-size: 0.85rem; }
-        .event-title { flex: 1; }
-        .email-item {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .email-item:last-child { border-bottom: none; }
-        .email-sender { color: #64ffda; font-weight: 500; font-size: 0.9rem; }
-        .email-subject { color: #eaeaea; font-size: 0.95rem; margin-top: 2px; }
-        .task-list, .habit-list { list-style: none; margin-top: 10px; }
-        .task-list li, .habit-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .task-list li:last-child, .habit-list li:last-child { border-bottom: none; }
-        .habit-pending { color: #ef0107; }
-        .habit-done { color: #64ffda; text-decoration: line-through; opacity: 0.7; }
-        .arsenal-card {
-            background: linear-gradient(135deg, rgba(239, 1, 7, 0.1) 0%, rgba(255,255,255,0.05) 100%);
-            border-left: 4px solid #ef0107;
-        }
-        .insights-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(255,255,255,0.05) 100%);
-            border-left: 4px solid #667eea;
-        }
-        .insight-text {
-            color: #b8c5d6;
-            line-height: 1.6;
-            margin-bottom: 12px;
-            font-size: 0.95rem;
-        }
-        .insight-text:last-child { margin-bottom: 0; }
-        .news-list { list-style: none; margin-top: 10px; }
-        .news-list li {
-            padding: 8px 0;
-            color: #ffd700;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .news-list li:last-child { border-bottom: none; }
-        .footer {
-            text-align: center;
-            padding: 30px;
-            color: #8892b0;
-            font-size: 0.9rem;
-        }
-        .delta-note {
-            font-size: 0.85rem;
-            color: #8892b0;
-            margin-left: 10px;
-        }
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            .weather-main { font-size: 2rem; }
-            .card { padding: 20px; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nik's $BRIEF_TYPE Brief</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.55;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    header { margin-bottom: 24px; }
+    h1 { margin: 0 0 6px; font-size: 34px; }
+    .sub { color: #8b949e; }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+    h2 { margin: 0 0 12px; color: #58a6ff; font-size: 18px; }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 8px 0; }
+    .muted { color: #8b949e; }
+    .event { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .event:last-child { border-bottom: none; }
+    .event-time { min-width: 72px; color: #58a6ff; }
+    .calendar-tag { color: #8b949e; font-size: 12px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .arsenal { border-left: 4px solid #ef0107; }
+    .footer { color: #8b949e; text-align: center; padding: 24px 0 12px; }
+    @media (max-width: 700px) { .split { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="date">$DATE</div>
-            <h1>$BRIEF_TYPE Brief</h1>
-            <div class="location">📍 Princeton, NJ</div>
-        </header>
+  <div class="container">
+    <header>
+      <h1>$BRIEF_TYPE Brief</h1>
+      <div class="sub">$DATE · Princeton, NJ · Updated $TIME</div>
+    </header>
 
-        <div class="card">
-            <div class="card-header">
-                <span class="icon">🌤️</span>
-                Weather
-            </div>
-            <div class="weather-card">
-                <div>
-                    <div class="weather-main">${TEMP_F}°F</div>
-                    <div class="weather-desc">Feels like ${FEELS_F}°F</div>
-                </div>
-                <div class="weather-icon">☁️</div>
-            </div>
-        </div>
+    <section class="card">
+      <h2>Executive Summary</h2>
+      <ul>
+        $SUMMARY_HTML
+      </ul>
+    </section>
 
-        <div class="card">
-            <div class="card-header">
-                <span class="icon">📆</span>
-                Today's Agenda
-            </div>
-            $NEEL_LIST
-            <div class="event">
-                <div class="event-time">7:00 AM</div>
-                <div class="event-title">Wake up</div>
-            </div>
-            <div class="event">
-                <div class="event-time">8:45 AM</div>
-                <div class="event-title">Drop Neel off</div>
-            </div>
-        </div>
+    <section class="card">
+      <h2>Day at a Glance</h2>
+      <p>${DAY_SHAPE}</p>
+      ${EVENT_LIST_HTML:-<p class="muted">No calendar constraints today.</p>}
+    </section>
+
+    <section class="card">
+      <h2>Top Priorities</h2>
+      <ul>
+        <li><strong>Must-do:</strong> $(printf '%s' "$PRIORITY_MUST" | escape_html)</li>
 HTML
 
-# Add NEW emails section (only emails since last run)
-if [ -n "$NEW_EMAIL_LIST" ]; then
-cat >> "$INDEX_FILE" << HTML
-        <div class="card">
-            <div class="card-header">
-                <span class="icon">📧</span>
-                New Emails <span class="badge new">$NEW_COUNT new</span>
-                <span class="delta-note">($EMAIL_COUNT total unread)</span>
-            </div>
-            $NEW_EMAIL_LIST
-        </div>
+if [ -n "$PRIORITY_SHOULD" ]; then
+cat >> "$INDEX_FILE" <<HTML
+        <li><strong>Should-do:</strong> $(printf '%s' "$PRIORITY_SHOULD" | escape_html)</li>
+HTML
+fi
+if [ -n "$PRIORITY_IF" ]; then
+cat >> "$INDEX_FILE" <<HTML
+        <li><strong>If there’s time:</strong> $(printf '%s' "$PRIORITY_IF" | escape_html)</li>
 HTML
 fi
 
-# Add tasks section
-if [ "$TODO_COUNT" -gt 0 ]; then
-cat >> "$INDEX_FILE" << HTML
-        <div class="card">
-            <div class="card-header">
-                <span class="icon">✅</span>
-                Tasks <span class="badge pending">$TODO_COUNT due</span>
-            </div>
-            <ul class="task-list">
-                $TODO_LIST
-            </ul>
-        </div>
+cat >> "$INDEX_FILE" <<HTML
+      </ul>
+    </section>
+
+    <div class="split">
+      <section class="card">
+        <h2>Inbox Triage</h2>
+HTML
+if [ -n "$EMAIL_NEEDS_HTML" ]; then
+cat >> "$INDEX_FILE" <<HTML
+        <p><strong>Needs attention</strong></p>
+        <ul>$EMAIL_NEEDS_HTML</ul>
 HTML
 fi
-
-# Add habits section
-if [ -n "$HABIT_PENDING" ] || [ -n "$HABIT_DONE" ]; then
-cat >> "$INDEX_FILE" << HTML
-        <div class="card">
-            <div class="card-header">
-                <span class="icon">🎯</span>
-                Habits
-            </div>
-            <ul class="habit-list">
-HTML
-    if [ -n "$HABIT_PENDING" ]; then
-        echo "$HABIT_PENDING" | while read habit; do
-            [ -n "$habit" ] && echo "                <li class=\"habit-pending\">☐ $habit</li>" >> "$INDEX_FILE"
-        done
-    fi
-    if [ -n "$HABIT_DONE" ]; then
-        echo "$HABIT_DONE" | while read habit; do
-            [ -n "$habit" ] && echo "                <li class=\"habit-done\">☑ $habit</li>" >> "$INDEX_FILE"
-        done
-    fi
-cat >> "$INDEX_FILE" << HTML
-            </ul>
-        </div>
+if [ -n "$EMAIL_NOTING_HTML" ]; then
+cat >> "$INDEX_FILE" <<HTML
+        <p><strong>Worth noting</strong></p>
+        <ul>$EMAIL_NOTING_HTML</ul>
 HTML
 fi
+cat >> "$INDEX_FILE" <<HTML
+        <p class="muted">Ignore bucket: $IGNORE_COUNT items. Total unread: $EMAIL_COUNT.</p>
+      </section>
 
-# Add Arsenal section
-if [ -n "$ARSEBLOG" ]; then
-cat >> "$INDEX_FILE" << HTML
-        <div class="card arsenal-card">
-            <div class="card-header">
-                <span class="icon">🔴</span>
-                Arsenal FC
-            </div>
-            <ul class="news-list">
-                $ARSEBLOG
-            </ul>
-        </div>
-HTML
-fi
-
-# Add insights for evening brief
-echo "$INSIGHTS" >> "$INDEX_FILE"
-
-cat >> "$INDEX_FILE" << HTML
-        <div class="footer">
-            Last updated: $TIME<br>
-            <a href="https://github.com/nikhilist/morning-brief" style="color: #64ffda;">github.com/nikhilist/morning-brief</a>
-        </div>
+      <section class="card">
+        <h2>Weather / Logistics</h2>
+        <ul>
+          <li>Now: ${TEMP_F}°F, feels like ${FEELS_F}°F.</li>
+          <li>Today: ${TODAY_HIGH_F}° / ${TODAY_LOW_F}°.</li>
+          <li>Tomorrow: ${TOMORROW_HIGH_F}° / ${TOMORROW_LOW_F}°, rain risk ${TOMORROW_PRECIP}%.</li>
+          <li>$WEATHER_CALL</li>
+        </ul>
+      </section>
     </div>
+HTML
+
+if [ "$TODO_COUNT" -gt 0 ]; then
+cat >> "$INDEX_FILE" <<HTML
+    <section class="card">
+      <h2>Task Pressure</h2>
+      <p class="muted">$TODO_COUNT due or overdue tasks.</p>
+      <ul>$TODO_LIST</ul>
+    </section>
+HTML
+fi
+
+cat >> "$INDEX_FILE" <<HTML
+    <section class="card">
+      <h2>Habits / Maintenance</h2>
+      <p>$HABIT_PATTERN</p>
+HTML
+if [ -n "$HABIT_LIST_HTML" ]; then
+cat >> "$INDEX_FILE" <<HTML
+      <ul>$HABIT_LIST_HTML</ul>
+HTML
+fi
+cat >> "$INDEX_FILE" <<HTML
+    </section>
+HTML
+
+if [ -n "$ARSENAL_HTML" ]; then
+cat >> "$INDEX_FILE" <<HTML
+    <section class="card arsenal">
+      <h2>Arsenal</h2>
+      <ul>$ARSENAL_HTML</ul>
+    </section>
+HTML
+fi
+
+cat >> "$INDEX_FILE" <<HTML
+    <section class="card">
+      <h2>Pattern to Notice</h2>
+      <p>$PATTERN_TEXT</p>
+    </section>
+
+    <section class="card">
+      <h2>Tomorrow Prep</h2>
+      <p>$TOMORROW_SHAPE</p>
+    </section>
+
+    <section class="card">
+      <h2>Recommended Next Move</h2>
+      <p><strong>$NEXT_MOVE</strong></p>
+    </section>
+
+    <div class="footer">
+      <div>Last updated: $TIME</div>
+      <div><a href="https://github.com/nikhilist/morning-brief" style="color:#58a6ff;">github.com/nikhilist/morning-brief</a></div>
+    </div>
+  </div>
 </body>
 </html>
 HTML
 
-# Copy to brief.html too
 cp "$INDEX_FILE" "$OUTPUT_FILE"
 
-# Commit and push
+echo "{\"emails\":$(jq -R -s -c 'split("\n")[:-1]' "$CURRENT_EMAILS_FILE"),\"tasks\":$TODO_COUNT,\"timestamp\":\"$(date -Iseconds)\"}" > "$STATE_FILE"
+
 cd /home/nik/.openclaw/workspace
-git add index.html brief.html .brief-state.json
-git commit -m "Update $BRIEF_TYPE brief: $DATE $TIME" 2>/dev/null || true
+git add index.html brief.html .brief-state.json generate-brief-html.sh
+
+git commit -m "Rewrite $BRIEF_TYPE brief structure: $DATE $TIME" 2>/dev/null || true
 git push origin main 2>&1 || echo "Push failed"
 
-echo "$BRIEF_TYPE brief generated with delta tracking"
+echo "$BRIEF_TYPE brief generated"
 echo "GitHub Pages: https://nikhilist.github.io/morning-brief/"
 echo "=== Finished: $(date) ==="

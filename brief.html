@@ -3,78 +3,119 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Afternoon Brief - March 13, 2026</title>
+  <title>Nik's Morning Brief</title>
   <style>
-    :root {
-      --bg: #0d1117;
-      --card: #161b22;
-      --border: #30363d;
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --accent: #58a6ff;
-      --good: #3fb950;
-      --warn: #d29922;
-    }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text);
       padding: 24px;
-      line-height: 1.5;
-      max-width: 860px;
-      margin-inline: auto;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.55;
     }
-    h1 { margin: 0 0 8px; font-size: 32px; }
-    .sub { color: var(--muted); margin-bottom: 24px; }
-    .grid { display: grid; gap: 16px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    header { margin-bottom: 24px; }
+    h1 { margin: 0 0 6px; font-size: 34px; }
+    .sub { color: #8b949e; }
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
     }
-    h2 { margin: 0 0 12px; font-size: 18px; color: var(--accent); }
+    h2 { margin: 0 0 12px; color: #58a6ff; font-size: 18px; }
     ul { margin: 0; padding-left: 20px; }
-    li { margin: 6px 0; }
-    .muted { color: var(--muted); }
-    .pill {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: rgba(88,166,255,0.15);
-      color: var(--accent);
-      font-size: 12px;
-      margin-left: 6px;
-    }
-    .unchanged { color: var(--muted); font-style: italic; }
+    li { margin: 8px 0; }
+    .muted { color: #8b949e; }
+    .event { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .event:last-child { border-bottom: none; }
+    .event-time { min-width: 72px; color: #58a6ff; }
+    .calendar-tag { color: #8b949e; font-size: 12px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .arsenal { border-left: 4px solid #ef0107; }
+    .footer { color: #8b949e; text-align: center; padding: 24px 0 12px; }
+    @media (max-width: 700px) { .split { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <h1>☀️ Afternoon Update</h1>
-  <div class="sub">Friday, March 13, 2026 · 3:00 PM ET</div>
-
-  <div class="grid">
-    <section class="card">
-      <h2>What's Changed</h2>
-      <p class="unchanged">Nothing new since the morning brief. No new emails, calendar updates, or task progress.</p>
-    </section>
+  <div class="container">
+    <header>
+      <h1>Morning Brief</h1>
+      <div class="sub">Saturday, March 14, 2026 · Princeton, NJ · Updated 02:59 AM</div>
+    </header>
 
     <section class="card">
-      <h2>Weather Tonight</h2>
-      <p>Slight chance of rain 8-9pm, then gradual clearing. Low around 38°F. Southwest wind 10-15 mph, gusts to 25 mph.</p>
-      <p><strong>Saturday:</strong> Sunny and breezy, high near 52°F. West wind 15-20 mph, gusts to 35 mph.</p>
-    </section>
-
-    <section class="card">
-      <h2>Still Pending</h2>
+      <h2>Executive Summary</h2>
       <ul>
-        <li><strong>Todoist:</strong> 2 overdue tasks (Neel soccer enrollment, Sriram trip)</li>
-        <li><strong>Habitica:</strong> 3 dailies (Nutty Nuts, Vitamin D, B12 + Calcium)</li>
-        <li><strong>Calendar:</strong> No events today</li>
+        <li>JC Pub Arsenal • Arsenal vs Everton (H)</li><li>Top priority: Enroll Neel in Soccer class</li><li>7 new unread emails since the last brief; most should be triaged, not read end-to-end.</li><li>Nothing weather-wise should get in your way.</li><li>Arsenal watch: Arteta: Premier League competitiveness reshaping the game</li>
       </ul>
     </section>
+
+    <section class="card">
+      <h2>Day at a Glance</h2>
+      <p>JC Pub Arsenal • Arsenal vs Everton (H)</p>
+      <p class=muted>No calendar constraints today.</p>
+    </section>
+
+    <section class="card">
+      <h2>Top Priorities</h2>
+      <ul>
+        <li><strong>Must-do:</strong> Enroll Neel in Soccer class</li>
+        <li><strong>Should-do:</strong> Check with Sriram about trip</li>
+      </ul>
+    </section>
+
+    <div class="split">
+      <section class="card">
+        <h2>Inbox Triage</h2>
+        <p><strong>Needs attention</strong></p>
+        <ul><li><strong>Monarch <email@email.monarch.com></strong> — ✨ You have 3 new updates in Monarch</li>
+<li><strong>Google Voice <voice-noreply@google.com></strong> — New text message from 24463</li>
+<li><strong>Monarch <email@email.monarch.com></strong> — Your account balance activity for  Mar 12th</li></ul>
+        <p class="muted">Ignore bucket: 6 items. Total unread: 10.</p>
+      </section>
+
+      <section class="card">
+        <h2>Weather / Logistics</h2>
+        <ul>
+          <li>Now: 38°F, feels like 32°F.</li>
+          <li>Today: 46° / 29°.</li>
+          <li>Tomorrow: 47° / 33°, rain risk 3%.</li>
+          <li>Nothing weather-wise should get in your way.</li>
+        </ul>
+      </section>
+    </div>
+    <section class="card">
+      <h2>Task Pressure</h2>
+      <p class="muted">2 due or overdue tasks.</p>
+      <ul></ul>
+    </section>
+    <section class="card">
+      <h2>Habits / Maintenance</h2>
+      <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+      <ul><li>Nutty Nuts (value: 6)</li><li>Vitamin D - 50000IU (value: 1)</li><li>Vitamin B12 + Calcium (value: 7)</li></ul>
+    </section>
+    <section class="card">
+      <h2>Pattern to Notice</h2>
+      <p>Admin backlog and inbox noise are competing for the same attention. That is usually a sign to clear one annoying real-world task before opening the inbox too far.</p>
+    </section>
+
+    <section class="card">
+      <h2>Tomorrow Prep</h2>
+      <p>Tomorrow is open right now.</p>
+    </section>
+
+    <section class="card">
+      <h2>Recommended Next Move</h2>
+      <p><strong>Enroll Neel in Soccer class</strong></p>
+    </section>
+
+    <div class="footer">
+      <div>Last updated: 02:59 AM</div>
+      <div><a href="https://github.com/nikhilist/morning-brief" style="color:#58a6ff;">github.com/nikhilist/morning-brief</a></div>
+    </div>
   </div>
 </body>
 </html>
