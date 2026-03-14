@@ -160,7 +160,32 @@ else
   HABIT_PATTERN="Personal maintenance looks under control."
 fi
 
-# Arsenal from Arseblog RSS
+# Arsenal: upcoming match first, then Arseblog RSS
+ARSENAL_MATCH_JSON=$(echo "$ARSENAL_EVENTS" | jq -c '
+  .events
+  | map(select((.summary // "") | test("Arsenal"; "i")))
+  | sort_by(.start.dateTime // .start.date // "")
+  | .[0] // empty
+' 2>/dev/null || true)
+
+ARSENAL_MATCH_HTML=""
+ARSENAL_MATCH_SUMMARY=""
+if [ -n "$ARSENAL_MATCH_JSON" ] && [ "$ARSENAL_MATCH_JSON" != "null" ]; then
+  ARSENAL_MATCH_TIME=$(echo "$ARSENAL_MATCH_JSON" | jq -r 'if .start.dateTime then (.start.dateTime | split("T")[1] | sub(":00([+-].*)?$"; "") | sub("([+-].*)$"; "")) else (.start.date // "All day") end')
+  ARSENAL_MATCH_TITLE=$(echo "$ARSENAL_MATCH_JSON" | jq -r '.summary // "Arsenal match"')
+  ARSENAL_MATCH_LOCATION=$(echo "$ARSENAL_MATCH_JSON" | jq -r '.location // empty')
+  ARSENAL_MATCH_DESC=$(echo "$ARSENAL_MATCH_JSON" | jq -r '.description // empty' | head -c 220)
+  ARSENAL_MATCH_SUMMARY="$ARSENAL_MATCH_TITLE at $ARSENAL_MATCH_TIME"
+  ARSENAL_MATCH_HTML="<li><strong>Next match:</strong> $(printf '%s' "$ARSENAL_MATCH_TITLE" | escape_html) <span class=\"muted\">— $ARSENAL_MATCH_TIME</span>"
+  if [ -n "$ARSENAL_MATCH_LOCATION" ]; then
+    ARSENAL_MATCH_HTML+="<br><span class=\"muted\">$(printf '%s' "$ARSENAL_MATCH_LOCATION" | escape_html)</span>"
+  fi
+  if [ -n "$ARSENAL_MATCH_DESC" ]; then
+    ARSENAL_MATCH_HTML+="<br><span class=\"muted\">$(printf '%s' "$ARSENAL_MATCH_DESC" | escape_html)</span>"
+  fi
+  ARSENAL_MATCH_HTML+="</li>"
+fi
+
 curl -sL "https://arseblog.news/feed/" -o "$RSS_FILE" || true
 python3 - "$RSS_FILE" "$TMP_DIR/arsenal.json" <<'PY'
 import sys, json, re, html, email.utils, time
@@ -191,8 +216,9 @@ except Exception:
 with open(out_path, 'w') as f:
     json.dump(out, f)
 PY
-ARSENAL_HTML=$(jq -r '.[] | "<li><strong>" + .title + "</strong><br><span class=""muted"">" + .desc + "</span></li>"' "$TMP_DIR/arsenal.json" 2>/dev/null || true)
-ARSENAL_SUMMARY=$(jq -r 'if length == 0 then "No fresh Arseblog posts surfaced." else .[0].title end' "$TMP_DIR/arsenal.json" 2>/dev/null)
+ARSENAL_NEWS_HTML=$(jq -r '.[] | "<li><strong>" + .title + "</strong><br><span class=""muted"">" + .desc + "</span></li>"' "$TMP_DIR/arsenal.json" 2>/dev/null || true)
+ARSENAL_HTML="$ARSENAL_MATCH_HTML$ARSENAL_NEWS_HTML"
+ARSENAL_SUMMARY=$(if [ -n "$ARSENAL_MATCH_SUMMARY" ]; then printf '%s' "$ARSENAL_MATCH_SUMMARY"; else jq -r 'if length == 0 then "No fresh Arseblog posts surfaced." else .[0].title end' "$TMP_DIR/arsenal.json" 2>/dev/null; fi)
 
 # Pattern recognition
 PATTERN_TEXT=""
