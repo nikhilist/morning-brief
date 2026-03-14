@@ -369,14 +369,12 @@ cat >> "$INDEX_FILE" <<HTML
     </section>
 HTML
 
-if [ -n "$ARSENAL_HTML" ]; then
 cat >> "$INDEX_FILE" <<HTML
     <section class="card arsenal">
       <h2>Arsenal</h2>
-      <ul>$ARSENAL_HTML</ul>
+      <ul>${ARSENAL_HTML:-<li class="muted">No fresh Arseblog items pulled.</li>}</ul>
     </section>
 HTML
-fi
 
 cat >> "$INDEX_FILE" <<HTML
     <section class="card">
