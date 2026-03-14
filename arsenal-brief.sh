@@ -21,10 +21,6 @@ escape_html() {
   python3 -c 'import html,sys; print(html.escape(sys.stdin.read()), end="")'
 }
 
-clean_text() {
-  tr '\n' ' ' | sed 's/[[:space:]]\+/ /g' | sed 's/^ //; s/ $//'
-}
-
 TODAY_EVENTS=$(gog calendar events "$ARSENAL_CALENDAR_ID" --from "$TODAY_START" --to "$TODAY_END" --json 2>/dev/null || echo '{"events":[]}')
 UPCOMING_EVENTS=$(gog calendar events "$ARSENAL_CALENDAR_ID" --from "$TODAY_START" --to "$LOOKAHEAD_END" --json 2>/dev/null || echo '{"events":[]}')
 RECENT_EVENTS=$(gog calendar events "$ARSENAL_CALENDAR_ID" --from "$LOOKBACK_START" --to "$TODAY_START" --json 2>/dev/null || echo '{"events":[]}')
@@ -34,7 +30,7 @@ TODAY_MATCH_JSON=$(echo "$TODAY_EVENTS" | jq -c '.events | map(select((.summary 
 LAST_MATCH_JSON=$(echo "$RECENT_EVENTS" | jq -c '.events | map(select((.summary // "") | test("Arsenal"; "i"))) | sort_by(.start.dateTime // .start.date // "") | last // empty')
 
 python3 - "$NEXT_MATCH_JSON" "$TODAY_MATCH_JSON" "$LAST_MATCH_JSON" > "$TMP_DIR/match.json" <<'PY'
-import sys, json
+import sys, json, re
 from datetime import datetime, timezone
 
 def parse_event(raw):
@@ -77,11 +73,17 @@ def rel_time(value):
         return f'in {hours}h'
     return ''
 
+def clean_desc(text):
+    text = (text or '').replace('\n', ' ')
+    text = re.sub(r'https?://\S+', '', text)
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text[:220]
+
 def build_focus(event, label):
     title = event.get('summary') or 'Arsenal match'
     start = ((event.get('start') or {}).get('dateTime')) or ((event.get('start') or {}).get('date')) or ''
     location = event.get('location') or ''
-    desc = (event.get('description') or '').strip().replace('\n', ' ')
+    desc = clean_desc(event.get('description') or '')
     kickoff = fmt_time(start)
     rel = rel_time(start)
     summary = f'{label}: {title} at {kickoff}'
@@ -91,8 +93,14 @@ def build_focus(event, label):
         'kickoff': kickoff,
         'relative': rel,
         'location': location,
-        'description': desc[:280],
+        'description': desc,
     }
+
+def maybe_result(title):
+    m = re.search(r'(\d+)\s*[-–]\s*(\d+)', title or '')
+    if m:
+        return title
+    return ''
 
 next_match = parse_event(sys.argv[1])
 today_match = parse_event(sys.argv[2])
@@ -123,11 +131,11 @@ if focus:
     html += "</li>"
     out['match_html'] = html
 
-if last_match:
+if last_match and not today_match:
     title = last_match.get('summary') or 'Recent Arsenal match'
-    start = ((last_match.get('start') or {}).get('dateTime')) or ((last_match.get('start') or {}).get('date')) or ''
-    kickoff = fmt_time(start)
-    out['result_html'] = f"<li><strong>Last result context:</strong> {title} <span class=\"muted\">— {kickoff}</span></li>"
+    result = maybe_result(title)
+    if result:
+        out['result_html'] = f"<li><strong>Last result:</strong> {result}</li>"
 
 print(json.dumps(out))
 PY
@@ -136,9 +144,6 @@ MATCH_SUMMARY=$(jq -r '.match_summary' "$TMP_DIR/match.json")
 WHAT_MATTERS_BASE=$(jq -r '.what_matters' "$TMP_DIR/match.json")
 MATCH_HTML=$(jq -r '.match_html' "$TMP_DIR/match.json")
 RESULT_HTML=$(jq -r '.result_html' "$TMP_DIR/match.json")
-if [ -n "$TODAY_MATCH_JSON" ] && [ "$TODAY_MATCH_JSON" != "null" ]; then
-  RESULT_HTML=""
-fi
 
 curl -sL "https://arseblog.news/feed/" -o "$TMP_DIR/arseblog.xml" || true
 python3 - "$TMP_DIR/arseblog.xml" > "$TMP_DIR/arseblog.json" <<'PY'
@@ -150,7 +155,7 @@ try:
     channel = root.find('channel')
     now = time.time()
     if channel is not None:
-        for item in channel.findall('item')[:15]:
+        for item in channel.findall('item')[:20]:
             title = (item.findtext('title') or '').strip()
             pub = (item.findtext('pubDate') or '').strip()
             desc = item.findtext('description') or ''
@@ -162,8 +167,8 @@ try:
             except Exception:
                 pass
             items.append({"source": "Arseblog", "title": title, "desc": desc[:220], "ts": ts})
-    fresh = [x for x in items if x.get('ts', 0) and x['ts'] >= now - 172800]
-    out = fresh[:5] if fresh else items[:5]
+    fresh = [x for x in items if x.get('ts', 0) and x['ts'] >= now - 172800 and 'women' not in x['title'].lower()]
+    out = fresh[:6] if fresh else [x for x in items if 'women' not in x['title'].lower()][:6]
 except Exception:
     out = []
 print(json.dumps(out))
@@ -177,22 +182,26 @@ try:
     text = open(sys.argv[1], 'r', encoding='utf-8', errors='ignore').read()
 except Exception:
     pass
-patterns = [
-    r'\[Preview: Arsenal v Everton\]',
-    r'\[How to watch Arsenal v Everton live on TV\]',
-    r'\[Odegaard on his fitness, Dixon\'s debut and Everton\]',
-    r'\[Arteta provides update on Odegaard and Trossard\]',
-    r'\[Go Inside Training ahead of Everton clash\]'
+cand = [
+    'Preview: Arsenal v Everton',
+    'How to watch Arsenal v Everton live on TV',
+    "Odegaard on his fitness, Dixon's debut and Everton",
+    'Arteta provides update on Odegaard and Trossard',
+    'Go Inside Training ahead of Everton clash',
+    'Training gallery: Back to work ahead of Everton'
 ]
-found = []
-for pat in patterns:
-    m = re.search(pat, text)
-    if m:
-        s = re.sub(r'^[\[]|[\]]$', '', m.group(0)).strip()
-        if s not in found:
-            found.append(s)
-out = [{"source":"Arsenal.com", "title": s, "desc": "Official club coverage"} for s in found[:5]]
-print(json.dumps(out))
+out = []
+for s in cand:
+    if s in text:
+        desc = 'Official club coverage'
+        if 'fitness' in s or 'update' in s:
+            desc = 'Team-news signal from the manager/media cycle'
+        elif 'Preview' in s:
+            desc = 'Official match preview'
+        elif 'watch' in s:
+            desc = 'Broadcast/watch info'
+        out.append({"source":"Arsenal.com", "title": s, "desc": desc})
+print(json.dumps(out[:6]))
 PY
 
 curl -sL "https://www.bbc.com/sport/football/teams/arsenal" -o "$TMP_DIR/bbc.html" || true
@@ -204,20 +213,38 @@ try:
 except Exception:
     pass
 clean = html.unescape(re.sub(r'\s+', ' ', text))
-snippets = []
-for needle in [
-    'Arsenal have the chance to temporarily go 10 points clear at the top of the Premier League on Saturday when they host away-day specialists Everton at Emirates Stadium (17:30 GMT).',
-    'Arsenal, by comparison, seem to be settling well into the run-in grind and will be buoyed by their 1-1 draw with Bayer Leverkusen thanks to a late Kai Havertz penalty.',
-    'One player who could relish this encounter is Gabriel Jesus.',
-    'Everton represent stern opposition though, especially when they are on their travels.'
-]:
-    if needle in clean:
-        snippets.append(needle)
-out = [{"source":"BBC", "title": snippets[0], "desc": snippets[1] if len(snippets) > 1 else ""}] if snippets else []
+out = []
+main = 'Arsenal have the chance to temporarily go 10 points clear at the top of the Premier League on Saturday when they host away-day specialists Everton at Emirates Stadium (17:30 GMT).'
+secondary = 'Arsenal, by comparison, seem to be settling well into the run-in grind and will be buoyed by their 1-1 draw with Bayer Leverkusen thanks to a late Kai Havertz penalty.'
+if main in clean:
+    out.append({"source":"BBC", "title": main, "desc": secondary if secondary in clean else 'BBC match framing'})
 print(json.dumps(out))
 PY
 
-jq -s 'add | unique_by(.title) | .[:8]' "$TMP_DIR/official.json" "$TMP_DIR/arseblog.json" "$TMP_DIR/bbc.json" > "$TMP_DIR/news.json"
+jq -s 'add | unique_by(.title)' "$TMP_DIR/official.json" "$TMP_DIR/arseblog.json" "$TMP_DIR/bbc.json" > "$TMP_DIR/news-all.json"
+python3 - "$TMP_DIR/news-all.json" > "$TMP_DIR/news.json" <<'PY'
+import sys, json
+items = json.load(open(sys.argv[1]))
+
+def score(item):
+    s = 0
+    source = item.get('source','')
+    title = (item.get('title') or '').lower()
+    if source == 'Arsenal.com': s += 30
+    if source == 'BBC': s += 25
+    if source == 'Arseblog': s += 20
+    if 'preview' in title: s += 20
+    if 'update' in title or 'fitness' in title: s += 18
+    if 'everton' in title: s += 16
+    if 'arteta' in title or 'odegaard' in title or 'saka' in title: s += 10
+    if 'women' in title: s -= 30
+    if 'how to watch' in title: s -= 8
+    if 'training gallery' in title: s -= 10
+    return -s
+items = sorted(items, key=score)[:3]
+json.dump(items, sys.stdout)
+PY
+
 NEWS_HTML=$(python3 - "$TMP_DIR/news.json" <<'PY'
 import json, sys, html
 try:
@@ -236,26 +263,27 @@ PY
 )
 HEADLINE_ONE=$(jq -r '.[0].title // empty' "$TMP_DIR/news.json")
 HEADLINE_TWO=$(jq -r '.[1].title // empty' "$TMP_DIR/news.json")
+HEADLINE_THREE=$(jq -r '.[2].title // empty' "$TMP_DIR/news.json")
 
 TEAM_NEWS_HTML=""
-if printf '%s' "$HEADLINE_ONE $HEADLINE_TWO" | grep -qi 'Odegaard\|Trossard\|fitness\|update'; then
-  TEAM_NEWS_HTML+="<li><strong>Fitness watch:</strong> Official coverage is flagging Odegaard/Trossard availability as one of the key pre-match themes.</li>"
+if printf '%s' "$HEADLINE_ONE $HEADLINE_TWO $HEADLINE_THREE" | grep -qi 'Odegaard\|Trossard\|fitness\|update'; then
+  TEAM_NEWS_HTML+="<li><strong>Fitness watch:</strong> Odegaard/Trossard availability is in the official pre-match signal set, so that is real team-news rather than fluff.</li>"
 fi
-if printf '%s' "$HEADLINE_ONE $HEADLINE_TWO" | grep -qi 'Preview'; then
-  TEAM_NEWS_HTML+="<li><strong>Pre-match focus:</strong> The club preview is live, which usually means the core team-news frame is settled.</li>"
+if printf '%s' "$HEADLINE_ONE $HEADLINE_TWO $HEADLINE_THREE" | grep -qi 'Arteta'; then
+  TEAM_NEWS_HTML+="<li><strong>Manager line:</strong> Arteta is part of the pre-match cycle, which usually means the section to trust most is availability plus selection hints, not fan noise.</li>"
 fi
 TEAM_NEWS_HTML=${TEAM_NEWS_HTML:-<li><span class="muted">No clean injury/team-news extraction yet beyond headline signals.</span></li>}
 
-LINEUP_HTML="<li><strong>Selection note:</strong> No modelled XI yet. Current useful signal is which names dominate the official preview/update cycle, not a fake lineup.</li>"
-if printf '%s' "$HEADLINE_ONE $HEADLINE_TWO" | grep -qi 'Odegaard'; then
-  LINEUP_HTML="<li><strong>Selection note:</strong> Odegaard is part of the pre-match conversation, so midfield/attacking structure is one of the real things to watch.</li>"
+LINEUP_HTML="<li><strong>Selection question:</strong> The module still refuses to fake a probable XI. The real watchpoints are the Odegaard/Trossard fitness picture and how aggressive Arteta goes before the next run of fixtures.</li>"
+if ! printf '%s' "$HEADLINE_ONE $HEADLINE_TWO $HEADLINE_THREE" | grep -qi 'Odegaard\|Trossard\|fitness\|update'; then
+  LINEUP_HTML="<li><strong>Selection question:</strong> No trustworthy lineup edge yet beyond standard match-preview noise, so better to wait for stronger team-news signals.</li>"
 fi
 
-SOCIAL_HTML="<li><strong>Signal policy:</strong> Social section is intentionally conservative for now — only official club posts and high-confidence reporter consensus should appear here.</li>"
+SOCIAL_HTML="<li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>"
 
 WHAT_MATTERS="$WHAT_MATTERS_BASE"
 if [ -n "$HEADLINE_ONE" ]; then
-  WHAT_MATTERS="$WHAT_MATTERS_BASE Official coverage is leaning on: $HEADLINE_ONE"
+  WHAT_MATTERS="$WHAT_MATTERS_BASE Top news line: $HEADLINE_ONE"
 fi
 
 cat <<HTML
