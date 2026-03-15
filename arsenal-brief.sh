@@ -184,23 +184,32 @@ except Exception:
     pass
 clean = html.unescape(re.sub(r'\s+', ' ', text))
 patterns = [
-    (r'Post-[A-Za-z]+ quotes round-up[^<]{0,120}', 'Post-match reaction'),
-    (r'Highlights?:[^<]{0,120}', 'Match highlights'),
-    (r'Report: Arsenal [^<]{0,120}', 'Official match report'),
-    (r'Gallery: [^<]{0,120}', 'Official gallery'),
-    (r'Preview: [^<]{0,120}', 'Official match preview'),
-    (r'How to watch [^<]{0,120}', 'Broadcast/watch info'),
-    (r'Arteta provides update on [^<]{0,120}', 'Team-news signal from the manager/media cycle'),
-    (r'Odegaard on [^<]{0,120}', 'Player/team-news signal'),
+    (r'Post-[A-Za-z]+ quotes round-up.{0,120}', 'Post-match reaction'),
+    (r'Highlights?:.{0,120}', 'Match highlights'),
+    (r'Report: Arsenal .{0,120}', 'Official match report'),
+    (r'Gallery: .{0,120}', 'Official gallery'),
+    (r'Preview: .{0,120}', 'Official match preview'),
+    (r'How to watch .{0,120}', 'Broadcast/watch info'),
+    (r'Arteta provides update on .{0,120}', 'Team-news signal from the manager/media cycle'),
+    (r'Odegaard on .{0,120}', 'Player/team-news signal'),
 ]
+
+def tidy(title):
+    title = re.split(r'loading=|typeof=|src=|href=|/></|&quot;|<|\|', title, 1)[0]
+    title = re.sub(r'\s+', ' ', title)
+    return title.strip(' -–|"\' ')
+
 out = []
 seen = set()
 for pattern, desc in patterns:
     for m in re.finditer(pattern, clean, flags=re.I):
-        title = m.group(0).strip(' -–|')
-        if title.lower() in seen:
+        title = tidy(m.group(0))
+        if len(title) < 8:
             continue
-        seen.add(title.lower())
+        low = title.lower()
+        if low in seen:
+            continue
+        seen.add(low)
         out.append({"source":"Arsenal.com", "title": title, "desc": desc})
         if len(out) >= 8:
             break
