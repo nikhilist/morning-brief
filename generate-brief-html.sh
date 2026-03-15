@@ -170,8 +170,8 @@ cat > "$INDEX_FILE" <<HTML
       <p>$PATTERN_TEXT</p>
     </section>
 
-    ${MARKET_INTEL_HTML}
     ${UPCOMING_PREP_HTML}
+    ${MARKET_INTEL_HTML}
     ${TASKS_HTML}
     ${EMAIL_HTML}
     ${WEATHER_HTML}
