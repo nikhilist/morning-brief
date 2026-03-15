@@ -86,6 +86,10 @@ CURRENT_EMAIL_IDS=$(printf '%s\n' "$EMAIL_RAW" | extract_meta EMAIL_IDS)
 TODO_COUNT=$(printf '%s\n' "$TASKS_RAW" | extract_meta TODO_COUNT)
 HABIT_COUNT=$(printf '%s\n' "$HABITS_RAW" | extract_meta HABIT_COUNT)
 
+if [ "$BRIEF_TYPE" != "Evening" ]; then
+  MARKET_INTEL_HTML=""
+fi
+
 PATTERN_TEXT=""
 EMAIL_NEW_COUNT=$(printf '%s' "$EMAIL_SUMMARY" | grep -o '^[0-9]\+' || echo 0)
 if [ "${TODO_COUNT:-0}" -gt 0 ] && [ "${EMAIL_NEW_COUNT:-0}" -gt 5 ]; then
