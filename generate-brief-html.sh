@@ -62,6 +62,7 @@ EMAIL_RAW=$(run_module "$WORKSPACE/brief-email.sh")
 TASKS_RAW=$(run_module "$WORKSPACE/brief-tasks.sh")
 HABITS_RAW=$(run_module "$WORKSPACE/brief-habits.sh")
 ARSENAL_RAW=$(run_module "$WORKSPACE/arsenal-brief.sh")
+MARKETS_RAW=$(run_module "$WORKSPACE/brief-markets.sh")
 
 WEATHER_HTML=$(printf '%s\n' "$WEATHER_RAW" | extract_html)
 CALENDAR_HTML=$(printf '%s\n' "$CALENDAR_RAW" | extract_html)
@@ -69,6 +70,7 @@ EMAIL_HTML=$(printf '%s\n' "$EMAIL_RAW" | extract_html)
 TASKS_HTML=$(printf '%s\n' "$TASKS_RAW" | extract_html)
 HABITS_HTML=$(printf '%s\n' "$HABITS_RAW" | extract_html)
 ARSENAL_HTML=$(printf '%s\n' "$ARSENAL_RAW" | extract_html)
+MARKETS_HTML=$(printf '%s\n' "$MARKETS_RAW" | extract_html)
 
 DAY_SHAPE=$(printf '%s\n' "$CALENDAR_RAW" | extract_meta SUMMARY)
 TOMORROW_SHAPE=$(printf '%s\n' "$CALENDAR_RAW" | extract_meta TOMORROW)
@@ -76,6 +78,7 @@ EMAIL_SUMMARY=$(printf '%s\n' "$EMAIL_RAW" | extract_meta SUMMARY)
 TASK_SUMMARY=$(printf '%s\n' "$TASKS_RAW" | extract_meta SUMMARY)
 WEATHER_SUMMARY=$(printf '%s\n' "$WEATHER_RAW" | extract_meta SUMMARY)
 HABIT_SUMMARY=$(printf '%s\n' "$HABITS_RAW" | extract_meta SUMMARY)
+MARKETS_SUMMARY=$(printf '%s\n' "$MARKETS_RAW" | extract_meta SUMMARY)
 CURRENT_EMAIL_IDS=$(printf '%s\n' "$EMAIL_RAW" | extract_meta EMAIL_IDS)
 TODO_COUNT=$(printf '%s\n' "$TASKS_RAW" | extract_meta TODO_COUNT)
 HABIT_COUNT=$(printf '%s\n' "$HABITS_RAW" | extract_meta HABIT_COUNT)
@@ -83,13 +86,21 @@ HABIT_COUNT=$(printf '%s\n' "$HABITS_RAW" | extract_meta HABIT_COUNT)
 PATTERN_TEXT=""
 EMAIL_NEW_COUNT=$(printf '%s' "$EMAIL_SUMMARY" | grep -o '^[0-9]\+' || echo 0)
 if [ "${TODO_COUNT:-0}" -gt 0 ] && [ "${EMAIL_NEW_COUNT:-0}" -gt 5 ]; then
-  PATTERN_TEXT="Admin backlog and inbox noise are competing for the same attention. That is usually a sign to clear one annoying real-world task before opening the inbox too far."
+  PATTERN_TEXT="Admin backlog and inbox noise are competing for the same attention. Clear one annoying real-world task first, or the inbox will eat the day."
 elif [ "${TODO_COUNT:-0}" -gt 0 ]; then
-  PATTERN_TEXT="The tasks hanging around look more nuisance-driven than difficult. That usually means they need an early slot, not more thought."
+  PATTERN_TEXT="The task list looks more friction-heavy than actually hard. This is a sequencing problem, not a capability problem."
 elif [ "${EMAIL_NEW_COUNT:-0}" -gt 5 ]; then
-  PATTERN_TEXT="The inbox is active, but most of the volume is ambient noise rather than meaningful demand."
+  PATTERN_TEXT="The inbox has motion but not necessarily importance. Triage for signal, then get out."
 else
-  PATTERN_TEXT="The day looks structurally calm; the challenge is choosing the right first move."
+  PATTERN_TEXT="The day is not crowded by reality yet, which means execution quality matters more than scheduling heroics."
+fi
+
+DECISION_TEXT="$TASK_SUMMARY"
+if [ -n "${MARKETS_SUMMARY:-}" ]; then
+  DECISION_TEXT="$MARKETS_SUMMARY"
+fi
+if [ "$BRIEF_TYPE" = "Morning" ] && [ "${TODO_COUNT:-0}" -gt 0 ]; then
+  DECISION_TEXT="$TASK_SUMMARY"
 fi
 
 NEXT_MOVE="$TASK_SUMMARY"
@@ -150,24 +161,25 @@ cat > "$INDEX_FILE" <<HTML
     <section class="card">
       <h2>Executive Summary</h2>
       <ul>
-        <li>${DAY_SHAPE}</li>
-        <li>${TASK_SUMMARY}</li>
-        <li>${EMAIL_SUMMARY}</li>
-        <li>${WEATHER_SUMMARY}</li>
+        <li><strong>Shape of the day:</strong> ${DAY_SHAPE}</li>
+        <li><strong>Main decision:</strong> ${DECISION_TEXT}</li>
+        <li><strong>Attention risk:</strong> ${EMAIL_SUMMARY}</li>
+        <li><strong>Environmental drag:</strong> ${WEATHER_SUMMARY}</li>
       </ul>
     </section>
 
+    <section class="card">
+      <h2>Pattern to Notice</h2>
+      <p>$PATTERN_TEXT</p>
+    </section>
+
+    ${MARKETS_HTML}
     ${CALENDAR_HTML}
     ${TASKS_HTML}
     ${EMAIL_HTML}
     ${WEATHER_HTML}
     ${HABITS_HTML}
     ${ARSENAL_HTML}
-
-    <section class="card">
-      <h2>Pattern to Notice</h2>
-      <p>$PATTERN_TEXT</p>
-    </section>
 
     <section class="card">
       <h2>Tomorrow Prep</h2>
