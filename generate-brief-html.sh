@@ -62,9 +62,7 @@ EMAIL_RAW=$(run_module "$WORKSPACE/brief-email.sh")
 TASKS_RAW=$(run_module "$WORKSPACE/brief-tasks.sh")
 HABITS_RAW=$(run_module "$WORKSPACE/brief-habits.sh")
 ARSENAL_RAW=$(run_module "$WORKSPACE/arsenal-brief.sh")
-MARKETS_RAW=$(run_module "$WORKSPACE/brief-markets.sh")
-REGIME_RAW=$(run_module "$WORKSPACE/brief-market-regime.sh")
-MACRO_NEWS_RAW=$(run_module "$WORKSPACE/brief-macro-news.sh")
+MARKET_INTEL_RAW=$(run_module "$WORKSPACE/brief-market-intel.sh")
 UPCOMING_PREP_RAW=$(run_module "$WORKSPACE/brief-upcoming-prep.sh")
 
 WEATHER_HTML=$(printf '%s\n' "$WEATHER_RAW" | extract_html)
@@ -73,9 +71,7 @@ EMAIL_HTML=$(printf '%s\n' "$EMAIL_RAW" | extract_html)
 TASKS_HTML=$(printf '%s\n' "$TASKS_RAW" | extract_html)
 HABITS_HTML=$(printf '%s\n' "$HABITS_RAW" | extract_html)
 ARSENAL_HTML=$(printf '%s\n' "$ARSENAL_RAW" | extract_html)
-MARKETS_HTML=$(printf '%s\n' "$MARKETS_RAW" | extract_html)
-REGIME_HTML=$(printf '%s\n' "$REGIME_RAW" | extract_html)
-MACRO_NEWS_HTML=$(printf '%s\n' "$MACRO_NEWS_RAW" | extract_html)
+MARKET_INTEL_HTML=$(printf '%s\n' "$MARKET_INTEL_RAW" | extract_html)
 UPCOMING_PREP_HTML=$(printf '%s\n' "$UPCOMING_PREP_RAW" | extract_html)
 
 DAY_SHAPE=$(printf '%s\n' "$CALENDAR_RAW" | extract_meta SUMMARY)
@@ -84,9 +80,7 @@ EMAIL_SUMMARY=$(printf '%s\n' "$EMAIL_RAW" | extract_meta SUMMARY)
 TASK_SUMMARY=$(printf '%s\n' "$TASKS_RAW" | extract_meta SUMMARY)
 WEATHER_SUMMARY=$(printf '%s\n' "$WEATHER_RAW" | extract_meta SUMMARY)
 HABIT_SUMMARY=$(printf '%s\n' "$HABITS_RAW" | extract_meta SUMMARY)
-MARKETS_SUMMARY=$(printf '%s\n' "$MARKETS_RAW" | extract_meta SUMMARY)
-REGIME_SUMMARY=$(printf '%s\n' "$REGIME_RAW" | extract_meta SUMMARY)
-MACRO_SUMMARY=$(printf '%s\n' "$MACRO_NEWS_RAW" | extract_meta SUMMARY)
+MARKET_INTEL_SUMMARY=$(printf '%s\n' "$MARKET_INTEL_RAW" | extract_meta SUMMARY)
 UPCOMING_PREP_SUMMARY=$(printf '%s\n' "$UPCOMING_PREP_RAW" | extract_meta SUMMARY)
 CURRENT_EMAIL_IDS=$(printf '%s\n' "$EMAIL_RAW" | extract_meta EMAIL_IDS)
 TODO_COUNT=$(printf '%s\n' "$TASKS_RAW" | extract_meta TODO_COUNT)
@@ -105,11 +99,8 @@ else
 fi
 
 DECISION_TEXT="$TASK_SUMMARY"
-if [ -n "${REGIME_SUMMARY:-}" ]; then
-  DECISION_TEXT="$REGIME_SUMMARY"
-fi
-if [ -n "${MACRO_SUMMARY:-}" ] && [ "$BRIEF_TYPE" != "Morning" ]; then
-  DECISION_TEXT="$MACRO_SUMMARY"
+if [ -n "${MARKET_INTEL_SUMMARY:-}" ] && [ "$BRIEF_TYPE" != "Morning" ]; then
+  DECISION_TEXT="$MARKET_INTEL_SUMMARY"
 fi
 if [ "$BRIEF_TYPE" = "Morning" ] && [ "${TODO_COUNT:-0}" -gt 0 ]; then
   DECISION_TEXT="$TASK_SUMMARY"
@@ -170,6 +161,7 @@ cat > "$INDEX_FILE" <<HTML
         <li><strong>Main decision:</strong> ${DECISION_TEXT}</li>
         <li><strong>Attention risk:</strong> ${EMAIL_SUMMARY}</li>
         <li><strong>Environmental drag:</strong> ${WEATHER_SUMMARY}</li>
+        <li><strong>Coming up soon:</strong> ${UPCOMING_PREP_SUMMARY}</li>
       </ul>
     </section>
 
@@ -178,11 +170,8 @@ cat > "$INDEX_FILE" <<HTML
       <p>$PATTERN_TEXT</p>
     </section>
 
-    ${REGIME_HTML}
-    ${MACRO_NEWS_HTML}
-    ${MARKETS_HTML}
+    ${MARKET_INTEL_HTML}
     ${UPCOMING_PREP_HTML}
-    ${CALENDAR_HTML}
     ${TASKS_HTML}
     ${EMAIL_HTML}
     ${WEATHER_HTML}
