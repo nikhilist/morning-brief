@@ -1,212 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morning Brief - March 15, 2026</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e8e8e8;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .header {
-            text-align: center;
-            padding: 30px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 25px;
-        }
-        .header h1 {
-            font-size: 2rem;
-            font-weight: 300;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-        .header .date {
-            color: #888;
-            font-size: 0.9rem;
-        }
-        .card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .card h2 {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #64b5f6;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .card h2::before {
-            content: '';
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background: #64b5f6;
-            border-radius: 50%;
-        }
-        .weather-temp {
-            font-size: 3rem;
-            font-weight: 200;
-        }
-        .weather-desc {
-            color: #aaa;
-            margin-top: 5px;
-        }
-        .empty-state {
-            color: #666;
-            font-style: italic;
-        }
-        .email-item {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .email-item:last-child {
-            border-bottom: none;
-        }
-        .email-from {
-            font-size: 0.85rem;
-            color: #888;
-        }
-        .email-subject {
-            font-size: 0.95rem;
-            margin-top: 4px;
-        }
-        .task-item {
-            padding: 8px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .task-checkbox {
-            width: 18px;
-            height: 18px;
-            border: 2px solid #64b5f6;
-            border-radius: 4px;
-        }
-        .news-item {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .news-item:last-child {
-            border-bottom: none;
-        }
-        .news-title {
-            font-size: 0.95rem;
-            color: #fff;
-        }
-        .news-meta {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 4px;
-        }
-        .streak {
-            color: #81c784;
-            font-size: 0.85rem;
-        }
-        .footer {
-            text-align: center;
-            padding: 30px 0;
-            color: #555;
-            font-size: 0.8rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nik's Morning Brief</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.55;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    header { margin-bottom: 24px; }
+    h1 { margin: 0 0 6px; font-size: 34px; }
+    .sub { color: #8b949e; }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+    h2 { margin: 0 0 12px; color: #58a6ff; font-size: 18px; }
+    h3 { margin: 16px 0 10px; color: #c9d1d9; font-size: 15px; }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 8px 0; }
+    .muted { color: #8b949e; }
+    .event { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .event:last-child { border-bottom: none; }
+    .event-time { min-width: 72px; color: #58a6ff; }
+    .calendar-tag { color: #8b949e; font-size: 12px; }
+    .footer { color: #8b949e; text-align: center; padding: 24px 0 12px; }
+    .arsenal { border-left: 4px solid #ef0107; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>☀️ Morning Brief</h1>
-            <div class="date">Sunday, March 15, 2026</div>
-        </div>
+  <div class="container">
+    <header>
+      <h1>Morning Brief</h1>
+      <div class="sub">Sunday, March 15, 2026 · Princeton, NJ · Updated 10:30 AM EDT</div>
+    </header>
 
-        <div class="card">
-            <h2>Weather</h2>
-            <div class="weather-temp">☀️ 36°F</div>
-            <div class="weather-desc">Princeton, NJ — Clear and sunny</div>
-        </div>
+    <section class="card">
+      <h2>Executive Summary</h2>
+      <ul>
+        <li>No real calendar constraints today.</li>
+        <li>Top priority: Enroll Neel in Soccer class</li>
+        <li>4 new unread emails since the last brief; most should be triaged, not read end-to-end.</li>
+        <li>Tomorrow has real rain risk.</li>
+      </ul>
+    </section>
 
-        <div class="card">
-            <h2>Calendar</h2>
-            <div class="empty-state">No events scheduled for today</div>
-        </div>
+    <section class="card">
+  <h2>Day at a Glance</h2>
+  <p>No real calendar constraints today.</p>
+  <p class=muted>No calendar constraints today.</p>
+</section>
+    <section class="card">
+  <h2>Top Priorities</h2>
+  <ul>
+    <li><strong>Must-do:</strong> Enroll Neel in Soccer class</li>
+    <li><strong>Should-do:</strong> Check with Sriram about trip</li>
+    <li><strong>If there’s time:</strong> Return mango stuff</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>Task Pressure</h2>
+  <p class="muted">4 due or overdue tasks.</p>
+  <ul></ul>
+</section>
+    <section class="card">
+  <h2>Inbox Triage</h2>
+  <p class="muted">Ignore bucket: 10 items. Total unread: 10.</p>
+</section>
+    <section class="card">
+  <h2>Weather / Logistics</h2>
+  <ul>
+    <li>Now: 41°F, feels like 32°F.</li>
+    <li>Today: 45° / 34°.</li>
+    <li>Tomorrow: 64° / 45°, rain risk 98%.</li>
+    <li>Tomorrow has real rain risk.</li>
+  </ul>
+</section>
+    <section class="card">
+  <h2>Habits / Maintenance</h2>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 6)</li><li>Vitamin D - 50000IU (value: 1)</li><li>Vitamin B12 + Calcium (value: 7)</li></ul>
+</section>
+    <section class="card arsenal">
+  <h2>Arsenal</h2>
+  <p><strong>What matters:</strong> Next up. Arsenal vs Bayer 04 Leverkusen (H) (in 53h) is the main Arsenal event to care about. Top news line: Preview: Arsenal v Everton</p>
+  <ul>
+    <li><strong>Next match: Arsenal vs Bayer 04 Leverkusen (H) at 8:00 PM</strong><br><span class="muted">in 53h • Emirates Stadium, London</span><br><span class="muted">UEFA Champions League | Matchweek 12 | TV: Check local guides. Join us for analysis and live commentary in The Breakdown Live on the Arsenal App and Arsenal.com | Join In #ARS Shop Arsenal Direct Join Membership Download</span></li>
+    
+  </ul>
+  <h3>News & Commentary</h3>
+  <ul>
+    <li><strong>[Arsenal.com]</strong> Preview: Arsenal v Everton<br><span class="muted">Official match preview</span></li>
+<li><strong>[Arseblog]</strong> Post-Everton quotes round-up: Arteta, Moyes, Gyokeres, Smith, Redknapp<br><span class="muted">Arsenal overcame a stubborn Everton side with two late goals to retain their advantage at the top of the table, prompting an outpouring of relief and celebration at a tense Emirates Stadium. Viktor Gyokeres broke the dea</span></li>
+<li><strong>[BBC]</strong> Arsenal have the chance to temporarily go 10 points clear at the top of the Premier League on Saturday when they host away-day specialists Everton at Emirates Stadium (17:30 GMT).<br><span class="muted">Arsenal, by comparison, seem to be settling well into the run-in grind and will be buoyed by their 1-1 draw with Bayer Leverkusen thanks to a late Kai Havertz penalty.</span></li>
+  </ul>
+  <h3>Team News</h3>
+  <ul>
+    <li><strong>Manager line:</strong> Arteta is part of the pre-match cycle, which usually means the section to trust most is availability plus selection hints, not fan noise.</li>
+  </ul>
+  <h3>Likely XI / Selection Questions</h3>
+  <ul>
+    <li><strong>Selection question:</strong> No trustworthy lineup edge yet beyond standard match-preview noise, so better to wait for stronger team-news signals.</li>
+  </ul>
+  <h3>Social Pulse</h3>
+  <ul>
+    <li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>
+  </ul>
+</section>
 
-        <div class="card">
-            <h2>Unread Emails (10)</h2>
-            <div class="email-item">
-                <div class="email-from">Todoist</div>
-                <div class="email-subject">nikhilist's task(s) for 15 Mar 2026 → 4 overdue</div>
-            </div>
-            <div class="email-item">
-                <div class="email-from">Huckberry</div>
-                <div class="email-subject">The 5 Shorts Every Guy Needs</div>
-            </div>
-            <div class="email-item">
-                <div class="email-from">Amazon.com</div>
-                <div class="email-subject">Shipped: "Mens Pants Tweed..."</div>
-            </div>
-            <div class="email-item">
-                <div class="email-from">The Athletic Weekly</div>
-                <div class="email-subject">What football really thinks of Arsenal's football</div>
-            </div>
-            <div class="email-item">
-                <div class="email-from">Swiggy</div>
-                <div class="email-subject">Nikhil, time to take an OFF! 🏖️</div>
-            </div>
-        </div>
+    <section class="card">
+      <h2>Pattern to Notice</h2>
+      <p>The tasks hanging around look more nuisance-driven than difficult. That usually means they need an early slot, not more thought.</p>
+    </section>
 
-        <div class="card">
-            <h2>Todoist Tasks</h2>
-            <div class="empty-state">No tasks due today</div>
-        </div>
+    <section class="card">
+      <h2>Tomorrow Prep</h2>
+      <p>Karate Neel • Nikhil - Hartford Travel • Arsenal vs Bayer 04 Leverkusen (H)</p>
+    </section>
 
-        <div class="card">
-            <h2>Habitica Dailies</h2>
-            <div class="task-item">
-                <div class="task-checkbox"></div>
-                <div>Nutty Nuts <span class="streak">🔥 6 day streak</span></div>
-            </div>
-            <div class="task-item">
-                <div class="task-checkbox"></div>
-                <div>Vitamin D - 50000IU <span class="streak">🔥 1 day streak</span></div>
-            </div>
-            <div class="task-item">
-                <div class="task-checkbox"></div>
-                <div>Vitamin B12 + Calcium <span class="streak">🔥 7 day streak</span></div>
-            </div>
-        </div>
+    <section class="card">
+      <h2>Recommended Next Move</h2>
+      <p><strong>Top priority: Enroll Neel in Soccer class</strong></p>
+    </section>
 
-        <div class="card">
-            <h2>Arsenal News</h2>
-            <div class="news-item">
-                <div class="news-title">Borbe starts in goal for Arsenal against London City Lionesses</div>
-                <div class="news-meta">Arsenal Women — March 15, 2026</div>
-            </div>
-            <div class="news-item">
-                <div class="news-title">London City Lionesses v Arsenal Preview</div>
-                <div class="news-meta">Arsenal Women — March 14, 2026</div>
-            </div>
-            <div class="news-item">
-                <div class="news-title">'I have known her for a very long time' Slegers looks forward to van de Donk reunion</div>
-                <div class="news-meta">Arsenal Women — March 13, 2026</div>
-            </div>
-        </div>
-
-        <div class="footer">
-            Generated by Gunner · Morning Brief
-        </div>
+    <div class="footer">
+      <div>Last updated: 10:30 AM EDT</div>
+      <div><a href="https://github.com/nikhilist/morning-brief" style="color:#58a6ff;">github.com/nikhilist/morning-brief</a></div>
     </div>
+  </div>
 </body>
 </html>
