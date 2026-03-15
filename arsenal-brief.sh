@@ -182,26 +182,31 @@ try:
     text = open(sys.argv[1], 'r', encoding='utf-8', errors='ignore').read()
 except Exception:
     pass
-cand = [
-    'Preview: Arsenal v Everton',
-    'How to watch Arsenal v Everton live on TV',
-    "Odegaard on his fitness, Dixon's debut and Everton",
-    'Arteta provides update on Odegaard and Trossard',
-    'Go Inside Training ahead of Everton clash',
-    'Training gallery: Back to work ahead of Everton'
+clean = html.unescape(re.sub(r'\s+', ' ', text))
+patterns = [
+    (r'Post-[A-Za-z]+ quotes round-up[^<]{0,120}', 'Post-match reaction'),
+    (r'Highlights?:[^<]{0,120}', 'Match highlights'),
+    (r'Report: Arsenal [^<]{0,120}', 'Official match report'),
+    (r'Gallery: [^<]{0,120}', 'Official gallery'),
+    (r'Preview: [^<]{0,120}', 'Official match preview'),
+    (r'How to watch [^<]{0,120}', 'Broadcast/watch info'),
+    (r'Arteta provides update on [^<]{0,120}', 'Team-news signal from the manager/media cycle'),
+    (r'Odegaard on [^<]{0,120}', 'Player/team-news signal'),
 ]
 out = []
-for s in cand:
-    if s in text:
-        desc = 'Official club coverage'
-        if 'fitness' in s or 'update' in s:
-            desc = 'Team-news signal from the manager/media cycle'
-        elif 'Preview' in s:
-            desc = 'Official match preview'
-        elif 'watch' in s:
-            desc = 'Broadcast/watch info'
-        out.append({"source":"Arsenal.com", "title": s, "desc": desc})
-print(json.dumps(out[:6]))
+seen = set()
+for pattern, desc in patterns:
+    for m in re.finditer(pattern, clean, flags=re.I):
+        title = m.group(0).strip(' -–|')
+        if title.lower() in seen:
+            continue
+        seen.add(title.lower())
+        out.append({"source":"Arsenal.com", "title": title, "desc": desc})
+        if len(out) >= 8:
+            break
+    if len(out) >= 8:
+        break
+print(json.dumps(out[:8]))
 PY
 
 curl -sL "https://www.bbc.com/sport/football/teams/arsenal" -o "$TMP_DIR/bbc.html" || true
@@ -214,32 +219,53 @@ except Exception:
     pass
 clean = html.unescape(re.sub(r'\s+', ' ', text))
 out = []
-main = 'Arsenal have the chance to temporarily go 10 points clear at the top of the Premier League on Saturday when they host away-day specialists Everton at Emirates Stadium (17:30 GMT).'
-secondary = 'Arsenal, by comparison, seem to be settling well into the run-in grind and will be buoyed by their 1-1 draw with Bayer Leverkusen thanks to a late Kai Havertz penalty.'
-if main in clean:
-    out.append({"source":"BBC", "title": main, "desc": secondary if secondary in clean else 'BBC match framing'})
-print(json.dumps(out))
+patterns = [
+    r'Arsenal [^.]{20,220}\.',
+    r'Mikel Arteta [^.]{20,220}\.',
+    r'Kai Havertz [^.]{20,220}\.',
+]
+seen = set()
+for pattern in patterns:
+    for m in re.finditer(pattern, clean, flags=re.I):
+        title = m.group(0).strip()
+        low = title.lower()
+        if low in seen:
+            continue
+        seen.add(low)
+        desc = 'BBC Arsenal coverage'
+        if 'have the chance' in low or 'host' in low:
+            desc = 'BBC match framing'
+        elif 'drew' in low or 'beat' in low or 'won' in low or 'penalty' in low:
+            desc = 'BBC recent result framing'
+        out.append({"source":"BBC", "title": title, "desc": desc})
+        if len(out) >= 5:
+            break
+    if len(out) >= 5:
+        break
+print(json.dumps(out[:5]))
 PY
 
 jq -s 'add | unique_by(.title)' "$TMP_DIR/official.json" "$TMP_DIR/arseblog.json" "$TMP_DIR/bbc.json" > "$TMP_DIR/news-all.json"
 python3 - "$TMP_DIR/news-all.json" > "$TMP_DIR/news.json" <<'PY'
-import sys, json
+import sys, json, re
 items = json.load(open(sys.argv[1]))
 
 def score(item):
     s = 0
     source = item.get('source','')
     title = (item.get('title') or '').lower()
+    desc = (item.get('desc') or '').lower()
     if source == 'Arsenal.com': s += 30
     if source == 'BBC': s += 25
     if source == 'Arseblog': s += 20
-    if 'preview' in title: s += 20
+    if any(x in title for x in ['post-', 'report:', 'reaction', 'quotes', 'highlights', 'result']): s += 28
     if 'update' in title or 'fitness' in title: s += 18
-    if 'everton' in title: s += 16
-    if 'arteta' in title or 'odegaard' in title or 'saka' in title: s += 10
+    if 'arteta' in title or 'odegaard' in title or 'saka' in title or 'havertz' in title: s += 10
+    if 'preview' in title: s -= 18
+    if 'how to watch' in title: s -= 20
+    if 'training gallery' in title or 'gallery:' in title: s -= 12
     if 'women' in title: s -= 30
-    if 'how to watch' in title: s -= 8
-    if 'training gallery' in title: s -= 10
+    if 'broadcast/watch info' in desc: s -= 10
     return -s
 items = sorted(items, key=score)[:3]
 json.dump(items, sys.stdout)
