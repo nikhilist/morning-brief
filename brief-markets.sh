@@ -24,7 +24,6 @@ watchlist = [
     ('DOCN', 'DigitalOcean Holdings, Inc.'),
     ('NBIS', 'Nebius Group N.V.'),
 ]
-
 bench = ['SPY', 'QQQ', 'TLT', 'GLD', 'DBC']
 stooq_map = {
     'SPY': 'spy.us', 'QQQ': 'qqq.us', 'TLT': 'tlt.us', 'GLD': 'gld.us', 'DBC': 'dbc.us',
@@ -65,9 +64,7 @@ def stooq_quote(symbol):
     except Exception:
         return None
 
-quotes = {}
-for sym in bench + [x[0] for x in watchlist]:
-    quotes[sym] = stooq_quote(stooq_map[sym])
+quotes = {sym: stooq_quote(stooq_map[sym]) for sym in bench + [x[0] for x in watchlist]}
 
 crypto = {}
 try:
@@ -78,11 +75,7 @@ except Exception:
     pass
 
 macro_news = []
-for query in [
-    'fed inflation yields markets',
-    'bitcoin crypto markets',
-    'semiconductor ai markets',
-]:
+for query in ['fed inflation yields markets', 'bitcoin crypto markets', 'semiconductor ai markets']:
     try:
         data = fetch_json('https://hnrss.org/newest.jsonfeed?q=' + urllib.parse.quote(query))
         for item in data.get('items', []):
@@ -106,7 +99,7 @@ btc = (crypto.get('BTC') or {}).get('chg')
 macro_lines = []
 if spy is not None and qqq is not None:
     if qqq > spy + 0.5:
-        macro_lines.append('Growth is leading, so the tape still favors AI, semis, and high-quality duration over generic beta.')
+        macro_lines.append('Growth is leading, so the tape still favors AI, semis, and quality duration over generic beta.')
     elif spy > qqq + 0.5:
         macro_lines.append('This is broader risk appetite, not just mega-cap tech autopilot, which is healthier for second-order names.')
 if tlt is not None:
@@ -131,8 +124,9 @@ for ticker, name in watchlist:
     q = quotes.get(ticker) or {}
     rows.append({'ticker': ticker, 'name': name, 'price': q.get('price'), 'chg': q.get('chg')})
 
-leaders = sorted([r for r in rows if r['chg'] is not None], key=lambda r: r['chg'], reverse=True)[:5]
-laggards = sorted([r for r in rows if r['chg'] is not None], key=lambda r: r['chg'])[:4]
+positive = sorted([r for r in rows if r['chg'] is not None and r['chg'] >= 0], key=lambda r: r['chg'], reverse=True)[:5]
+negative = sorted([r for r in rows if r['chg'] is not None and r['chg'] < 0], key=lambda r: r['chg'])[:5]
+flat = sorted([r for r in rows if r['chg'] is not None and abs(r['chg']) < 0.75], key=lambda r: abs(r['chg']))[:3]
 
 interpretation = []
 for r in rows:
@@ -145,10 +139,14 @@ for r in rows:
         interpretation.append(f'{t} is soft enough to question whether AI leadership is narrowing.')
     elif t in ['CRWD','RBRK','NOW','DOCN'] and c > 2:
         interpretation.append(f'{t} says quality software/cyber is still attracting real money.')
+    elif t in ['CRWD','RBRK','NOW','DOCN'] and c < -2:
+        interpretation.append(f'{t} weakness suggests the market is not forgiving software duration without fresh reasons.')
     elif t == 'VRT' and c > 2:
         interpretation.append('VRT strength keeps the AI infrastructure trade alive beyond the obvious chip winners.')
     elif t == 'COPX' and c > 2:
         interpretation.append('COPX strength says cyclicals and commodity leverage still have room to matter.')
+    elif t == 'COPX' and c < -2:
+        interpretation.append('COPX weakness says the market is not paying for reflation/copper torque right now.')
     elif t in ['JMIA','NBIS'] and abs(c) > 4:
         interpretation.append(f'{t} is moving like a high-beta special situation, so sizing discipline matters more than narrative confidence.')
 
@@ -177,13 +175,14 @@ for line in filtered_news:
 print('</ul>')
 print('<h3>TradFi Watchlist</h3>')
 print('<ul>')
-for r in leaders:
-    print(f"<li><strong>{esc(r['ticker'])}</strong> {esc(fmt_price(r['price']))} ({esc(fmt_pct(r['chg']))}) — acting well.</li>")
-shown = {r['ticker'] for r in leaders}
-for r in laggards:
-    if r['ticker'] not in shown:
-        print(f"<li><strong>{esc(r['ticker'])}</strong> {esc(fmt_price(r['price']))} ({esc(fmt_pct(r['chg']))}) — under pressure.</li>")
-if not leaders and not laggards:
+for r in positive:
+    print(f"<li><strong>{esc(r['ticker'])}</strong> {esc(fmt_price(r['price']))} ({esc(fmt_pct(r['chg']))}) — showing relative strength.</li>")
+for r in negative:
+    print(f"<li><strong>{esc(r['ticker'])}</strong> {esc(fmt_price(r['price']))} ({esc(fmt_pct(r['chg']))}) — under pressure.</li>")
+if not positive and not negative:
+    for r in flat:
+        print(f"<li><strong>{esc(r['ticker'])}</strong> {esc(fmt_price(r['price']))} ({esc(fmt_pct(r['chg']))}) — basically flat.</li>")
+if not positive and not negative and not flat:
     print('<li class="muted">Live quote feed unavailable.</li>')
 print('</ul>')
 print('<h3>Interpretation</h3>')
