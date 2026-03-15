@@ -23,14 +23,16 @@ PREV_TASK_COUNT=$(jq -r '.tasks // 0' "$(brief_state_file)" 2>/dev/null || echo 
 TASK_DELTA=$((TODO_COUNT - PREV_TASK_COUNT))
 
 if [ "$(brief_mode)" = "delta" ]; then
-  cat <<HTML
+  if [ "$TASK_DELTA" -ne 0 ]; then
+    cat <<HTML
 <section class="card">
-  <h2>Task Delta</h2>
+  <h2>Tasks</h2>
   <p><strong>${TODO_COUNT}</strong> due or overdue tasks now.</p>
   <p class="muted">Change since last brief: ${TASK_DELTA}.</p>
   <ul>$TODO_LIST</ul>
 </section>
 HTML
+  fi
 else
   cat <<HTML
 <section class="card">

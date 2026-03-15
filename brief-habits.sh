@@ -19,27 +19,29 @@ else
   HABIT_PATTERN="Personal maintenance looks under control."
 fi
 
-if [ "$(brief_mode)" = "delta" ]; then
-  cat <<HTML
+if [ "$HABIT_PENDING_COUNT" -gt 0 ]; then
+  if [ "$(brief_mode)" = "delta" ]; then
+    cat <<HTML
 <section class="card">
-  <h2>Habits Delta</h2>
+  <h2>Habits</h2>
   <p><strong>${HABIT_PENDING_COUNT}</strong> dailies still open.</p>
   <p>${HABIT_PATTERN}</p>
 HTML
-else
-  cat <<HTML
+  else
+    cat <<HTML
 <section class="card">
-  <h2>Habits / Maintenance</h2>
+  <h2>Habits</h2>
   <p>$HABIT_PATTERN</p>
 HTML
-fi
-if [ -n "$HABIT_LIST_HTML" ]; then
+  fi
+  if [ -n "$HABIT_LIST_HTML" ]; then
 cat <<HTML
   <ul>$HABIT_LIST_HTML</ul>
 HTML
-fi
-cat <<HTML
+  fi
+  cat <<HTML
 </section>
 HTML
+fi
 brief_meta SUMMARY "${HABIT_PATTERN}"
 brief_meta HABIT_COUNT "${HABIT_PENDING_COUNT}"

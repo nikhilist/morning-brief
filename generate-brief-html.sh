@@ -112,13 +112,6 @@ if [ "$BRIEF_TYPE" = "Morning" ] && [ "${TODO_COUNT:-0}" -gt 0 ]; then
   DECISION_TEXT="$TASK_SUMMARY"
 fi
 
-NEXT_MOVE="$TASK_SUMMARY"
-if [ "$BRIEF_TYPE" = "Afternoon" ]; then
-  NEXT_MOVE="Recalibrate now: finish one concrete task, then stop pretending the inbox is a plan."
-elif [ "$BRIEF_TYPE" = "Evening" ]; then
-  NEXT_MOVE="Set up tomorrow by deciding the first real task tonight, so the morning starts clean."
-fi
-
 cat > "$INDEX_FILE" <<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -195,11 +188,6 @@ cat > "$INDEX_FILE" <<HTML
     <section class="card">
       <h2>Tomorrow Prep</h2>
       <p>$TOMORROW_SHAPE</p>
-    </section>
-
-    <section class="card">
-      <h2>Recommended Next Move</h2>
-      <p><strong>$NEXT_MOVE</strong></p>
     </section>
 
     <div class="footer">

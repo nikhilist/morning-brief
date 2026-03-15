@@ -49,22 +49,22 @@ render_email_bucket() {
 EMAIL_NEEDS_HTML=$(render_email_bucket "$NEEDS_JSON")
 EMAIL_NOTING_HTML=$(render_email_bucket "$NOTING_JSON")
 
+MEANINGFUL_DELTA=0
+if [ "$NEW_COUNT" -gt 0 ] && [ -n "$EMAIL_NEEDS_HTML" ]; then
+  MEANINGFUL_DELTA=1
+fi
+
 if [ "$(brief_mode)" = "delta" ]; then
-  cat <<HTML
-<section class="card">
-  <h2>Inbox Delta</h2>
-  <p><strong>${NEW_COUNT}</strong> new unread since the last brief.</p>
-HTML
-  if [ "$NEW_COUNT" -gt 0 ] && [ -n "$EMAIL_NEEDS_HTML" ]; then
+  if [ "$MEANINGFUL_DELTA" -eq 1 ]; then
     cat <<HTML
+<section class="card">
+  <h2>Inbox</h2>
+  <p><strong>${NEW_COUNT}</strong> new unread since the last brief.</p>
   <p><strong>New signal</strong></p>
   <ul>$EMAIL_NEEDS_HTML</ul>
-HTML
-  fi
-  cat <<HTML
-  <p class="muted">Total unread now: $EMAIL_COUNT.</p>
 </section>
 HTML
+  fi
 else
   cat <<HTML
 <section class="card">
