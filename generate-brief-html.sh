@@ -65,6 +65,7 @@ ARSENAL_RAW=$(run_module "$WORKSPACE/arsenal-brief.sh")
 MARKETS_RAW=$(run_module "$WORKSPACE/brief-markets.sh")
 REGIME_RAW=$(run_module "$WORKSPACE/brief-market-regime.sh")
 MACRO_NEWS_RAW=$(run_module "$WORKSPACE/brief-macro-news.sh")
+UPCOMING_PREP_RAW=$(run_module "$WORKSPACE/brief-upcoming-prep.sh")
 
 WEATHER_HTML=$(printf '%s\n' "$WEATHER_RAW" | extract_html)
 CALENDAR_HTML=$(printf '%s\n' "$CALENDAR_RAW" | extract_html)
@@ -75,6 +76,7 @@ ARSENAL_HTML=$(printf '%s\n' "$ARSENAL_RAW" | extract_html)
 MARKETS_HTML=$(printf '%s\n' "$MARKETS_RAW" | extract_html)
 REGIME_HTML=$(printf '%s\n' "$REGIME_RAW" | extract_html)
 MACRO_NEWS_HTML=$(printf '%s\n' "$MACRO_NEWS_RAW" | extract_html)
+UPCOMING_PREP_HTML=$(printf '%s\n' "$UPCOMING_PREP_RAW" | extract_html)
 
 DAY_SHAPE=$(printf '%s\n' "$CALENDAR_RAW" | extract_meta SUMMARY)
 TOMORROW_SHAPE=$(printf '%s\n' "$CALENDAR_RAW" | extract_meta TOMORROW)
@@ -85,6 +87,7 @@ HABIT_SUMMARY=$(printf '%s\n' "$HABITS_RAW" | extract_meta SUMMARY)
 MARKETS_SUMMARY=$(printf '%s\n' "$MARKETS_RAW" | extract_meta SUMMARY)
 REGIME_SUMMARY=$(printf '%s\n' "$REGIME_RAW" | extract_meta SUMMARY)
 MACRO_SUMMARY=$(printf '%s\n' "$MACRO_NEWS_RAW" | extract_meta SUMMARY)
+UPCOMING_PREP_SUMMARY=$(printf '%s\n' "$UPCOMING_PREP_RAW" | extract_meta SUMMARY)
 CURRENT_EMAIL_IDS=$(printf '%s\n' "$EMAIL_RAW" | extract_meta EMAIL_IDS)
 TODO_COUNT=$(printf '%s\n' "$TASKS_RAW" | extract_meta TODO_COUNT)
 HABIT_COUNT=$(printf '%s\n' "$HABITS_RAW" | extract_meta HABIT_COUNT)
@@ -178,6 +181,7 @@ cat > "$INDEX_FILE" <<HTML
     ${REGIME_HTML}
     ${MACRO_NEWS_HTML}
     ${MARKETS_HTML}
+    ${UPCOMING_PREP_HTML}
     ${CALENDAR_HTML}
     ${TASKS_HTML}
     ${EMAIL_HTML}
