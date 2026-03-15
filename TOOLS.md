@@ -84,6 +84,27 @@ Things like:
 ### Arsenal News
 - Source: https://arseblog.news/
 - Format: Summarize all articles from last 24h
+
+### Markets Watchlist
+- Goal: Brief should emphasize interpretation over raw facts
+- Needs: tradfi watchlist + crypto + macro/news context
+- TradFi watchlist:
+  - COPX — Global X Copper Miners ETF
+  - VRT — Vertiv Holdings Co
+  - JMIA — Jumia Technologies AG
+  - NVDA — NVIDIA Corporation
+  - RBRK — Rubrik, Inc.
+  - AMZN — Amazon.com, Inc.
+  - MELI — MercadoLibre, Inc.
+  - CRWD — CrowdStrike Holdings, Inc.
+  - ALAB — Astera Labs, Inc.
+  - NOW — ServiceNow, Inc.
+  - SITM — SiTime Corporation
+  - AMAT — Applied Materials, Inc.
+  - DOCN — DigitalOcean Holdings, Inc.
+  - NBIS — Nebius Group N.V.
+- Crypto baseline: BTC, ETH, SOL
+- Preference: more intelligence than display of facts; if it is just facts, it is not useful enough
 ```
 
 ## Why Separate?

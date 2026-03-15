@@ -261,3 +261,13 @@ To github.com:nikhilist/morning-brief.git
 Morning brief generated
 GitHub Pages: https://nikhilist.github.io/morning-brief/
 === Finished: Sun Mar 15 11:04:17 AM EDT 2026 ===
+=== Starting brief generation: Sun Mar 15 12:58:20 PM EDT 2026 ===
+[main 17fc8a5] Rewrite Afternoon brief structure: Sunday, March 15, 2026 12:58 PM EDT
+ 6 files changed, 262 insertions(+), 55 deletions(-)
+ create mode 100755 brief-macro-news.sh
+ create mode 100755 brief-market-regime.sh
+To github.com:nikhilist/morning-brief.git
+   c19153f..17fc8a5  main -> main
+Afternoon brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Sun Mar 15 12:58:50 PM EDT 2026 ===
