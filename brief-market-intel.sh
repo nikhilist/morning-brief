@@ -53,7 +53,7 @@ quotes = {k: stooq_quote(v) for k,v in {**bench, **stooq_map}.items()}
 
 crypto = {}
 try:
-    data = fetch_json('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&price_change_percentage=24h&ids=bitcoin,ethereum,solana')
+    data = fetch_json('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&price_change_percentage=24h&ids=bitcoin,ethereum,solana,hyperliquid')
     for item in data:
         crypto[item['symbol'].upper()] = {'price': item.get('current_price'), 'chg': item.get('price_change_percentage_24h')}
 except Exception:
@@ -136,7 +136,7 @@ else:
 print('</ul>')
 print('<h3>Crypto</h3>')
 print('<ul>')
-for sym in ['BTC','ETH','SOL']:
+for sym in ['BTC','ETH','SOL','HYPE']:
     item = crypto.get(sym)
     if item:
         note = 'risk appetite is constructive.' if (item.get('chg') or 0) > 2 else ('risk appetite is softening.' if (item.get('chg') or 0) < -2 else 'mostly noise unless the move extends.')

@@ -71,6 +71,10 @@ _This is the non-negotiable foundation. Everything here loads in every session._
 - Software engineering
 - **Hates chores** — observe patterns, suggest automation proactively
 - **Procrastinator** — needs external accountability system
+- **Markets brief preference:** wants interpretation and signal over raw facts; brief should be judgment-first, not data-dump-first.
+- **Investor style:** long-term investor (5+ years). Minor price moves are noise; only big changes, sector/trend shifts, or thesis-changing developments matter.
+- **Watchlist to track in briefs:** COPX, VRT, JMIA, NVDA, RBRK, AMZN, MELI, CRWD, ALAB, NOW, SITM, AMAT, DOCN, NBIS, plus crypto watchlist BTC, ETH, SOL, HYPE.
+- **Preferred framing for markets:** group watchlist by sectors/themes and track sector-level news/trends rather than obsessing over daily ticker wiggles.
 
 ---
 

@@ -103,8 +103,18 @@ Things like:
   - AMAT — Applied Materials, Inc.
   - DOCN — DigitalOcean Holdings, Inc.
   - NBIS — Nebius Group N.V.
-- Crypto baseline: BTC, ETH, SOL
+- Crypto baseline: BTC, ETH, SOL, HYPE
 - Preference: more intelligence than display of facts; if it is just facts, it is not useful enough
+- Investor style: long-term (5+ years); minor price moves are noise
+- Focus market brief on big changes, thesis changes, and sector/theme trends
+- Preferred sector/theme grouping:
+  - AI / Semis: NVDA, ALAB, AMAT, SITM
+  - Software / Cyber / Infra: CRWD, RBRK, NOW, DOCN
+  - AI infrastructure / power / datacenter: VRT
+  - Consumer / commerce / platforms: AMZN, MELI, JMIA
+  - Commodities / reflation: COPX
+  - International / special situations: NBIS, JMIA
+  - Crypto: BTC, ETH, SOL, HYPE
 ```
 
 ## Why Separate?
