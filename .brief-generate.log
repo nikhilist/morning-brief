@@ -361,3 +361,589 @@ To github.com:nikhilist/morning-brief.git
 Morning brief generated
 GitHub Pages: https://nikhilist.github.io/morning-brief/
 === Finished: Mon Mar 16 07:00:47 AM EDT 2026 ===
+=== Starting brief generation: Mon Mar 16 04:00:13 PM EDT 2026 ===
++ TZ=America/New_York
++ export TZ
++ export PATH=/usr/local/bin:/usr/bin:/bin:/home/nik/.local/bin:/home/nik/.npm-global/bin
++ PATH=/usr/local/bin:/usr/bin:/bin:/home/nik/.local/bin:/home/nik/.npm-global/bin
++ export HOME=/home/nik
++ HOME=/home/nik
++ export GOG_KEYRING_BACKEND=file
++ GOG_KEYRING_BACKEND=file
++ export GOG_KEYRING_PASSWORD=
++ GOG_KEYRING_PASSWORD=
++ export GOG_ACCOUNT=nikhilist@gmail.com
++ GOG_ACCOUNT=nikhilist@gmail.com
++ export HABITICA_USER_ID=404a4487-6eea-4ed3-b60b-03f82092b29a
++ HABITICA_USER_ID=404a4487-6eea-4ed3-b60b-03f82092b29a
++ export HABITICA_API_TOKEN=e3470ee9-56d7-49f4-bd56-4f3f175bd804
++ HABITICA_API_TOKEN=e3470ee9-56d7-49f4-bd56-4f3f175bd804
++ export TODOIST_API_TOKEN=81d341953323302cf0919e4ec8a8d9531ea6f881
++ TODOIST_API_TOKEN=81d341953323302cf0919e4ec8a8d9531ea6f881
+++ date
++ echo '=== Starting brief generation: Mon Mar 16 04:05:16 PM EDT 2026 ==='
+=== Starting brief generation: Mon Mar 16 04:05:16 PM EDT 2026 ===
++ WORKSPACE=/home/nik/.openclaw/workspace
++ OUTPUT_FILE=/home/nik/.openclaw/workspace/brief.html
++ INDEX_FILE=/home/nik/.openclaw/workspace/index.html
++ STATE_FILE=/home/nik/.openclaw/workspace/.brief-state.json
+++ date '+%A, %B %-d, %Y'
++ DATE='Monday, March 16, 2026'
+++ date '+%I:%M %p %Z'
++ TIME='04:05 PM EDT'
+++ date +%H
++ HOUR=16
+++ cat /home/nik/.openclaw/workspace/.brief-state.json
++ PREV_STATE='{"emails":["19cf19f3acd4d204","19cf19f3ddc32a38","19cf1e64d288a94d","19cf2873536d32c8","19cf34794f03365d","19cf358dba2d2226","19cf3606694f8519","19cf36a7500f68d5","19cf36e8c2d0050a","19cf642485af59aa"],"tasks":5,"timestamp":"2026-03-16T07:00:46-04:00"}'
++ '[' 16 -lt 12 ']'
++ '[' 16 -lt 20 ']'
++ BRIEF_TYPE=Afternoon
++ BRIEF_MODE=delta
++ export BRIEF_MODE
+++ run_module /home/nik/.openclaw/workspace/brief-weather.sh
+++ local script=/home/nik/.openclaw/workspace/brief-weather.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-weather.sh ']'
+++ /home/nik/.openclaw/workspace/brief-weather.sh
++ WEATHER_RAW='<section class="card">
+  <h2>Weather / Logistics</h2>
+  <ul>
+    <li>Now: 67°F, feels like 63°F.</li>
+    <li>Today: 67° / 46°.</li>
+    <li>Tomorrow: 49° / 30°, rain risk 82%.</li>
+    <li>Windy enough to be annoying.</li>
+  </ul>
+</section>
+__SUMMARY__Windy enough to be annoying.'
+++ run_module /home/nik/.openclaw/workspace/brief-calendar.sh
+++ local script=/home/nik/.openclaw/workspace/brief-calendar.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-calendar.sh ']'
+++ /home/nik/.openclaw/workspace/brief-calendar.sh
++ CALENDAR_RAW='<section class="card">
+  <h2>Day at a Glance</h2>
+  <p>No real calendar constraints today.</p>
+  <p class=muted>No calendar constraints today.</p>
+</section>
+__SUMMARY__No real calendar constraints today.
+__TOMORROW__Wear Green to school • Karate Neel • Nikhil - Hartford Travel • Arsenal vs Bayer 04 Leverkusen (H)'
+++ run_module /home/nik/.openclaw/workspace/brief-email.sh
+++ local script=/home/nik/.openclaw/workspace/brief-email.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-email.sh ']'
+++ /home/nik/.openclaw/workspace/brief-email.sh
++ EMAIL_RAW='<section class="card">
+  <h2>Inbox</h2>
+  <p><strong>8</strong> new unread since the last brief.</p>
+  <p><strong>New signal</strong></p>
+  <ul><li><strong>ClassDojo <parent@classdojo.com></strong> — Menus and payment due for April tomorrow</li>
+<li><strong>ClassDojo <parent@classdojo.com></strong> — Mrs. Smith shared a post in Neel'\''s class</li></ul>
+</section>
+__SUMMARY__8 new unread emails since the last brief; most should be triaged, not read end-to-end.
+__EMAIL_IDS__["19cf36e8c2d0050a","19cf642485af59aa","19cf678851e0ea65","19cf6daad30f9c02","19cf7261ea93b496","19cf72988e1cd9c9","19cf78355dfb4bf9","19cf8057e994fdbe","19cf81379022750d","19cf8313f9a48db3"]'
+++ run_module /home/nik/.openclaw/workspace/brief-tasks.sh
+++ local script=/home/nik/.openclaw/workspace/brief-tasks.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-tasks.sh ']'
+++ /home/nik/.openclaw/workspace/brief-tasks.sh
++ TASKS_RAW='<section class="card">
+  <h2>Tasks</h2>
+  <p><strong>4</strong> due or overdue tasks now.</p>
+  <p class="muted">Change since last brief: -1.</p>
+  <ul></ul>
+</section>
+__SUMMARY__Top priority: Enroll Neel in Soccer class
+__TODO_COUNT__4'
+++ run_module /home/nik/.openclaw/workspace/brief-habits.sh
+++ local script=/home/nik/.openclaw/workspace/brief-habits.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-habits.sh ']'
+++ /home/nik/.openclaw/workspace/brief-habits.sh
++ HABITS_RAW='<section class="card">
+  <h2>Habits</h2>
+  <p><strong>3</strong> dailies still open.</p>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 7)</li><li>Vitamin D - 50000IU (value: 1)</li><li>Vitamin B12 + Calcium (value: 8)</li></ul>
+</section>
+__SUMMARY__Basics are still open late, which usually means the trigger is weak, not the intention.
+__HABIT_COUNT__3'
+++ run_module /home/nik/.openclaw/workspace/arsenal-brief.sh
+++ local script=/home/nik/.openclaw/workspace/arsenal-brief.sh
+++ '[' -x /home/nik/.openclaw/workspace/arsenal-brief.sh ']'
+++ /home/nik/.openclaw/workspace/arsenal-brief.sh
++ ARSENAL_RAW='<section class="card arsenal">
+  <h2>Arsenal</h2>
+  <p><strong>What matters:</strong> Matchday. Arsenal vs Bayer 04 Leverkusen (H) (in 23h) is the main Arsenal event to care about. Top news line: Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;headline&quot;:&quot;Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;url&quot;:&quot;https://www.</p>
+  <ul>
+    <li><strong>Today: Arsenal vs Bayer 04 Leverkusen (H) at 8:00 PM</strong><br><span class="muted">in 23h • Emirates Stadium, London</span><br><span class="muted">UEFA Champions League | Matchweek 12 | TV: Check local guides. Join us for analysis and live commentary in The Breakdown Live on the Arsenal App and Arsenal.com | Join In #ARS Shop Arsenal Direct Join Membership Download</span></li>
+    
+  </ul>
+  <h3>News & Commentary</h3>
+  <ul>
+    <li><strong>[BBC]</strong> Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;headline&quot;:&quot;Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;url&quot;:&quot;https://www.<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;/&gt;&lt;meta data-rh=&quot;true&quot; name=&quot;twitter:url&quot; content=&quot;https://www.<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;/&gt;&lt;meta data-rh=&quot;true&quot; property=&quot;og:type&quot; content=&quot;website&quot;/&gt;&lt;meta data-rh=&quot;true&quot; property=&quot;og:url&quot; content=&quot;https://www.<br><span class="muted">BBC Arsenal coverage</span></li>
+  </ul>
+  <h3>Team News</h3>
+  <ul>
+    <li><span class=muted>No clean injury/team-news extraction yet beyond headline signals.</span></li>
+  </ul>
+  <h3>Likely XI / Selection Questions</h3>
+  <ul>
+    <li><strong>Selection question:</strong> No trustworthy lineup edge yet beyond standard match-preview noise, so better to wait for stronger team-news signals.</li>
+  </ul>
+  <h3>Social Pulse</h3>
+  <ul>
+    <li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>
+  </ul>
+</section>'
+++ run_module /home/nik/.openclaw/workspace/brief-market-intel.sh
+++ local script=/home/nik/.openclaw/workspace/brief-market-intel.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-market-intel.sh ']'
+++ /home/nik/.openclaw/workspace/brief-market-intel.sh
++ MARKET_INTEL_RAW='<section class="card">
+<h2>Market Intelligence</h2>
+<p><strong>What matters:</strong> No dominant macro regime is obvious, so theme selection matters more than market narration.</p>
+<ul>
+<li>AI / Semis is weak enough to ask whether AI leadership is narrowing rather than broadening.</li>
+<li>Software / Cyber / Infra looks unforgiving, which usually means investors want cleaner proof before paying up.</li>
+</ul>
+<h3>Invested Themes</h3>
+<ul>
+<li><strong>International / Special Situations</strong> (-3.6%) — International / Special Situations should be read more through idiosyncratic risk and sizing than broad market mood.</li>
+<li><strong>Software / Cyber / Infra</strong> (-3.5%) — Software / Cyber / Infra looks unforgiving, which usually means investors want cleaner proof before paying up.</li>
+<li><strong>AI / Semis</strong> (-2.9%) — AI / Semis is weak enough to ask whether AI leadership is narrowing rather than broadening.</li>
+<li><strong>AI Infrastructure / Power / Datacenter</strong> (-2.2%) — AI Infrastructure / Power / Datacenter is cooling, which would matter because it is one of the cleaner second-derivative AI expressions.</li>
+</ul>
+<h3>Only Moves Big Enough to Matter</h3>
+<ul>
+<li><strong>RBRK</strong> $51.54 (-4.6%) — worth checking only if the move is tied to real news or thesis change.</li>
+</ul>
+<h3>Crypto</h3>
+<ul>
+<li><strong>BTC</strong> $73,939 (+3.4%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>ETH</strong> $2,327 (+10.1%) — worth attention only if tied to a thesis or market-structure shift.</li>
+<li><strong>SOL</strong> $95.17 (+7.9%) — worth attention only if tied to a thesis or market-structure shift.</li>
+<li><strong>HYPE</strong> $39.49 (+6.4%) — worth attention only if tied to a thesis or market-structure shift.</li>
+</ul>
+</section>
+__SUMMARY__No dominant macro regime is obvious, so theme selection matters more than market narration.'
+++ run_module /home/nik/.openclaw/workspace/brief-upcoming-prep.sh
+++ local script=/home/nik/.openclaw/workspace/brief-upcoming-prep.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-upcoming-prep.sh ']'
+++ /home/nik/.openclaw/workspace/brief-upcoming-prep.sh
++ UPCOMING_PREP_RAW='<section class="card">
+<h2>Upcoming Things Worth Thinking About</h2>
+<p><strong>What matters:</strong> 2026-03-17 is the first day that looks worth thinking about ahead of time.</p>
+<ul>
+<li><strong>2026-03-17</strong> — needs daytime planning; family timing block; travel logistics<br><span class="muted">All day — Wear Green to school • 3:30 PM — Karate Neel • 6:00 PM — Nikhil - Hartford Travel • 8:00 PM — Arsenal vs Bayer 04 Leverkusen (H)</span></li>
+<li><strong>2026-03-18</strong> — easy to forget if not decided early; needs daytime planning; family timing block<br><span class="muted">All day — Mallik Anniversary • 9:45 AM — Bring Your Parent to School Day • 6:30 PM — Storytime@WW</span></li>
+</ul>
+</section>
+__SUMMARY__2026-03-17 is the first day that looks worth thinking about ahead of time.'
+++ printf '%s\n' '<section class="card">
+  <h2>Weather / Logistics</h2>
+  <ul>
+    <li>Now: 67°F, feels like 63°F.</li>
+    <li>Today: 67° / 46°.</li>
+    <li>Tomorrow: 49° / 30°, rain risk 82%.</li>
+    <li>Windy enough to be annoying.</li>
+  </ul>
+</section>
+__SUMMARY__Windy enough to be annoying.'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ WEATHER_HTML='<section class="card">
+  <h2>Weather / Logistics</h2>
+  <ul>
+    <li>Now: 67°F, feels like 63°F.</li>
+    <li>Today: 67° / 46°.</li>
+    <li>Tomorrow: 49° / 30°, rain risk 82%.</li>
+    <li>Windy enough to be annoying.</li>
+  </ul>
+</section>'
+++ printf '%s\n' '<section class="card">
+  <h2>Day at a Glance</h2>
+  <p>No real calendar constraints today.</p>
+  <p class=muted>No calendar constraints today.</p>
+</section>
+__SUMMARY__No real calendar constraints today.
+__TOMORROW__Wear Green to school • Karate Neel • Nikhil - Hartford Travel • Arsenal vs Bayer 04 Leverkusen (H)'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ CALENDAR_HTML='<section class="card">
+  <h2>Day at a Glance</h2>
+  <p>No real calendar constraints today.</p>
+  <p class=muted>No calendar constraints today.</p>
+</section>'
+++ printf '%s\n' '<section class="card">
+  <h2>Inbox</h2>
+  <p><strong>8</strong> new unread since the last brief.</p>
+  <p><strong>New signal</strong></p>
+  <ul><li><strong>ClassDojo <parent@classdojo.com></strong> — Menus and payment due for April tomorrow</li>
+<li><strong>ClassDojo <parent@classdojo.com></strong> — Mrs. Smith shared a post in Neel'\''s class</li></ul>
+</section>
+__SUMMARY__8 new unread emails since the last brief; most should be triaged, not read end-to-end.
+__EMAIL_IDS__["19cf36e8c2d0050a","19cf642485af59aa","19cf678851e0ea65","19cf6daad30f9c02","19cf7261ea93b496","19cf72988e1cd9c9","19cf78355dfb4bf9","19cf8057e994fdbe","19cf81379022750d","19cf8313f9a48db3"]'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ EMAIL_HTML='<section class="card">
+  <h2>Inbox</h2>
+  <p><strong>8</strong> new unread since the last brief.</p>
+  <p><strong>New signal</strong></p>
+  <ul><li><strong>ClassDojo <parent@classdojo.com></strong> — Menus and payment due for April tomorrow</li>
+<li><strong>ClassDojo <parent@classdojo.com></strong> — Mrs. Smith shared a post in Neel'\''s class</li></ul>
+</section>'
+++ printf '%s\n' '<section class="card">
+  <h2>Tasks</h2>
+  <p><strong>4</strong> due or overdue tasks now.</p>
+  <p class="muted">Change since last brief: -1.</p>
+  <ul></ul>
+</section>
+__SUMMARY__Top priority: Enroll Neel in Soccer class
+__TODO_COUNT__4'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ TASKS_HTML='<section class="card">
+  <h2>Tasks</h2>
+  <p><strong>4</strong> due or overdue tasks now.</p>
+  <p class="muted">Change since last brief: -1.</p>
+  <ul></ul>
+</section>'
+++ printf '%s\n' '<section class="card">
+  <h2>Habits</h2>
+  <p><strong>3</strong> dailies still open.</p>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 7)</li><li>Vitamin D - 50000IU (value: 1)</li><li>Vitamin B12 + Calcium (value: 8)</li></ul>
+</section>
+__SUMMARY__Basics are still open late, which usually means the trigger is weak, not the intention.
+__HABIT_COUNT__3'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ HABITS_HTML='<section class="card">
+  <h2>Habits</h2>
+  <p><strong>3</strong> dailies still open.</p>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 7)</li><li>Vitamin D - 50000IU (value: 1)</li><li>Vitamin B12 + Calcium (value: 8)</li></ul>
+</section>'
+++ printf '%s\n' '<section class="card arsenal">
+  <h2>Arsenal</h2>
+  <p><strong>What matters:</strong> Matchday. Arsenal vs Bayer 04 Leverkusen (H) (in 23h) is the main Arsenal event to care about. Top news line: Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;headline&quot;:&quot;Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;url&quot;:&quot;https://www.</p>
+  <ul>
+    <li><strong>Today: Arsenal vs Bayer 04 Leverkusen (H) at 8:00 PM</strong><br><span class="muted">in 23h • Emirates Stadium, London</span><br><span class="muted">UEFA Champions League | Matchweek 12 | TV: Check local guides. Join us for analysis and live commentary in The Breakdown Live on the Arsenal App and Arsenal.com | Join In #ARS Shop Arsenal Direct Join Membership Download</span></li>
+    
+  </ul>
+  <h3>News & Commentary</h3>
+  <ul>
+    <li><strong>[BBC]</strong> Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;headline&quot;:&quot;Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;url&quot;:&quot;https://www.<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;/&gt;&lt;meta data-rh=&quot;true&quot; name=&quot;twitter:url&quot; content=&quot;https://www.<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;/&gt;&lt;meta data-rh=&quot;true&quot; property=&quot;og:type&quot; content=&quot;website&quot;/&gt;&lt;meta data-rh=&quot;true&quot; property=&quot;og:url&quot; content=&quot;https://www.<br><span class="muted">BBC Arsenal coverage</span></li>
+  </ul>
+  <h3>Team News</h3>
+  <ul>
+    <li><span class=muted>No clean injury/team-news extraction yet beyond headline signals.</span></li>
+  </ul>
+  <h3>Likely XI / Selection Questions</h3>
+  <ul>
+    <li><strong>Selection question:</strong> No trustworthy lineup edge yet beyond standard match-preview noise, so better to wait for stronger team-news signals.</li>
+  </ul>
+  <h3>Social Pulse</h3>
+  <ul>
+    <li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>
+  </ul>
+</section>'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ ARSENAL_HTML='<section class="card arsenal">
+  <h2>Arsenal</h2>
+  <p><strong>What matters:</strong> Matchday. Arsenal vs Bayer 04 Leverkusen (H) (in 23h) is the main Arsenal event to care about. Top news line: Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;headline&quot;:&quot;Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;url&quot;:&quot;https://www.</p>
+  <ul>
+    <li><strong>Today: Arsenal vs Bayer 04 Leverkusen (H) at 8:00 PM</strong><br><span class="muted">in 23h • Emirates Stadium, London</span><br><span class="muted">UEFA Champions League | Matchweek 12 | TV: Check local guides. Join us for analysis and live commentary in The Breakdown Live on the Arsenal App and Arsenal.com | Join In #ARS Shop Arsenal Direct Join Membership Download</span></li>
+    
+  </ul>
+  <h3>News & Commentary</h3>
+  <ul>
+    <li><strong>[BBC]</strong> Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;headline&quot;:&quot;Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;,&quot;url&quot;:&quot;https://www.<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;/&gt;&lt;meta data-rh=&quot;true&quot; name=&quot;twitter:url&quot; content=&quot;https://www.<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arsenal FC - Transfer news, results, fixtures, video &amp; audio&quot;/&gt;&lt;meta data-rh=&quot;true&quot; property=&quot;og:type&quot; content=&quot;website&quot;/&gt;&lt;meta data-rh=&quot;true&quot; property=&quot;og:url&quot; content=&quot;https://www.<br><span class="muted">BBC Arsenal coverage</span></li>
+  </ul>
+  <h3>Team News</h3>
+  <ul>
+    <li><span class=muted>No clean injury/team-news extraction yet beyond headline signals.</span></li>
+  </ul>
+  <h3>Likely XI / Selection Questions</h3>
+  <ul>
+    <li><strong>Selection question:</strong> No trustworthy lineup edge yet beyond standard match-preview noise, so better to wait for stronger team-news signals.</li>
+  </ul>
+  <h3>Social Pulse</h3>
+  <ul>
+    <li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>
+  </ul>
+</section>'
+++ printf '%s\n' '<section class="card">
+<h2>Market Intelligence</h2>
+<p><strong>What matters:</strong> No dominant macro regime is obvious, so theme selection matters more than market narration.</p>
+<ul>
+<li>AI / Semis is weak enough to ask whether AI leadership is narrowing rather than broadening.</li>
+<li>Software / Cyber / Infra looks unforgiving, which usually means investors want cleaner proof before paying up.</li>
+</ul>
+<h3>Invested Themes</h3>
+<ul>
+<li><strong>International / Special Situations</strong> (-3.6%) — International / Special Situations should be read more through idiosyncratic risk and sizing than broad market mood.</li>
+<li><strong>Software / Cyber / Infra</strong> (-3.5%) — Software / Cyber / Infra looks unforgiving, which usually means investors want cleaner proof before paying up.</li>
+<li><strong>AI / Semis</strong> (-2.9%) — AI / Semis is weak enough to ask whether AI leadership is narrowing rather than broadening.</li>
+<li><strong>AI Infrastructure / Power / Datacenter</strong> (-2.2%) — AI Infrastructure / Power / Datacenter is cooling, which would matter because it is one of the cleaner second-derivative AI expressions.</li>
+</ul>
+<h3>Only Moves Big Enough to Matter</h3>
+<ul>
+++ extract_html
+<li><strong>RBRK</strong> $51.54 (-4.6%) — worth checking only if the move is tied to real news or thesis change.</li>
+</ul>
+<h3>Crypto</h3>
+<ul>
+<li><strong>BTC</strong> $73,939 (+3.4%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>ETH</strong> $2,327 (+10.1%) — worth attention only if tied to a thesis or market-structure shift.</li>
+<li><strong>SOL</strong> $95.17 (+7.9%) — worth attention only if tied to a thesis or market-structure shift.</li>
+<li><strong>HYPE</strong> $39.49 (+6.4%) — worth attention only if tied to a thesis or market-structure shift.</li>
+</ul>
+</section>
+__SUMMARY__No dominant macro regime is obvious, so theme selection matters more than market narration.'
+++ sed '/^__.*__.*$/d'
++ MARKET_INTEL_HTML='<section class="card">
+<h2>Market Intelligence</h2>
+<p><strong>What matters:</strong> No dominant macro regime is obvious, so theme selection matters more than market narration.</p>
+<ul>
+<li>AI / Semis is weak enough to ask whether AI leadership is narrowing rather than broadening.</li>
+<li>Software / Cyber / Infra looks unforgiving, which usually means investors want cleaner proof before paying up.</li>
+</ul>
+<h3>Invested Themes</h3>
+<ul>
+<li><strong>International / Special Situations</strong> (-3.6%) — International / Special Situations should be read more through idiosyncratic risk and sizing than broad market mood.</li>
+<li><strong>Software / Cyber / Infra</strong> (-3.5%) — Software / Cyber / Infra looks unforgiving, which usually means investors want cleaner proof before paying up.</li>
+<li><strong>AI / Semis</strong> (-2.9%) — AI / Semis is weak enough to ask whether AI leadership is narrowing rather than broadening.</li>
+<li><strong>AI Infrastructure / Power / Datacenter</strong> (-2.2%) — AI Infrastructure / Power / Datacenter is cooling, which would matter because it is one of the cleaner second-derivative AI expressions.</li>
+</ul>
+<h3>Only Moves Big Enough to Matter</h3>
+<ul>
+<li><strong>RBRK</strong> $51.54 (-4.6%) — worth checking only if the move is tied to real news or thesis change.</li>
+</ul>
+<h3>Crypto</h3>
+<ul>
+<li><strong>BTC</strong> $73,939 (+3.4%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>ETH</strong> $2,327 (+10.1%) — worth attention only if tied to a thesis or market-structure shift.</li>
+<li><strong>SOL</strong> $95.17 (+7.9%) — worth attention only if tied to a thesis or market-structure shift.</li>
+<li><strong>HYPE</strong> $39.49 (+6.4%) — worth attention only if tied to a thesis or market-structure shift.</li>
+</ul>
+</section>'
+++ printf '%s\n' '<section class="card">
+<h2>Upcoming Things Worth Thinking About</h2>
+<p><strong>What matters:</strong> 2026-03-17 is the first day that looks worth thinking about ahead of time.</p>
+<ul>
+<li><strong>2026-03-17</strong> — needs daytime planning; family timing block; travel logistics<br><span class="muted">All day — Wear Green to school • 3:30 PM — Karate Neel • 6:00 PM — Nikhil - Hartford Travel • 8:00 PM — Arsenal vs Bayer 04 Leverkusen (H)</span></li>
+<li><strong>2026-03-18</strong> — easy to forget if not decided early; needs daytime planning; family timing block<br><span class="muted">All day — Mallik Anniversary • 9:45 AM — Bring Your Parent to School Day • 6:30 PM — Storytime@WW</span></li>
+</ul>
+</section>
+__SUMMARY__2026-03-17 is the first day that looks worth thinking about ahead of time.'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ UPCOMING_PREP_HTML='<section class="card">
+<h2>Upcoming Things Worth Thinking About</h2>
+<p><strong>What matters:</strong> 2026-03-17 is the first day that looks worth thinking about ahead of time.</p>
+<ul>
+<li><strong>2026-03-17</strong> — needs daytime planning; family timing block; travel logistics<br><span class="muted">All day — Wear Green to school • 3:30 PM — Karate Neel • 6:00 PM — Nikhil - Hartford Travel • 8:00 PM — Arsenal vs Bayer 04 Leverkusen (H)</span></li>
+<li><strong>2026-03-18</strong> — easy to forget if not decided early; needs daytime planning; family timing block<br><span class="muted">All day — Mallik Anniversary • 9:45 AM — Bring Your Parent to School Day • 6:30 PM — Storytime@WW</span></li>
+</ul>
+</section>'
+++ printf '%s\n' '<section class="card">
+  <h2>Day at a Glance</h2>
+  <p>No real calendar constraints today.</p>
+  <p class=muted>No calendar constraints today.</p>
+</section>
+__SUMMARY__No real calendar constraints today.
+__TOMORROW__Wear Green to school • Karate Neel • Nikhil - Hartford Travel • Arsenal vs Bayer 04 Leverkusen (H)'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ DAY_SHAPE='No real calendar constraints today.'
+++ printf '%s\n' '<section class="card">
+  <h2>Day at a Glance</h2>
+  <p>No real calendar constraints today.</p>
+  <p class=muted>No calendar constraints today.</p>
+</section>
+__SUMMARY__No real calendar constraints today.
+__TOMORROW__Wear Green to school • Karate Neel • Nikhil - Hartford Travel • Arsenal vs Bayer 04 Leverkusen (H)'
+++ extract_meta TOMORROW
+++ local key=TOMORROW
+++ sed -n 's/^__TOMORROW__//p'
+++ head -n1
++ TOMORROW_SHAPE='Wear Green to school • Karate Neel • Nikhil - Hartford Travel • Arsenal vs Bayer 04 Leverkusen (H)'
+++ printf '%s\n' '<section class="card">
+  <h2>Inbox</h2>
+  <p><strong>8</strong> new unread since the last brief.</p>
+  <p><strong>New signal</strong></p>
+  <ul><li><strong>ClassDojo <parent@classdojo.com></strong> — Menus and payment due for April tomorrow</li>
+<li><strong>ClassDojo <parent@classdojo.com></strong> — Mrs. Smith shared a post in Neel'\''s class</li></ul>
+</section>
+__SUMMARY__8 new unread emails since the last brief; most should be triaged, not read end-to-end.
+__EMAIL_IDS__["19cf36e8c2d0050a","19cf642485af59aa","19cf678851e0ea65","19cf6daad30f9c02","19cf7261ea93b496","19cf72988e1cd9c9","19cf78355dfb4bf9","19cf8057e994fdbe","19cf81379022750d","19cf8313f9a48db3"]'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ EMAIL_SUMMARY='8 new unread emails since the last brief; most should be triaged, not read end-to-end.'
+++ printf '%s\n' '<section class="card">
+  <h2>Tasks</h2>
+  <p><strong>4</strong> due or overdue tasks now.</p>
+  <p class="muted">Change since last brief: -1.</p>
+  <ul></ul>
+</section>
+__SUMMARY__Top priority: Enroll Neel in Soccer class
+__TODO_COUNT__4'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ TASK_SUMMARY='Top priority: Enroll Neel in Soccer class'
+++ printf '%s\n' '<section class="card">
+  <h2>Weather / Logistics</h2>
+  <ul>
+    <li>Now: 67°F, feels like 63°F.</li>
+    <li>Today: 67° / 46°.</li>
+    <li>Tomorrow: 49° / 30°, rain risk 82%.</li>
+    <li>Windy enough to be annoying.</li>
+  </ul>
+</section>
+__SUMMARY__Windy enough to be annoying.'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ WEATHER_SUMMARY='Windy enough to be annoying.'
+++ printf '%s\n' '<section class="card">
+  <h2>Habits</h2>
+  <p><strong>3</strong> dailies still open.</p>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 7)</li><li>Vitamin D - 50000IU (value: 1)</li><li>Vitamin B12 + Calcium (value: 8)</li></ul>
+</section>
+__SUMMARY__Basics are still open late, which usually means the trigger is weak, not the intention.
+__HABIT_COUNT__3'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ HABIT_SUMMARY='Basics are still open late, which usually means the trigger is weak, not the intention.'
+++ printf '%s\n' '<section class="card">
+<h2>Market Intelligence</h2>
+<p><strong>What matters:</strong> No dominant macro regime is obvious, so theme selection matters more than market narration.</p>
+<ul>
+<li>AI / Semis is weak enough to ask whether AI leadership is narrowing rather than broadening.</li>
+<li>Software / Cyber / Infra looks unforgiving, which usually means investors want cleaner proof before paying up.</li>
+</ul>
+<h3>Invested Themes</h3>
+<ul>
+<li><strong>International / Special Situations</strong> (-3.6%) — International / Special Situations should be read more through idiosyncratic risk and sizing than broad market mood.</li>
+<li><strong>Software / Cyber / Infra</strong> (-3.5%) — Software / Cyber / Infra looks unforgiving, which usually means investors want cleaner proof before paying up.</li>
+<li><strong>AI / Semis</strong> (-2.9%) — AI / Semis is weak enough to ask whether AI leadership is narrowing rather than broadening.</li>
+<li><strong>AI Infrastructure / Power / Datacenter</strong> (-2.2%) — AI Infrastructure / Power / Datacenter is cooling, which would matter because it is one of the cleaner second-derivative AI expressions.</li>
+</ul>
+<h3>Only Moves Big Enough to Matter</h3>
+<ul>
+<li><strong>RBRK</strong> $51.54 (-4.6%) — worth checking only if the move is tied to real news or thesis change.</li>
+</ul>
+<h3>Crypto</h3>
+<ul>
+<li><strong>BTC</strong> $73,939 (+3.4%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>ETH</strong> $2,327 (+10.1%) — worth attention only if tied to a thesis or market-structure shift.</li>
+<li><strong>SOL</strong> $95.17 (+7.9%) — worth attention only if tied to a thesis or market-structure shift.</li>
+<li><strong>HYPE</strong> $39.49 (+6.4%) — worth attention only if tied to a thesis or market-structure shift.</li>
+</ul>
+</section>
+__SUMMARY__No dominant macro regime is obvious, so theme selection matters more than market narration.'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ head -n1
+++ sed -n 's/^__SUMMARY__//p'
++ MARKET_INTEL_SUMMARY='No dominant macro regime is obvious, so theme selection matters more than market narration.'
+++ printf '%s\n' '<section class="card">
+<h2>Upcoming Things Worth Thinking About</h2>
+<p><strong>What matters:</strong> 2026-03-17 is the first day that looks worth thinking about ahead of time.</p>
+<ul>
+<li><strong>2026-03-17</strong> — needs daytime planning; family timing block; travel logistics<br><span class="muted">All day — Wear Green to school • 3:30 PM — Karate Neel • 6:00 PM — Nikhil - Hartford Travel • 8:00 PM — Arsenal vs Bayer 04 Leverkusen (H)</span></li>
+<li><strong>2026-03-18</strong> — easy to forget if not decided early; needs daytime planning; family timing block<br><span class="muted">All day — Mallik Anniversary • 9:45 AM — Bring Your Parent to School Day • 6:30 PM — Storytime@WW</span></li>
+</ul>
+</section>
+__SUMMARY__2026-03-17 is the first day that looks worth thinking about ahead of time.'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ UPCOMING_PREP_SUMMARY='2026-03-17 is the first day that looks worth thinking about ahead of time.'
+++ printf '%s\n' '<section class="card">
+  <h2>Inbox</h2>
+  <p><strong>8</strong> new unread since the last brief.</p>
+  <p><strong>New signal</strong></p>
+  <ul><li><strong>ClassDojo <parent@classdojo.com></strong> — Menus and payment due for April tomorrow</li>
+<li><strong>ClassDojo <parent@classdojo.com></strong> — Mrs. Smith shared a post in Neel'\''s class</li></ul>
+</section>
+__SUMMARY__8 new unread emails since the last brief; most should be triaged, not read end-to-end.
+__EMAIL_IDS__["19cf36e8c2d0050a","19cf642485af59aa","19cf678851e0ea65","19cf6daad30f9c02","19cf7261ea93b496","19cf72988e1cd9c9","19cf78355dfb4bf9","19cf8057e994fdbe","19cf81379022750d","19cf8313f9a48db3"]'
+++ extract_meta EMAIL_IDS
+++ local key=EMAIL_IDS
+++ sed -n 's/^__EMAIL_IDS__//p'
+++ head -n1
++ CURRENT_EMAIL_IDS='["19cf36e8c2d0050a","19cf642485af59aa","19cf678851e0ea65","19cf6daad30f9c02","19cf7261ea93b496","19cf72988e1cd9c9","19cf78355dfb4bf9","19cf8057e994fdbe","19cf81379022750d","19cf8313f9a48db3"]'
+++ printf '%s\n' '<section class="card">
+  <h2>Tasks</h2>
+  <p><strong>4</strong> due or overdue tasks now.</p>
+  <p class="muted">Change since last brief: -1.</p>
+  <ul></ul>
+</section>
+__SUMMARY__Top priority: Enroll Neel in Soccer class
+__TODO_COUNT__4'
+++ extract_meta TODO_COUNT
+++ local key=TODO_COUNT
+++ sed -n 's/^__TODO_COUNT__//p'
+++ head -n1
++ TODO_COUNT=4
+++ printf '%s\n' '<section class="card">
+  <h2>Habits</h2>
+  <p><strong>3</strong> dailies still open.</p>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 7)</li><li>Vitamin D - 50000IU (value: 1)</li><li>Vitamin B12 + Calcium (value: 8)</li></ul>
+</section>
+__SUMMARY__Basics are still open late, which usually means the trigger is weak, not the intention.
+__HABIT_COUNT__3'
+++ extract_meta HABIT_COUNT
+++ local key=HABIT_COUNT
+++ sed -n 's/^__HABIT_COUNT__//p'
+++ head -n1
++ HABIT_COUNT=3
++ '[' Afternoon '!=' Evening ']'
++ MARKET_INTEL_HTML=
++ PATTERN_TEXT=
+++ printf %s '8 new unread emails since the last brief; most should be triaged, not read end-to-end.'
+++ grep -o '^[0-9]\+'
++ EMAIL_NEW_COUNT=8
++ '[' 4 -gt 0 ']'
++ '[' 8 -gt 5 ']'
++ PATTERN_TEXT='Admin backlog and inbox noise are competing for the same attention. Clear one annoying real-world task first, or the inbox will eat the day.'
++ DECISION_TEXT='Top priority: Enroll Neel in Soccer class'
++ '[' -n 'No dominant macro regime is obvious, so theme selection matters more than market narration.' ']'
++ '[' Afternoon '!=' Morning ']'
++ DECISION_TEXT='No dominant macro regime is obvious, so theme selection matters more than market narration.'
++ '[' Afternoon = Morning ']'
++ cat
++ cp /home/nik/.openclaw/workspace/index.html /home/nik/.openclaw/workspace/brief.html
+++ date -Iseconds
++ echo '{"emails":["19cf36e8c2d0050a","19cf642485af59aa","19cf678851e0ea65","19cf6daad30f9c02","19cf7261ea93b496","19cf72988e1cd9c9","19cf78355dfb4bf9","19cf8057e994fdbe","19cf81379022750d","19cf8313f9a48db3"],"tasks":4,"timestamp":"2026-03-16T16:05:42-04:00"}'
++ cd /home/nik/.openclaw/workspace
++ git add index.html brief.html .brief-state.json generate-brief-html.sh arsenal-brief.sh brief-calendar.sh brief-email.sh brief-habits.sh brief-lib.sh brief-macro-news.sh brief-market-intel.sh brief-market-regime.sh brief-markets.sh brief-tasks.sh brief-upcoming-prep.sh brief-weather.sh
++ git commit -m 'Rewrite Afternoon brief structure: Monday, March 16, 2026 04:05 PM EDT'
+[main 4e1657c] Rewrite Afternoon brief structure: Monday, March 16, 2026 04:05 PM EDT
+ 3 files changed, 57 insertions(+), 67 deletions(-)
++ git push origin main
+To github.com:nikhilist/morning-brief.git
+   0edcba5..4e1657c  main -> main
++ echo 'Afternoon brief generated'
+Afternoon brief generated
++ echo 'GitHub Pages: https://nikhilist.github.io/morning-brief/'
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+++ date
++ echo '=== Finished: Mon Mar 16 04:05:46 PM EDT 2026 ==='
+=== Finished: Mon Mar 16 04:05:46 PM EDT 2026 ===
