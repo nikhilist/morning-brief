@@ -91,9 +91,14 @@ HABIT_SUMMARY=$(printf '%s\n' "$HABITS_RAW" | extract_meta SUMMARY)
 MARKET_INTEL_SUMMARY=$(printf '%s\n' "$MARKET_INTEL_RAW" | extract_meta SUMMARY)
 UPCOMING_PREP_SUMMARY=$(printf '%s\n' "$UPCOMING_PREP_RAW" | extract_meta SUMMARY)
 CURRENT_EMAIL_IDS=$(printf '%s\n' "$EMAIL_RAW" | extract_meta EMAIL_IDS)
+LATEST_EMAIL_AT=$(printf '%s\n' "$EMAIL_RAW" | extract_meta LATEST_EMAIL_AT)
 TODO_COUNT=$(printf '%s\n' "$TASKS_RAW" | extract_meta TODO_COUNT)
 INBOX_UNSCHEDULED_COUNT=$(printf '%s\n' "$TASKS_RAW" | extract_meta INBOX_UNSCHEDULED_COUNT)
+LATEST_INBOX_TASK_AT=$(printf '%s\n' "$TASKS_RAW" | extract_meta LATEST_INBOX_TASK_AT)
 HABIT_COUNT=$(printf '%s\n' "$HABITS_RAW" | extract_meta HABIT_COUNT)
+WEATHER_FETCHED_AT=$(printf '%s\n' "$WEATHER_RAW" | extract_meta FETCHED_AT)
+MARKET_FETCHED_AT=$(printf '%s\n' "$MARKET_INTEL_RAW" | extract_meta FETCHED_AT)
+ARSENAL_FETCHED_AT=$(printf '%s\n' "$ARSENAL_RAW" | extract_meta FETCHED_AT)
 
 if [ "$BRIEF_TYPE" != "Evening" ]; then
   MARKET_INTEL_HTML=""
@@ -153,9 +158,14 @@ cat > "$RAW_CONTEXT_FILE" <<JSON
   "email_summary": $(printf '%s' "$EMAIL_SUMMARY" | json_escape),
   "email_new_count": ${EMAIL_NEW_COUNT:-0},
   "weather_summary": $(printf '%s' "$WEATHER_SUMMARY" | json_escape),
+  "weather_fetched_at": $(printf '%s' "$WEATHER_FETCHED_AT" | json_escape),
   "habit_summary": $(printf '%s' "$HABIT_SUMMARY" | json_escape),
   "habit_count": ${HABIT_COUNT:-0},
   "market_summary": $(printf '%s' "$MARKET_INTEL_SUMMARY" | json_escape),
+  "market_fetched_at": $(printf '%s' "$MARKET_FETCHED_AT" | json_escape),
+  "arsenal_fetched_at": $(printf '%s' "$ARSENAL_FETCHED_AT" | json_escape),
+  "latest_email_at": $(printf '%s' "$LATEST_EMAIL_AT" | json_escape),
+  "latest_inbox_task_at": $(printf '%s' "$LATEST_INBOX_TASK_AT" | json_escape),
   "calendar_html": $(printf '%s' "$CALENDAR_HTML" | json_escape),
   "tasks_html": $(printf '%s' "$TASKS_HTML" | json_escape),
   "email_html": $(printf '%s' "$EMAIL_HTML" | json_escape),
@@ -180,6 +190,16 @@ cat > "$RAW_CONTEXT_FILE" <<JSON
 JSON
 
 python3 "$WORKSPACE/brief-context-builder.py" < "$RAW_CONTEXT_FILE" > "$MODEL_CONTEXT_FILE"
+FRESHNESS_JSON=$(python3 "$WORKSPACE/brief-freshness.py" < "$RAW_CONTEXT_FILE")
+python3 - "$MODEL_CONTEXT_FILE" "$FRESHNESS_JSON" <<'PY'
+import json, sys
+path = sys.argv[1]
+fresh = json.loads(sys.argv[2])
+obj = json.load(open(path))
+obj['freshness'] = fresh
+with open(path, 'w') as f:
+    json.dump(obj, f)
+PY
 cp "$MODEL_CONTEXT_FILE" "$WORKSPACE/.brief-context.json"
 
 if node "$WORKSPACE/morning-brief/scripts/brief-synthesizer.mjs" "$MODEL_CONTEXT_FILE" > "$MODEL_JSON_FILE" 2>> "$LOG_FILE"; then

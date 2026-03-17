@@ -16,6 +16,7 @@ COMBINED_JSON=$(jq -n --argjson today "$TODAY_JSON" --argjson inbox "$INBOX_JSON
 TODO_COUNT=$(echo "$TODAY_JSON" | jq 'length')
 INBOX_COUNT=$(echo "$INBOX_JSON" | jq 'length')
 INBOX_UNSCHEDULED_COUNT=$(echo "$INBOX_JSON" | jq '[.[] | select((.due.date // "") == "")] | length')
+LATEST_INBOX_TASK_AT=$(echo "$INBOX_JSON" | jq -r 'sort_by(.updatedAt // .addedAt // "") | last.updatedAt // last.addedAt // empty')
 
 TOP_TASK=$(echo "$COMBINED_JSON" | jq -r '
   sort_by(
@@ -135,3 +136,4 @@ brief_meta SUMMARY "Top priority: ${PRIORITY_MUST}"
 brief_meta TODO_COUNT "${TODO_COUNT}"
 brief_meta TASK_TOP "${TASK_HEADLINES}"
 brief_meta INBOX_UNSCHEDULED_COUNT "${INBOX_UNSCHEDULED_COUNT}"
+brief_meta LATEST_INBOX_TASK_AT "${LATEST_INBOX_TASK_AT}"

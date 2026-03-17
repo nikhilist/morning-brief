@@ -6,6 +6,7 @@ escape_html() {
   python3 -c 'import html,sys; print(html.escape(sys.stdin.read()), end="")'
 }
 
+FETCHED_AT=$(date -Iseconds)
 WEATHER_JSON=$(curl -s "https://api.open-meteo.com/v1/forecast?latitude=40.3573&longitude=-74.6672&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=3&timezone=America%2FNew_York")
 TEMP=$(echo "$WEATHER_JSON" | jq -r '.current.temperature_2m // 0')
 FEELS_LIKE=$(echo "$WEATHER_JSON" | jq -r '.current.apparent_temperature // 0')
@@ -46,3 +47,4 @@ cat <<HTML
 HTML
 
 echo "__SUMMARY__$(printf '%s' "$SUMMARY" | escape_html)"
+echo "__FETCHED_AT__${FETCHED_AT}"

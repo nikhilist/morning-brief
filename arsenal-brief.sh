@@ -10,6 +10,7 @@ export GOG_ACCOUNT=nikhilist@gmail.com
 
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"' EXIT
+FETCHED_AT=$(date -Iseconds)
 
 ARSENAL_CALENDAR_ID="08ac8665d76573fd7cfcb0e0cb13ed3a951e59b7b1c4c6eabc9adaae8a74e615@group.calendar.google.com"
 TODAY_START=$(date '+%Y-%m-%d')
@@ -372,3 +373,5 @@ cat <<HTML
   </ul>
 </section>
 HTML
+
+echo "__FETCHED_AT__${FETCHED_AT}"

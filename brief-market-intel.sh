@@ -2,6 +2,8 @@
 set -euo pipefail
 export TZ="America/New_York"
 
+FETCHED_AT=$(date -Iseconds)
+
 python3 - <<'PY'
 import urllib.request, urllib.parse, json, ssl, html
 ssl_ctx = ssl.create_default_context()
@@ -193,3 +195,5 @@ print('</ul>')
 print('</section>')
 print('__SUMMARY__' + summary)
 PY
+
+echo "__FETCHED_AT__${FETCHED_AT}"

@@ -25,6 +25,7 @@ comm -23 "$CURRENT_EMAILS_FILE" "$PREV_EMAILS_FILE" > "$NEW_EMAILS_FILE" || :
 EMAIL_COUNT=$(echo "$EMAILS_JSON" | jq '.threads | length')
 NEW_COUNT=$(wc -l < "$NEW_EMAILS_FILE" 2>/dev/null | tr -d ' ')
 NEW_COUNT=${NEW_COUNT:-0}
+LATEST_EMAIL_AT=$(echo "$EMAILS_JSON" | jq -r '.threads[0].date // empty')
 
 echo "$EMAILS_JSON" | jq '
   .threads // [] |
@@ -91,3 +92,4 @@ TOP_NEEDS=$(echo "$NEEDS_JSON" | jq -r 'map((.from // "Unknown") + " — " + (.s
 brief_meta SUMMARY "${NEW_COUNT} new unread emails since the last brief; most should be triaged, not read end-to-end."
 brief_meta EMAIL_IDS "$(jq -R -s -c 'split("\n")[:-1]' "$CURRENT_EMAILS_FILE")"
 brief_meta NEEDS_TOP "${TOP_NEEDS}"
+brief_meta LATEST_EMAIL_AT "${LATEST_EMAIL_AT}"
