@@ -56,6 +56,14 @@ extract_meta() {
   sed -n "s/^__${key}__//p" | head -n1
 }
 
+html_escape() {
+  python3 -c 'import html,sys; print(html.escape(sys.stdin.read()), end="")'
+}
+
+json_escape() {
+  python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+}
+
 WEATHER_RAW=$(run_module "$WORKSPACE/brief-weather.sh")
 CALENDAR_RAW=$(run_module "$WORKSPACE/brief-calendar.sh")
 EMAIL_RAW=$(run_module "$WORKSPACE/brief-email.sh")
@@ -121,6 +129,96 @@ if [ "$BRIEF_TYPE" = "Morning" ] && [ "${TODO_COUNT:-0}" -gt 0 ]; then
   DECISION_TEXT="$TASK_SUMMARY"
 fi
 
+MODEL_JSON_FILE=$(mktemp)
+MODEL_CONTEXT_FILE=$(mktemp)
+trap 'rm -f "$MODEL_JSON_FILE" "$MODEL_CONTEXT_FILE"' EXIT
+
+cat > "$MODEL_CONTEXT_FILE" <<JSON
+{
+  "brief_type": $(printf '%s' "$BRIEF_TYPE" | json_escape),
+  "brief_mode": $(printf '%s' "$BRIEF_MODE" | json_escape),
+  "date": $(printf '%s' "$DATE" | json_escape),
+  "time": $(printf '%s' "$TIME" | json_escape),
+  "calendar": {
+    "day_shape": $(printf '%s' "$DAY_SHAPE" | json_escape),
+    "tomorrow_shape": $(printf '%s' "$TOMORROW_SHAPE" | json_escape),
+    "upcoming_prep_summary": $(printf '%s' "$UPCOMING_PREP_SUMMARY" | json_escape)
+  },
+  "tasks": {
+    "summary": $(printf '%s' "$TASK_SUMMARY" | json_escape),
+    "count": ${TODO_COUNT:-0}
+  },
+  "email": {
+    "summary": $(printf '%s' "$EMAIL_SUMMARY" | json_escape),
+    "new_count": ${EMAIL_NEW_COUNT:-0}
+  },
+  "weather": {
+    "summary": $(printf '%s' "$WEATHER_SUMMARY" | json_escape)
+  },
+  "habits": {
+    "summary": $(printf '%s' "$HABIT_SUMMARY" | json_escape),
+    "count": ${HABIT_COUNT:-0}
+  },
+  "markets": {
+    "summary": $(printf '%s' "$MARKET_INTEL_SUMMARY" | json_escape)
+  },
+  "arsenal": {
+    "summary": $(printf '%s' "$(printf '%s\n' "$ARSENAL_RAW" | sed -n 's/^.*<p><strong>What matters:<\/strong> //p' | head -n1 | sed 's/<.*$//')" | json_escape)
+  },
+  "fallback": {
+    "executive_summary": [
+      {"label": "Shape of the day", "text": $(printf '%s' "$DAY_SHAPE" | json_escape)},
+      {"label": "Main decision", "text": $(printf '%s' "$DECISION_TEXT" | json_escape)},
+      {"label": "Attention risk", "text": $(printf '%s' "$EMAIL_SUMMARY" | json_escape)},
+      {"label": "Environmental drag", "text": $(printf '%s' "$WEATHER_SUMMARY" | json_escape)},
+      {"label": "Coming up soon", "text": $(printf '%s' "$UPCOMING_PREP_SUMMARY" | json_escape)}
+    ],
+    "pattern_to_notice": $(printf '%s' "$PATTERN_TEXT" | json_escape),
+    "tomorrow_prep": $(printf '%s' "$TOMORROW_SHAPE" | json_escape),
+    "recommended_next_move": $(printf '%s' "$DECISION_TEXT" | json_escape)
+  }
+}
+JSON
+
+if node "$WORKSPACE/morning-brief/scripts/brief-synthesizer.mjs" "$MODEL_CONTEXT_FILE" > "$MODEL_JSON_FILE" 2>> "$LOG_FILE"; then
+  EXEC_SUMMARY_HTML=$(python3 - "$MODEL_JSON_FILE" <<'PY'
+import json, sys, html
+obj = json.load(open(sys.argv[1]))
+for item in obj.get('executive_summary', []):
+    label = html.escape(str(item.get('label', 'Summary')))
+    text = html.escape(str(item.get('text', '')))
+    print(f'<li><strong>{label}:</strong> {text}</li>')
+PY
+)
+  PATTERN_TEXT=$(python3 - "$MODEL_JSON_FILE" <<'PY'
+import json, sys, html
+obj = json.load(open(sys.argv[1]))
+print(html.escape(str(obj.get('pattern_to_notice', ''))))
+PY
+)
+  TOMORROW_PREP_TEXT=$(python3 - "$MODEL_JSON_FILE" <<'PY'
+import json, sys, html
+obj = json.load(open(sys.argv[1]))
+print(html.escape(str(obj.get('tomorrow_prep', ''))))
+PY
+)
+  RECOMMENDED_NEXT_MOVE=$(python3 - "$MODEL_JSON_FILE" <<'PY'
+import json, sys, html
+obj = json.load(open(sys.argv[1]))
+print(html.escape(str(obj.get('recommended_next_move', ''))))
+PY
+)
+else
+  EXEC_SUMMARY_HTML="
+        <li><strong>Shape of the day:</strong> ${DAY_SHAPE}</li>
+        <li><strong>Main decision:</strong> ${DECISION_TEXT}</li>
+        <li><strong>Attention risk:</strong> ${EMAIL_SUMMARY}</li>
+        <li><strong>Environmental drag:</strong> ${WEATHER_SUMMARY}</li>
+        <li><strong>Coming up soon:</strong> ${UPCOMING_PREP_SUMMARY}</li>"
+  TOMORROW_PREP_TEXT="$TOMORROW_SHAPE"
+  RECOMMENDED_NEXT_MOVE="$DECISION_TEXT"
+fi
+
 cat > "$INDEX_FILE" <<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -172,17 +270,18 @@ cat > "$INDEX_FILE" <<HTML
     <section class="card">
       <h2>Executive Summary</h2>
       <ul>
-        <li><strong>Shape of the day:</strong> ${DAY_SHAPE}</li>
-        <li><strong>Main decision:</strong> ${DECISION_TEXT}</li>
-        <li><strong>Attention risk:</strong> ${EMAIL_SUMMARY}</li>
-        <li><strong>Environmental drag:</strong> ${WEATHER_SUMMARY}</li>
-        <li><strong>Coming up soon:</strong> ${UPCOMING_PREP_SUMMARY}</li>
+${EXEC_SUMMARY_HTML}
       </ul>
     </section>
 
     <section class="card">
       <h2>Pattern to Notice</h2>
       <p>$PATTERN_TEXT</p>
+    </section>
+
+    <section class="card">
+      <h2>Recommended Next Move</h2>
+      <p>$RECOMMENDED_NEXT_MOVE</p>
     </section>
 
     ${UPCOMING_PREP_HTML}
@@ -195,7 +294,7 @@ cat > "$INDEX_FILE" <<HTML
 
     <section class="card">
       <h2>Tomorrow Prep</h2>
-      <p>$TOMORROW_SHAPE</p>
+      <p>$TOMORROW_PREP_TEXT</p>
     </section>
 
     <div class="footer">
