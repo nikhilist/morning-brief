@@ -92,6 +92,7 @@ MARKET_INTEL_SUMMARY=$(printf '%s\n' "$MARKET_INTEL_RAW" | extract_meta SUMMARY)
 UPCOMING_PREP_SUMMARY=$(printf '%s\n' "$UPCOMING_PREP_RAW" | extract_meta SUMMARY)
 CURRENT_EMAIL_IDS=$(printf '%s\n' "$EMAIL_RAW" | extract_meta EMAIL_IDS)
 TODO_COUNT=$(printf '%s\n' "$TASKS_RAW" | extract_meta TODO_COUNT)
+INBOX_UNSCHEDULED_COUNT=$(printf '%s\n' "$TASKS_RAW" | extract_meta INBOX_UNSCHEDULED_COUNT)
 HABIT_COUNT=$(printf '%s\n' "$HABITS_RAW" | extract_meta HABIT_COUNT)
 
 if [ "$BRIEF_TYPE" != "Evening" ]; then
@@ -148,6 +149,7 @@ cat > "$RAW_CONTEXT_FILE" <<JSON
   "upcoming_prep_summary": $(printf '%s' "$UPCOMING_PREP_SUMMARY" | json_escape),
   "task_summary": $(printf '%s' "$TASK_SUMMARY" | json_escape),
   "todo_count": ${TODO_COUNT:-0},
+  "inbox_unscheduled_count": ${INBOX_UNSCHEDULED_COUNT:-0},
   "email_summary": $(printf '%s' "$EMAIL_SUMMARY" | json_escape),
   "email_new_count": ${EMAIL_NEW_COUNT:-0},
   "weather_summary": $(printf '%s' "$WEATHER_SUMMARY" | json_escape),
