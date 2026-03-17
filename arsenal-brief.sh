@@ -226,25 +226,42 @@ try:
     text = open(sys.argv[1], 'r', encoding='utf-8', errors='ignore').read()
 except Exception:
     pass
+# Remove script/style tags and their content
+text = re.sub(r'<script[^>]*>.*?</script>', ' ', text, flags=re.S|re.I)
+text = re.sub(r'<style[^>]*>.*?</style>', ' ', text, flags=re.S|re.I)
+# Remove meta tags and other head content
+text = re.sub(r'<meta[^>]*>', ' ', text, flags=re.I)
+text = re.sub(r'<link[^>]*>', ' ', text, flags=re.I)
+# Clean up HTML entities and whitespace
 clean = html.unescape(re.sub(r'\s+', ' ', text))
 out = []
-patterns = [
-    r'Arsenal [^.]{20,220}\.',
-    r'Mikel Arteta [^.]{20,220}\.',
-    r'Kai Havertz [^.]{20,220}\.',
+# Look for article headlines in the page - BBC uses specific data attributes and classes
+# Try to find actual article headlines, not meta tag content
+headline_patterns = [
+    r'data-testid="card-headline"[^>]*>([^<]+)</',
+    r'class="[^"]*headline[^"]*"[^>]*>([^<]+)</',
+    r'<h[23][^>]*>([^<]+)</h[23]',
 ]
 seen = set()
-for pattern in patterns:
+for pattern in headline_patterns:
     for m in re.finditer(pattern, clean, flags=re.I):
-        title = m.group(0).strip()
+        title = m.group(1).strip() if m.groups() else m.group(0).strip()
+        # Filter out junk
+        if len(title) < 15 or len(title) > 150:
+            continue
+        if any(x in title.lower() for x in ['var ', 'function', '=>', '{', '}', '="', 'twitter', 'og:', 'meta']):
+            continue
+        # Must contain Arsenal-related terms
+        if not any(x in title.lower() for x in ['arsenal', 'arteta', 'saka', 'odegaard', 'havertz', 'rice', 'saliba', 'partey', 'white', 'gabriel', 'martinelli', 'trossard']):
+            continue
         low = title.lower()
         if low in seen:
             continue
         seen.add(low)
         desc = 'BBC Arsenal coverage'
-        if 'have the chance' in low or 'host' in low:
+        if 'have the chance' in low or 'host' in low or 'visit' in low:
             desc = 'BBC match framing'
-        elif 'drew' in low or 'beat' in low or 'won' in low or 'penalty' in low:
+        elif any(x in low for x in ['drew', 'beat', 'won', 'penalty', 'score', 'defeat']):
             desc = 'BBC recent result framing'
         out.append({"source":"BBC", "title": title, "desc": desc})
         if len(out) >= 5:
