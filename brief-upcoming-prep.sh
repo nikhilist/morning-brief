@@ -42,14 +42,20 @@ def parse_event_time(ev):
     if 'dateTime' in s:
         dt = s['dateTime']
         try:
-            t = dt.split('T')[1][:5]
-            hh, mm = t.split(':')
-            hh = int(hh)
-            suffix = 'AM' if hh < 12 else 'PM'
-            hh12 = hh % 12 or 12
-            return f'{hh12}:{mm} {suffix}'
+            from zoneinfo import ZoneInfo
+            parsed = datetime.fromisoformat(dt.replace('Z', '+00:00'))
+            local = parsed.astimezone(ZoneInfo('America/New_York'))
+            return local.strftime('%-I:%M %p')
         except Exception:
-            return 'Timed'
+            try:
+                t = dt.split('T')[1][:5]
+                hh, mm = t.split(':')
+                hh = int(hh)
+                suffix = 'AM' if hh < 12 else 'PM'
+                hh12 = hh % 12 or 12
+                return f'{hh12}:{mm} {suffix}'
+            except Exception:
+                return 'Timed'
     return 'All day'
 
 def score_event(ev):
