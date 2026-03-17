@@ -66,5 +66,7 @@ HTML
   fi
 fi
 
+TASK_HEADLINES=$(echo "$TODO_JSON" | jq -r '.[0:3] | map(.content) | join(" | ")' 2>/dev/null)
 brief_meta SUMMARY "Top priority: ${PRIORITY_MUST}"
 brief_meta TODO_COUNT "${TODO_COUNT}"
+brief_meta TASK_TOP "${TASK_HEADLINES}"

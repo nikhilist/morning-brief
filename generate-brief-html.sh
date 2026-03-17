@@ -133,38 +133,35 @@ MODEL_JSON_FILE=$(mktemp)
 MODEL_CONTEXT_FILE=$(mktemp)
 trap 'rm -f "$MODEL_JSON_FILE" "$MODEL_CONTEXT_FILE"' EXIT
 
-cat > "$MODEL_CONTEXT_FILE" <<JSON
+RAW_CONTEXT_FILE=$(mktemp)
+trap 'rm -f "$MODEL_JSON_FILE" "$MODEL_CONTEXT_FILE" "$RAW_CONTEXT_FILE"' EXIT
+
+cat > "$RAW_CONTEXT_FILE" <<JSON
 {
+  "generated_at": $(date -Iseconds | json_escape),
   "brief_type": $(printf '%s' "$BRIEF_TYPE" | json_escape),
   "brief_mode": $(printf '%s' "$BRIEF_MODE" | json_escape),
   "date": $(printf '%s' "$DATE" | json_escape),
   "time": $(printf '%s' "$TIME" | json_escape),
-  "calendar": {
-    "day_shape": $(printf '%s' "$DAY_SHAPE" | json_escape),
-    "tomorrow_shape": $(printf '%s' "$TOMORROW_SHAPE" | json_escape),
-    "upcoming_prep_summary": $(printf '%s' "$UPCOMING_PREP_SUMMARY" | json_escape)
-  },
-  "tasks": {
-    "summary": $(printf '%s' "$TASK_SUMMARY" | json_escape),
-    "count": ${TODO_COUNT:-0}
-  },
-  "email": {
-    "summary": $(printf '%s' "$EMAIL_SUMMARY" | json_escape),
-    "new_count": ${EMAIL_NEW_COUNT:-0}
-  },
-  "weather": {
-    "summary": $(printf '%s' "$WEATHER_SUMMARY" | json_escape)
-  },
-  "habits": {
-    "summary": $(printf '%s' "$HABIT_SUMMARY" | json_escape),
-    "count": ${HABIT_COUNT:-0}
-  },
-  "markets": {
-    "summary": $(printf '%s' "$MARKET_INTEL_SUMMARY" | json_escape)
-  },
-  "arsenal": {
-    "summary": $(printf '%s' "$(printf '%s\n' "$ARSENAL_RAW" | sed -n 's/^.*<p><strong>What matters:<\/strong> //p' | head -n1 | sed 's/<.*$//')" | json_escape)
-  },
+  "day_shape": $(printf '%s' "$DAY_SHAPE" | json_escape),
+  "tomorrow_shape": $(printf '%s' "$TOMORROW_SHAPE" | json_escape),
+  "upcoming_prep_summary": $(printf '%s' "$UPCOMING_PREP_SUMMARY" | json_escape),
+  "task_summary": $(printf '%s' "$TASK_SUMMARY" | json_escape),
+  "todo_count": ${TODO_COUNT:-0},
+  "email_summary": $(printf '%s' "$EMAIL_SUMMARY" | json_escape),
+  "email_new_count": ${EMAIL_NEW_COUNT:-0},
+  "weather_summary": $(printf '%s' "$WEATHER_SUMMARY" | json_escape),
+  "habit_summary": $(printf '%s' "$HABIT_SUMMARY" | json_escape),
+  "habit_count": ${HABIT_COUNT:-0},
+  "market_summary": $(printf '%s' "$MARKET_INTEL_SUMMARY" | json_escape),
+  "calendar_html": $(printf '%s' "$CALENDAR_HTML" | json_escape),
+  "tasks_html": $(printf '%s' "$TASKS_HTML" | json_escape),
+  "email_html": $(printf '%s' "$EMAIL_HTML" | json_escape),
+  "weather_html": $(printf '%s' "$WEATHER_HTML" | json_escape),
+  "habits_html": $(printf '%s' "$HABITS_HTML" | json_escape),
+  "arsenal_html": $(printf '%s' "$ARSENAL_HTML" | json_escape),
+  "market_html": $(printf '%s' "$MARKET_INTEL_HTML" | json_escape),
+  "upcoming_html": $(printf '%s' "$UPCOMING_PREP_HTML" | json_escape),
   "fallback": {
     "executive_summary": [
       {"label": "Shape of the day", "text": $(printf '%s' "$DAY_SHAPE" | json_escape)},
@@ -179,6 +176,9 @@ cat > "$MODEL_CONTEXT_FILE" <<JSON
   }
 }
 JSON
+
+python3 "$WORKSPACE/brief-context-builder.py" < "$RAW_CONTEXT_FILE" > "$MODEL_CONTEXT_FILE"
+cp "$MODEL_CONTEXT_FILE" "$WORKSPACE/.brief-context.json"
 
 if node "$WORKSPACE/morning-brief/scripts/brief-synthesizer.mjs" "$MODEL_CONTEXT_FILE" > "$MODEL_JSON_FILE" 2>> "$LOG_FILE"; then
   EXEC_SUMMARY_HTML=$(python3 - "$MODEL_JSON_FILE" <<'PY'

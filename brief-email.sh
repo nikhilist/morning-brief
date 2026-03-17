@@ -87,5 +87,7 @@ HTML
 </section>
 HTML
 fi
+TOP_NEEDS=$(echo "$NEEDS_JSON" | jq -r 'map((.from // "Unknown") + " — " + (.subject // "(no subject)")) | join(" | ")' 2>/dev/null)
 brief_meta SUMMARY "${NEW_COUNT} new unread emails since the last brief; most should be triaged, not read end-to-end."
 brief_meta EMAIL_IDS "$(jq -R -s -c 'split("\n")[:-1]' "$CURRENT_EMAILS_FILE")"
+brief_meta NEEDS_TOP "${TOP_NEEDS}"
