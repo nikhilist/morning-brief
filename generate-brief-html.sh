@@ -92,12 +92,23 @@ fi
 
 PATTERN_TEXT=""
 EMAIL_NEW_COUNT=$(printf '%s' "$EMAIL_SUMMARY" | grep -o '^[0-9]\+' || echo 0)
-if [ "${TODO_COUNT:-0}" -gt 0 ] && [ "${EMAIL_NEW_COUNT:-0}" -gt 5 ]; then
+DAY_LOWER=$(printf '%s' "$DAY_SHAPE" | tr '[:upper:]' '[:lower:]')
+TOMORROW_LOWER=$(printf '%s' "$TOMORROW_SHAPE" | tr '[:upper:]' '[:lower:]')
+
+if printf '%s' "$DAY_LOWER" | grep -qi 'travel'; then
+  PATTERN_TEXT="Travel days collapse faster than they look on paper. Anything annoying should get handled before the afternoon handoff to logistics."
+elif printf '%s' "$DAY_LOWER" | grep -qi 'karate\|school\|parent'; then
+  PATTERN_TEXT="Today has family timing edges, so the real risk is letting small admin work leak into pickup-and-transition windows."
+elif printf '%s' "$DAY_LOWER" | grep -qi 'arsenal'; then
+  PATTERN_TEXT="There’s a hard stop in the day because of the match, which is useful. Treat the afternoon like a deadline, not a suggestion."
+elif [ "${TODO_COUNT:-0}" -gt 0 ] && [ "${EMAIL_NEW_COUNT:-0}" -gt 5 ]; then
   PATTERN_TEXT="Admin backlog and inbox noise are competing for the same attention. Clear one annoying real-world task first, or the inbox will eat the day."
-elif [ "${TODO_COUNT:-0}" -gt 0 ]; then
-  PATTERN_TEXT="The task list looks more friction-heavy than actually hard. This is a sequencing problem, not a capability problem."
+elif [ "${TODO_COUNT:-0}" -gt 0 ] && [ "${HABIT_COUNT:-0}" -ge 3 ]; then
+  PATTERN_TEXT="When basic maintenance is still open and tasks are hanging around, the problem is usually activation energy, not lack of time."
 elif [ "${EMAIL_NEW_COUNT:-0}" -gt 5 ]; then
   PATTERN_TEXT="The inbox has motion but not necessarily importance. Triage for signal, then get out."
+elif printf '%s' "$TOMORROW_LOWER" | grep -qi 'anniversary\|school\|swim'; then
+  PATTERN_TEXT="Tomorrow already has enough shape that a tiny bit of prep tonight will buy back calm in the morning."
 else
   PATTERN_TEXT="The day is not crowded by reality yet, which means execution quality matters more than scheduling heroics."
 fi

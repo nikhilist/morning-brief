@@ -55,14 +55,22 @@ def fmt_time(value):
     dt = parse_dt(value)
     if not dt:
         return 'All day'
-    return dt.strftime('%-I:%M %p')
+    try:
+        local = dt.astimezone()
+    except Exception:
+        local = dt
+    return local.strftime('%-I:%M %p')
 
 def rel_time(value):
     dt = parse_dt(value)
     if not dt:
         return ''
-    now = datetime.now(dt.tzinfo or timezone.utc)
-    delta = dt - now
+    try:
+        local = dt.astimezone()
+    except Exception:
+        local = dt
+    now = datetime.now(local.tzinfo or timezone.utc)
+    delta = local - now
     hours = int(delta.total_seconds() // 3600)
     if abs(hours) < 1:
         mins = int(delta.total_seconds() // 60)
