@@ -90,35 +90,27 @@ if [ "$BRIEF_TYPE" != "Evening" ]; then
   MARKET_INTEL_HTML=""
 fi
 
-INSIGHT_JSON=$(python3 "$WORKSPACE/brief-insight.py" <<JSON
-{
-  "brief_type": $(printf '%s' "$BRIEF_TYPE" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "date": $(printf '%s' "$DATE" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "day_shape": $(printf '%s' "$DAY_SHAPE" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "tomorrow_shape": $(printf '%s' "$TOMORROW_SHAPE" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "decision_text": $(printf '%s' "$TASK_SUMMARY" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "email_summary": $(printf '%s' "$EMAIL_SUMMARY" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "weather_summary": $(printf '%s' "$WEATHER_SUMMARY" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "habit_summary": $(printf '%s' "$HABIT_SUMMARY" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "upcoming_summary": $(printf '%s' "$UPCOMING_PREP_SUMMARY" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "market_summary": $(printf '%s' "$MARKET_INTEL_SUMMARY" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "todo_count": ${TODO_COUNT:-0},
-  "habit_count": ${HABIT_COUNT:-0},
-  "calendar_html": $(printf '%s' "$CALENDAR_HTML" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "tasks_html": $(printf '%s' "$TASKS_HTML" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "email_html": $(printf '%s' "$EMAIL_HTML" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "weather_html": $(printf '%s' "$WEATHER_HTML" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "habits_html": $(printf '%s' "$HABITS_HTML" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "arsenal_html": $(printf '%s' "$ARSENAL_HTML" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'),
-  "upcoming_html": $(printf '%s' "$UPCOMING_PREP_HTML" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
-}
-JSON
-)
-PATTERN_TEXT=$(printf '%s' "$INSIGHT_JSON" | jq -r '.pattern // "Today needs prioritization that respects real-world timing, not just task count."' 2>/dev/null)
-TOMORROW_PREP_TEXT=$(printf '%s' "$INSIGHT_JSON" | jq -r '.tomorrow_prep // empty' 2>/dev/null)
-RECOMMENDED_NEXT_MOVE=$(printf '%s' "$INSIGHT_JSON" | jq -r '.next_move // "Handle the highest-friction real-world task first, before the inbox or background noise expands to fill the day."' 2>/dev/null)
-if [ -z "$TOMORROW_PREP_TEXT" ] || [ "$TOMORROW_PREP_TEXT" = "null" ]; then
-  TOMORROW_PREP_TEXT="$TOMORROW_SHAPE"
+PATTERN_TEXT=""
+EMAIL_NEW_COUNT=$(printf '%s' "$EMAIL_SUMMARY" | grep -o '^[0-9]\+' || echo 0)
+DAY_LOWER=$(printf '%s' "$DAY_SHAPE" | tr '[:upper:]' '[:lower:]')
+TOMORROW_LOWER=$(printf '%s' "$TOMORROW_SHAPE" | tr '[:upper:]' '[:lower:]')
+
+if printf '%s' "$DAY_LOWER" | grep -qi 'travel'; then
+  PATTERN_TEXT="Travel days collapse faster than they look on paper. Anything annoying should get handled before the afternoon handoff to logistics."
+elif printf '%s' "$DAY_LOWER" | grep -qi 'karate\|school\|parent'; then
+  PATTERN_TEXT="Today has family timing edges, so the real risk is letting small admin work leak into pickup-and-transition windows."
+elif printf '%s' "$DAY_LOWER" | grep -qi 'arsenal'; then
+  PATTERN_TEXT="There’s a hard stop in the day because of the match, which is useful. Treat the afternoon like a deadline, not a suggestion."
+elif [ "${TODO_COUNT:-0}" -gt 0 ] && [ "${EMAIL_NEW_COUNT:-0}" -gt 5 ]; then
+  PATTERN_TEXT="Admin backlog and inbox noise are competing for the same attention. Clear one annoying real-world task first, or the inbox will eat the day."
+elif [ "${TODO_COUNT:-0}" -gt 0 ] && [ "${HABIT_COUNT:-0}" -ge 3 ]; then
+  PATTERN_TEXT="When basic maintenance is still open and tasks are hanging around, the problem is usually activation energy, not lack of time."
+elif [ "${EMAIL_NEW_COUNT:-0}" -gt 5 ]; then
+  PATTERN_TEXT="The inbox has motion but not necessarily importance. Triage for signal, then get out."
+elif printf '%s' "$TOMORROW_LOWER" | grep -qi 'anniversary\|school\|swim'; then
+  PATTERN_TEXT="Tomorrow already has enough shape that a tiny bit of prep tonight will buy back calm in the morning."
+else
+  PATTERN_TEXT="The day is not crowded by reality yet, which means execution quality matters more than scheduling heroics."
 fi
 
 DECISION_TEXT="$TASK_SUMMARY"
@@ -203,12 +195,7 @@ cat > "$INDEX_FILE" <<HTML
 
     <section class="card">
       <h2>Tomorrow Prep</h2>
-      <p>$TOMORROW_PREP_TEXT</p>
-    </section>
-
-    <section class="card">
-      <h2>Recommended Next Move</h2>
-      <p>$RECOMMENDED_NEXT_MOVE</p>
+      <p>$TOMORROW_SHAPE</p>
     </section>
 
     <div class="footer">
