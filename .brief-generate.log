@@ -1048,3 +1048,12 @@ To github.com:nikhilist/morning-brief.git
 Evening brief generated
 GitHub Pages: https://nikhilist.github.io/morning-brief/
 === Finished: Tue Mar 17 10:02:20 PM EDT 2026 ===
+=== Starting brief generation: Wed Mar 18 07:00:30 AM EDT 2026 ===
+429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+[main 2238dc8] Rewrite Morning brief structure: Wednesday, March 18, 2026 07:00 AM EDT
+ 3 files changed, 73 insertions(+), 107 deletions(-)
+To github.com:nikhilist/morning-brief.git
+   4e991c5..2238dc8  main -> main
+Morning brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Wed Mar 18 07:01:17 AM EDT 2026 ===
