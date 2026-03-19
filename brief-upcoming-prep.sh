@@ -85,7 +85,11 @@ for ev in all_events:
     by_day.setdefault(day, []).append(ev)
 
 prep_items = []
+today = now.date().isoformat()
+
 for day, events in sorted(by_day.items()):
+    if not day or day < today:
+        continue
     day_score = 0
     notes = []
     labels = []
