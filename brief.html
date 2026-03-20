@@ -1,135 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evening Brief — Thursday, March 19, 2026</title>
-    <style>
-        :root {
-            --bg: #0d1117;
-            --bg-secondary: #161b22;
-            --text: #c9d1d9;
-            --text-muted: #8b949e;
-            --accent: #58a6ff;
-            --accent-green: #238636;
-            --accent-yellow: #d29922;
-            --accent-red: #da3633;
-            --border: #30363d;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent); }
-        .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
-        .section { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
-        .section h2 { font-size: 1.1rem; color: var(--accent); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
-        .section h3 { font-size: 0.95rem; color: var(--text); margin: 0.75rem 0 0.5rem; }
-        .empty { color: var(--text-muted); font-style: italic; }
-        .email-item { padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
-        .email-item:last-child { border-bottom: none; }
-        .email-from { color: var(--accent); font-size: 0.85rem; }
-        .email-subject { font-weight: 500; }
-        .highlight { background: rgba(88, 166, 255, 0.1); border-left: 3px solid var(--accent); padding: 0.75rem; margin: 0.5rem 0; border-radius: 0 4px 4px 0; }
-        .insight { background: rgba(35, 134, 54, 0.1); border-left: 3px solid var(--accent-green); padding: 0.75rem; margin: 0.5rem 0; border-radius: 0 4px 4px 0; }
-        .warning { background: rgba(218, 54, 51, 0.1); border-left: 3px solid var(--accent-red); padding: 0.75rem; margin: 0.5rem 0; border-radius: 0 4px 4px 0; }
-        ul { margin-left: 1.25rem; }
-        li { margin: 0.4rem 0; }
-        .footer { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nik's Morning Brief</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.55;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    header { margin-bottom: 24px; }
+    h1 { margin: 0 0 6px; font-size: 34px; }
+    .sub { color: #8b949e; }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+    h2 { margin: 0 0 12px; color: #58a6ff; font-size: 18px; }
+    h3 { margin: 16px 0 10px; color: #c9d1d9; font-size: 15px; }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 8px 0; }
+    .muted { color: #8b949e; }
+    .event { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .event:last-child { border-bottom: none; }
+    .event-time { min-width: 72px; color: #58a6ff; }
+    .calendar-tag { color: #8b949e; font-size: 12px; }
+    .footer { color: #8b949e; text-align: center; padding: 24px 0 12px; }
+    .arsenal { border-left: 4px solid #ef0107; }
+  </style>
 </head>
 <body>
-    <h1>🌙 Evening Brief</h1>
-    <p class="subtitle">Thursday, March 19, 2026 — 10:00 PM EDT</p>
+  <div class="container">
+    <header>
+      <h1>Morning Brief</h1>
+      <div class="sub">Friday, March 20, 2026 · Princeton, NJ · Updated 07:00 AM EDT</div>
+    </header>
 
-    <div class="section">
-        <h2>📋 Executive Summary</h2>
-        <p>Quiet day — no calendar events for you or Neel. Still 2 overdue Todoist tasks from earlier this week. 7 new unread emails since the morning brief, mostly routine notifications. Arsenal through to Champions League quarters after beating Leverkusen. League Cup final vs Man City on Sunday.</p>
-    </div>
+    <section class="card">
+      <h2>Executive Summary</h2>
+      <ul>
+<li><strong>Shape of the day:</strong> No real calendar constraints today.</li>
+<li><strong>Main decision:</strong> Top priority: Enroll Neel in Soccer class.</li>
+<li><strong>Attention risk:</strong> 4 new unread emails since the last brief; most should be triaged, not read end-to-end.</li>
+<li><strong>Environmental drag:</strong> Nothing weather-wise should get in your way.</li>
+<li><strong>Coming up soon:</strong> 2026-03-25 is the first day that looks worth thinking about ahead of time.</li>
+      </ul>
+    </section>
 
-    <div class="section">
-        <h2>✅ What Got Done vs Still Pending</h2>
-        <h3>Tasks</h3>
-        <p><strong>Still pending:</strong> 2 overdue tasks (Enroll Neel in Soccer class, Purchase backpack for Florida)</p>
-        <p class="empty">No tasks completed today (based on available data)</p>
-        
-        <h3>Habits</h3>
-        <p class="empty">Unable to fetch Habitica dailies status (API issue)</p>
-    </div>
+    <section class="card">
+      <h2>Pattern to Notice</h2>
+      <p>When basic maintenance is still open and tasks are hanging around, the problem is usually activation energy, not lack of time.</p>
+    </section>
 
-    <div class="section">
-        <h2>📅 Calendar Carryover</h2>
-        <p><strong>Today:</strong> No events — clean day as expected</p>
-        <p><strong>Tomorrow (Friday):</strong> No events scheduled</p>
-        <div class="highlight">
-            <strong>Note:</strong> Spring starts tomorrow (March 20). ClassDojo mentioned "Breakfast to Go! First Day of Spring" for Neel's school.
-        </div>
-    </div>
+    <section class="card">
+      <h2>Recommended Next Move</h2>
+      <p>Top priority: Enroll Neel in Soccer class.</p>
+    </section>
 
-    <div class="section">
-        <h2>📧 New Unread Emails (7 since morning brief)</h2>
-        <div class="email-item">
-            <div class="email-from">HDFC Bank</div>
-            <div class="email-subject">Account update</div>
-        </div>
-        <div class="email-item">
-            <div class="email-from">ClassDojo</div>
-            <div class="email-subject">Breakfast to Go! First Day of Spring tomorrow</div>
-        </div>
-        <div class="email-item">
-            <div class="email-from">ClassDojo</div>
-            <div class="email-subject">Mrs. Smith added new event to Neel's school</div>
-        </div>
-        <div class="email-item">
-            <div class="email-from">OpenAI</div>
-            <div class="email-subject">Your OpenAI API account has been funded</div>
-        </div>
-        <div class="email-item">
-            <div class="email-from">Neon</div>
-            <div class="email-subject">Feedback on onboarding</div>
-        </div>
-        <div class="email-item">
-            <div class="email-from">Monarch</div>
-            <div class="email-subject">Account balance activity</div>
-        </div>
-        <div class="email-item">
-            <div class="email-from">Enterprise</div>
-            <div class="email-subject">Rental Agreement 2QN75Q</div>
-        </div>
-    </div>
+    <section class="card">
+<h2>Upcoming Things Worth Thinking About</h2>
+<p><strong>What matters:</strong> 2026-03-25 is the first day that looks worth thinking about ahead of time.</p>
+<ul>
+<li><strong>2026-03-25</strong> — travel logistics<br><span class="muted">6:35 PM — Flight to Orlando (B6 1827) • All day — Flight to FL</span></li>
+</ul>
+</section>
+    
+    <section class="card">
+  <h2>Top Priorities</h2>
+  <ul>
+    <li><strong>Must-do:</strong> Enroll Neel in Soccer class</li>
+    <li><strong>Should-do:</strong> Purchase backpack for Florida</li>
+    <li><strong>If there’s time:</strong> Sell the BMW matts for the 5 series</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>Task Pressure</h2>
+  <p class="muted">2 due or overdue task(s). 1 unscheduled Inbox task(s).</p>
+  <h3>Due / Overdue</h3>
+  <ul><li><strong>Enroll Neel in Soccer class</strong> <span class="muted">— due 2026-03-08</span></li>
+<li><strong>Purchase backpack for Florida</strong> <span class="muted">— due 2026-03-16</span></li></ul>
+  <h3>Inbox / No Due Date</h3>
+  <ul><li><strong>Sell the BMW matts for the 5 series</strong><span class="muted"> — Inbox / no due date</span></li></ul>
+</section>
+    <section class="card">
+  <h2>Inbox Triage</h2>
+  <p><strong>Needs attention</strong></p>
+  <ul><li><strong>ClassDojo <parent@classdojo.com></strong> — Breakfast to Go! First Day of Spring tomorrow</li>
+<li><strong>Monarch <email@email.monarch.com></strong> — Your account balance activity for  Mar 18th</li>
+<li><strong>ClassDojo <parent@classdojo.com></strong> — Mrs. Smith added a new event to Neel's school</li></ul>
+  <p><strong>Worth noting</strong></p>
+  <ul><li><strong>HDFC Bank InstaAlerts <alerts@hdfcbank.bank.in></strong> — View: Account update for your HDFC Bank A/c</li></ul>
+  <p class="muted">Ignore bucket: 6 items. Total unread: 10.</p>
+</section>
+    <section class="card">
+  <h2>Weather / Logistics</h2>
+  <ul>
+    <li>Now: 33°F, feels like 27°F.</li>
+    <li>Today: 62° / 33°.</li>
+    <li>Tomorrow: 51° / 40°, rain risk 39%.</li>
+    <li>Nothing weather-wise should get in your way.</li>
+  </ul>
+</section>
+    <section class="card">
+  <h2>Habits</h2>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 7)</li><li>Vitamin D - 50000IU (value: 1)</li><li>Vitamin B12 + Calcium (value: 9)</li></ul>
+</section>
+    <section class="card arsenal">
+  <h2>Arsenal</h2>
+  <p><strong>What matters:</strong> Next up. Arsenal vs Manchester City (H) (in 53h) is the main Arsenal event to care about. Top news line: Solbakken omits Odegaard from Norway squad but may reverse decision</p>
+  <ul>
+    <li><strong>Next match: Arsenal vs Manchester City (H) at 12:30 PM</strong><br><span class="muted">in 53h • Wembley Stadium, London</span><br><span class="muted">English League Cup | Matchweek 9 | TV: Check local guides. Join us for analysis and live commentary in The Breakdown Live on the Arsenal App and Arsenal.com | Join In #ARSMCI Shop Arsenal Direct Join Membership Download </span></li>
+    
+  </ul>
+  <h3>News & Commentary</h3>
+  <ul>
+    <li><strong>[Arseblog]</strong> Solbakken omits Odegaard from Norway squad but may reverse decision<br><span class="muted">Martin Odegaard has been left out of the Norway squad for their upcoming friendlies against the Netherlands and Switzerland, although manager Stale Solbakken says he may revisit the decision if the midfielder features fo</span></li>
+<li><strong>[BBC]</strong> Eze and Rice score as Arsenal cruise into quarters<br><span class="muted">BBC recent result framing</span></li>
+<li><strong>[BBC]</strong> Rice &#x27;The Horse&#x27; epitomises relentless Arsenal<br><span class="muted">BBC Arsenal coverage</span></li>
+  </ul>
+  <h3>Team News</h3>
+  <ul>
+    <li><strong>Fitness watch:</strong> Odegaard/Trossard availability is in the official pre-match signal set, so that is real team-news rather than fluff.</li>
+  </ul>
+  <h3>Likely XI / Selection Questions</h3>
+  <ul>
+    <li><strong>Selection question:</strong> The module still refuses to fake a probable XI. The real watchpoints are the Odegaard/Trossard fitness picture and how aggressive Arteta goes before the next run of fixtures.</li>
+  </ul>
+  <h3>Social Pulse</h3>
+  <ul>
+    <li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>
+  </ul>
+</section>
 
-    <div class="section">
-        <h2>⚽ Arsenal Update</h2>
-        <p><strong>Champions League:</strong> Through to quarter-finals after 2-0 win vs Leverkusen (3-1 agg)</p>
-        <p style="margin-top: 0.75rem;"><strong>League Cup Final:</strong> Arsenal vs Manchester City — Sunday</p>
-        <p style="margin-top: 0.5rem; color: var(--text-muted);">Max Dowman's breakaway goal against Everton highlighted as a "magic moment" — academy prospect stepping up when it matters.</p>
-    </div>
-
-    <div class="section">
-        <h2>🔍 Pattern to Notice</h2>
-        <p>Those 2 overdue tasks have been hanging around since early March. The pattern: tasks without clear deadlines tend to drift. Consider either doing them this weekend or officially deferring them with new dates.</p>
-    </div>
-
-    <div class="section">
-        <h2>📌 Tomorrow Prep</h2>
-        <p>Friday is open — no calendar constraints. Good opportunity to knock out those overdue tasks or get ahead on weekend planning. First day of Spring — maybe check if Neel's school has anything special planned.</p>
-    </div>
-
-    <div class="section">
-        <h2>🎯 Recommended Next Move (Friday Morning)</h2>
-        <div class="insight">
-            <strong>Spend 10 minutes on those overdue tasks first thing.</strong> Even partial progress (finding the soccer enrollment link, researching backpacks) breaks the stall pattern. The day is clear — use the morning momentum.
-        </div>
-    </div>
+    <section class="card">
+      <h2>Tomorrow Prep</h2>
+      <p>Spring Market • Vivaan house dinner; ensure prep aligns with family schedule.</p>
+    </section>
 
     <div class="footer">
-        Generated at 10:00 PM EDT • <a href="https://nikhilist.github.io/morning-brief/" style="color: var(--accent);">nikhilist.github.io/morning-brief</a>
+      <div>Last updated: 07:00 AM EDT</div>
+      <div><a href="https://github.com/nikhilist/morning-brief" style="color:#58a6ff;">github.com/nikhilist/morning-brief</a></div>
     </div>
+  </div>
 </body>
 </html>
