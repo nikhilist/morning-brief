@@ -72,6 +72,7 @@ HABITS_RAW=$(run_module "$WORKSPACE/brief-habits.sh")
 ARSENAL_RAW=$(run_module "$WORKSPACE/arsenal-brief.sh")
 MARKET_INTEL_RAW=$(run_module "$WORKSPACE/brief-market-intel.sh")
 UPCOMING_PREP_RAW=$(run_module "$WORKSPACE/brief-upcoming-prep.sh")
+TRIP_LOGISTICS_RAW=$(run_module "$WORKSPACE/brief-trip-logistics.sh")
 
 WEATHER_HTML=$(printf '%s\n' "$WEATHER_RAW" | extract_html)
 CALENDAR_HTML=$(printf '%s\n' "$CALENDAR_RAW" | extract_html)
@@ -81,6 +82,7 @@ HABITS_HTML=$(printf '%s\n' "$HABITS_RAW" | extract_html)
 ARSENAL_HTML=$(printf '%s\n' "$ARSENAL_RAW" | extract_html)
 MARKET_INTEL_HTML=$(printf '%s\n' "$MARKET_INTEL_RAW" | extract_html)
 UPCOMING_PREP_HTML=$(printf '%s\n' "$UPCOMING_PREP_RAW" | extract_html)
+TRIP_LOGISTICS_HTML=$(printf '%s\n' "$TRIP_LOGISTICS_RAW" | extract_html)
 
 DAY_SHAPE=$(printf '%s\n' "$CALENDAR_RAW" | extract_meta SUMMARY)
 TOMORROW_SHAPE=$(printf '%s\n' "$CALENDAR_RAW" | extract_meta TOMORROW)
@@ -90,6 +92,9 @@ WEATHER_SUMMARY=$(printf '%s\n' "$WEATHER_RAW" | extract_meta SUMMARY)
 HABIT_SUMMARY=$(printf '%s\n' "$HABITS_RAW" | extract_meta SUMMARY)
 MARKET_INTEL_SUMMARY=$(printf '%s\n' "$MARKET_INTEL_RAW" | extract_meta SUMMARY)
 UPCOMING_PREP_SUMMARY=$(printf '%s\n' "$UPCOMING_PREP_RAW" | extract_meta SUMMARY)
+TRIP_LOGISTICS_SUMMARY=$(printf '%s\n' "$TRIP_LOGISTICS_RAW" | extract_meta SUMMARY)
+TRIP_NEXT_ACTION=$(printf '%s\n' "$TRIP_LOGISTICS_RAW" | extract_meta NEXT_ACTION)
+TRIP_HELP_IDEAS=$(printf '%s\n' "$TRIP_LOGISTICS_RAW" | extract_meta HELP_IDEAS)
 CURRENT_EMAIL_IDS=$(printf '%s\n' "$EMAIL_RAW" | extract_meta EMAIL_IDS)
 LATEST_EMAIL_AT=$(printf '%s\n' "$EMAIL_RAW" | extract_meta LATEST_EMAIL_AT)
 TODO_COUNT=$(printf '%s\n' "$TASKS_RAW" | extract_meta TODO_COUNT)
@@ -152,6 +157,9 @@ cat > "$RAW_CONTEXT_FILE" <<JSON
   "day_shape": $(printf '%s' "$DAY_SHAPE" | json_escape),
   "tomorrow_shape": $(printf '%s' "$TOMORROW_SHAPE" | json_escape),
   "upcoming_prep_summary": $(printf '%s' "$UPCOMING_PREP_SUMMARY" | json_escape),
+  "trip_logistics_summary": $(printf '%s' "$TRIP_LOGISTICS_SUMMARY" | json_escape),
+  "trip_next_action": $(printf '%s' "$TRIP_NEXT_ACTION" | json_escape),
+  "trip_help_ideas": $(printf '%s' "$TRIP_HELP_IDEAS" | json_escape),
   "task_summary": $(printf '%s' "$TASK_SUMMARY" | json_escape),
   "todo_count": ${TODO_COUNT:-0},
   "inbox_unscheduled_count": ${INBOX_UNSCHEDULED_COUNT:-0},
@@ -174,17 +182,17 @@ cat > "$RAW_CONTEXT_FILE" <<JSON
   "arsenal_html": $(printf '%s' "$ARSENAL_HTML" | json_escape),
   "market_html": $(printf '%s' "$MARKET_INTEL_HTML" | json_escape),
   "upcoming_html": $(printf '%s' "$UPCOMING_PREP_HTML" | json_escape),
+  "trip_html": $(printf '%s' "$TRIP_LOGISTICS_HTML" | json_escape),
   "fallback": {
     "executive_summary": [
-      {"label": "Shape of the day", "text": $(printf '%s' "$DAY_SHAPE" | json_escape)},
-      {"label": "Main decision", "text": $(printf '%s' "$DECISION_TEXT" | json_escape)},
-      {"label": "Attention risk", "text": $(printf '%s' "$EMAIL_SUMMARY" | json_escape)},
-      {"label": "Environmental drag", "text": $(printf '%s' "$WEATHER_SUMMARY" | json_escape)},
-      {"label": "Coming up soon", "text": $(printf '%s' "$UPCOMING_PREP_SUMMARY" | json_escape)}
+      {"label": "Day shape", "text": $(printf '%s' "$DAY_SHAPE" | json_escape)},
+      {"label": "Trip pressure", "text": $(printf '%s' "$TRIP_LOGISTICS_SUMMARY" | json_escape)},
+      {"label": "Main work", "text": $(printf '%s' "$DECISION_TEXT" | json_escape)},
+      {"label": "Inbox risk", "text": $(printf '%s' "$EMAIL_SUMMARY" | json_escape)}
     ],
     "pattern_to_notice": $(printf '%s' "$PATTERN_TEXT" | json_escape),
     "tomorrow_prep": $(printf '%s' "$TOMORROW_SHAPE" | json_escape),
-    "recommended_next_move": $(printf '%s' "$DECISION_TEXT" | json_escape)
+    "recommended_next_move": $(printf '%s' "${TRIP_NEXT_ACTION:-$DECISION_TEXT}" | json_escape)
   }
 }
 JSON
@@ -230,15 +238,22 @@ obj = json.load(open(sys.argv[1]))
 print(html.escape(str(obj.get('recommended_next_move', ''))))
 PY
 )
+  THINGS_I_CAN_DO_HTML=$(python3 - "$MODEL_JSON_FILE" <<'PY'
+import json, sys, html
+obj = json.load(open(sys.argv[1]))
+for item in obj.get('things_i_can_do', []):
+    print(f'<li>{html.escape(str(item))}</li>')
+PY
+)
 else
   EXEC_SUMMARY_HTML="
-        <li><strong>Shape of the day:</strong> ${DAY_SHAPE}</li>
-        <li><strong>Main decision:</strong> ${DECISION_TEXT}</li>
-        <li><strong>Attention risk:</strong> ${EMAIL_SUMMARY}</li>
-        <li><strong>Environmental drag:</strong> ${WEATHER_SUMMARY}</li>
-        <li><strong>Coming up soon:</strong> ${UPCOMING_PREP_SUMMARY}</li>"
+        <li><strong>Day shape:</strong> ${DAY_SHAPE}</li>
+        <li><strong>Trip pressure:</strong> ${TRIP_LOGISTICS_SUMMARY}</li>
+        <li><strong>Main work:</strong> ${DECISION_TEXT}</li>
+        <li><strong>Inbox risk:</strong> ${EMAIL_SUMMARY}</li>"
   TOMORROW_PREP_TEXT="$TOMORROW_SHAPE"
-  RECOMMENDED_NEXT_MOVE="$DECISION_TEXT"
+  RECOMMENDED_NEXT_MOVE="${TRIP_NEXT_ACTION:-$DECISION_TEXT}"
+  THINGS_I_CAN_DO_HTML="<li>Build a Florida trip checklist and split it into today / before departure / airport-day.</li><li>Turn the trip prep into Todoist tasks with due dates.</li><li>Draft a clean departure-day logistics plan for your family.</li>"
 fi
 
 cat > "$INDEX_FILE" <<HTML
@@ -297,27 +312,34 @@ ${EXEC_SUMMARY_HTML}
     </section>
 
     <section class="card">
+      <h2>Recommended Next Move</h2>
+      <p>$RECOMMENDED_NEXT_MOVE</p>
+    </section>
+
+    <section class="card">
+      <h2>Things I Can Do For You</h2>
+      <ul>
+${THINGS_I_CAN_DO_HTML}
+      </ul>
+    </section>
+
+    ${TRIP_LOGISTICS_HTML}
+    ${CALENDAR_HTML}
+    ${TASKS_HTML}
+    ${EMAIL_HTML}
+
+    <section class="card">
       <h2>Pattern to Notice</h2>
       <p>$PATTERN_TEXT</p>
     </section>
 
     <section class="card">
-      <h2>Recommended Next Move</h2>
-      <p>$RECOMMENDED_NEXT_MOVE</p>
-    </section>
-
-    ${UPCOMING_PREP_HTML}
-    ${MARKET_INTEL_HTML}
-    ${TASKS_HTML}
-    ${EMAIL_HTML}
-    ${WEATHER_HTML}
-    ${HABITS_HTML}
-    ${ARSENAL_HTML}
-
-    <section class="card">
       <h2>Tomorrow Prep</h2>
       <p>$TOMORROW_PREP_TEXT</p>
     </section>
+
+    ${WEATHER_HTML}
+    ${ARSENAL_HTML}
 
     <div class="footer">
       <div>Last updated: $TIME</div>
