@@ -56,6 +56,12 @@ def main():
             'inbox_unscheduled_count': raw.get('inbox_unscheduled_count'),
             'items': extract_lines_from_li(raw.get('tasks_html') or ''),
         },
+        'trip': {
+            'summary': raw.get('trip_logistics_summary'),
+            'next_action': raw.get('trip_next_action'),
+            'help_ideas': [x.strip() for x in (raw.get('trip_help_ideas') or '').split('|') if x.strip()],
+            'items': extract_lines_from_li(raw.get('trip_html') or ''),
+        },
         'email': {
             'summary': raw.get('email_summary'),
             'new_count': raw.get('email_new_count'),

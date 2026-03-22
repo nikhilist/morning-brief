@@ -1139,3 +1139,12 @@ To github.com:nikhilist/morning-brief.git
 Morning brief generated
 GitHub Pages: https://nikhilist.github.io/morning-brief/
 === Finished: Sun Mar 22 07:01:34 AM EDT 2026 ===
+=== Starting brief generation: Sun Mar 22 10:15:52 AM EDT 2026 ===
+[main 2fd2062] Rewrite Morning brief structure: Sunday, March 22, 2026 10:15 AM EDT
+ 5 files changed, 281 insertions(+), 80 deletions(-)
+ create mode 100755 brief-trip-logistics.sh
+To github.com:nikhilist/morning-brief.git
+   a7a5bc7..2fd2062  main -> main
+Morning brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Sun Mar 22 10:16:27 AM EDT 2026 ===

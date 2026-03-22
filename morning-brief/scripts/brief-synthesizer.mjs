@@ -44,12 +44,12 @@ const client = new OpenAI({ apiKey });
 const schema = {
   type: 'object',
   additionalProperties: false,
-  required: ['executive_summary', 'pattern_to_notice', 'tomorrow_prep', 'recommended_next_move'],
+  required: ['executive_summary', 'pattern_to_notice', 'tomorrow_prep', 'recommended_next_move', 'things_i_can_do'],
   properties: {
     executive_summary: {
       type: 'array',
-      minItems: 4,
-      maxItems: 5,
+      minItems: 3,
+      maxItems: 4,
       items: {
         type: 'object',
         additionalProperties: false,
@@ -62,7 +62,13 @@ const schema = {
     },
     pattern_to_notice: { type: 'string' },
     tomorrow_prep: { type: 'string' },
-    recommended_next_move: { type: 'string' }
+    recommended_next_move: { type: 'string' },
+    things_i_can_do: {
+      type: 'array',
+      minItems: 1,
+      maxItems: 3,
+      items: { type: 'string' }
+    }
   }
 };
 
@@ -73,11 +79,13 @@ Rules:
 - Use only the provided context. Do not invent meetings, tasks, emails, weather, or news.
 - Prioritize freshness. If the context looks thin, stale, or summary-only, say so plainly and keep claims modest.
 - Prefer concrete items, timestamps, and deltas over generic summarization.
-- Prioritize family timing, real constraints, and the user's stated preference for interpretation over raw facts.
-- For market references: ignore noise unless a move looks thesis-relevant.
+- Prioritize family timing, real constraints, travel logistics, and the user's stated preference for interpretation over raw facts.
+- Make the brief smaller and sharper: 3-4 executive bullets max.
+- If a trip is upcoming, treat logistics as first-class: seats, airport timing, baggage, child travel friction, hotel/car/activity gaps.
 - "Pattern to Notice" should identify the real behavioral or operational risk in the day.
 - "Tomorrow Prep" should be a short, useful setup thought for tomorrow, not a repeat of calendar text.
 - "Recommended Next Move" should be a single concrete action to do next.
+- "Things I Can Do" should be 1-3 explicit offers of help, phrased like actions the assistant could take or prepare next.
 - If context is thin, say so plainly and keep it modest.
 - Return valid JSON only.
 
