@@ -64,6 +64,8 @@ _This is the non-negotiable foundation. Everything here loads in every session._
 
 ## Interests & Patterns
 
+- **Florida family trip (Mar 25–30, 2026):** JetBlue EWR ↔ MCO. Airport plan is NJ Transit from Princeton Junction to Newark Airport station. Carry-ons only + stroller. No major parks planned because Neel is too young. Briefs should proactively surface family seating/check-in, NJ Transit timing, kid travel bag, final packing, and any useful travel logistics until the trip is complete.
+
 - **Arsenal FC — lifelong fan** (Nik + Meg). Arsenal news is not optional — it's essential morning reading.
 - Travel (aspirational — wants to do more)
 - Family time / work-life balance
