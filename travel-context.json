@@ -1,0 +1,10 @@
+{
+  "active": true,
+  "location_name": "Orlando, FL",
+  "latitude": 28.5383,
+  "longitude": -81.3792,
+  "timezone": "America/New_York",
+  "note": "Auto-inferred active travel from recent outbound + future return calendar signals.",
+  "source": "auto-calendar",
+  "generated_at": "2026-03-27T23:23:19.971522-04:00"
+}

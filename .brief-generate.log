@@ -1316,3 +1316,44 @@ To github.com:nikhilist/morning-brief.git
 Evening brief generated
 GitHub Pages: https://nikhilist.github.io/morning-brief/
 === Finished: Fri Mar 27 10:55:40 PM EDT 2026 ===
+=== Starting brief generation: Fri Mar 27 11:14:12 PM EDT 2026 ===
+[main aa72f45] Rewrite Evening brief structure: Friday, March 27, 2026 11:14 PM EDT
+ 4 files changed, 66 insertions(+), 28 deletions(-)
+To github.com:nikhilist/morning-brief.git
+   9ebb72d..aa72f45  main -> main
+Evening brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Fri Mar 27 11:14:48 PM EDT 2026 ===
+=== Starting brief generation: Fri Mar 27 11:20:31 PM EDT 2026 ===
+[main cef1f21] Rewrite Evening brief structure: Friday, March 27, 2026 11:20 PM EDT
+ 5 files changed, 142 insertions(+), 33 deletions(-)
+ create mode 100755 brief-travel-context.sh
+To github.com:nikhilist/morning-brief.git
+   aa72f45..cef1f21  main -> main
+Evening brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Fri Mar 27 11:21:10 PM EDT 2026 ===
+=== Starting brief generation: Fri Mar 27 11:23:19 PM EDT 2026 ===
+file:///home/nik/.openclaw/workspace/morning-brief/scripts/brief-synthesizer.mjs:85
+- Use the `decision_support` block heavily. Prefer signal over status, blind spots over summaries, and latent risks over trivia.
+           ^^^^^^^^^^^^^^^^
+
+SyntaxError: Unexpected identifier 'decision_support'
+    at compileSourceTextModule (node:internal/modules/esm/utils:346:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:107:18)
+    at #translate (node:internal/modules/esm/loader:546:20)
+    at afterLoad (node:internal/modules/esm/loader:596:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:601:12)
+    at #createModuleJob (node:internal/modules/esm/loader:624:36)
+    at #getJobFromResolveResult (node:internal/modules/esm/loader:343:34)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:311:41)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:664:25)
+
+Node.js v22.22.0
+[main 0237ebb] Rewrite Evening brief structure: Friday, March 27, 2026 11:23 PM EDT
+ 4 files changed, 33 insertions(+), 32 deletions(-)
+To github.com:nikhilist/morning-brief.git
+   cef1f21..0237ebb  main -> main
+Evening brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Fri Mar 27 11:23:51 PM EDT 2026 ===
