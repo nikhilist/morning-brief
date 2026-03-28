@@ -6,7 +6,7 @@ export GOG_KEYRING_PASSWORD=""
 export GOG_ACCOUNT=nikhilist@gmail.com
 
 python3 - <<'PY'
-import subprocess, json, html
+import subprocess, json, html, re
 from datetime import datetime, timedelta
 
 TZ = 'America/New_York'
@@ -60,11 +60,20 @@ def parse_event_time(ev):
 
 def score_event(ev):
     title = (ev.get('summary') or '').lower()
-    day = parse_event_day(ev)
     score = 0
     reasons = []
-    if any(k in title for k in ['travel', 'flight', 'trip']):
-        score += 5; reasons.append('travel logistics')
+
+    travelish = any(k in title for k in ['travel', 'flight', 'trip'])
+    looks_like_return = any(k in title for k in ['return', 'mco', 'to newark', 'to ewr', 'to nj', 'to princeton'])
+    looks_like_outbound = any(k in title for k in ['to orlando', 'to florida', 'ewr → mco', 'newark to orlando'])
+
+    if travelish:
+        if looks_like_return and not looks_like_outbound:
+            score += 1
+            reasons.append('travel marker only')
+        else:
+            score += 5
+            reasons.append('travel logistics')
     if any(k in title for k in ['parent', 'school', 'doctor', 'dentist', 'appointment']):
         score += 4; reasons.append('needs daytime planning')
     if any(k in title for k in ['birthday', 'anniversary']):
@@ -102,6 +111,11 @@ for day, events in sorted(by_day.items()):
     if len(events) >= 3:
         day_score += 2
         notes.append('calendar density')
+
+    joined_titles = ' '.join((ev.get('summary') or '').lower() for ev in events)
+    if ('flight' in joined_titles or 'travel' in joined_titles or 'trip' in joined_titles) and not any(n == 'travel logistics' for n in notes):
+        day_score = min(day_score, 3)
+
     if day_score >= 4:
         uniq_notes = []
         for n in notes:
