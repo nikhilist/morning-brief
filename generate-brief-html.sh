@@ -18,6 +18,9 @@ export TODOIST_API_TOKEN="81d341953323302cf0919e4ec8a8d9531ea6f881"
 echo "=== Starting brief generation: $(date) ==="
 
 WORKSPACE="/home/nik/.openclaw/workspace"
+if [ -x "$WORKSPACE/brief-travel-context.sh" ]; then
+  "$WORKSPACE/brief-travel-context.sh" || true
+fi
 OUTPUT_FILE="$WORKSPACE/brief.html"
 INDEX_FILE="$WORKSPACE/index.html"
 STATE_FILE="$WORKSPACE/.brief-state.json"
