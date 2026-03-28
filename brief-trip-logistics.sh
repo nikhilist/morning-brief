@@ -101,9 +101,12 @@ def parse_trip(raw):
 trip = None
 for mid in search_ids():
     parsed = parse_trip(get_msg(mid))
-    if parsed and parsed.get('trip_id'):
-        trip = parsed
-        break
+    if not parsed or not parsed.get('trip_id'):
+        continue
+    if parsed.get('days_until') is None:
+        continue
+    trip = parsed
+    break
 
 print('<section class="card">')
 print('<h2>Trip Logistics</h2>')

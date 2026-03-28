@@ -18,7 +18,7 @@ FILTERED_TODAY_JSON=$(echo "$TODAY_JSON" | jq --arg today "$TODAY" '
     end
   )
   | map(select(
-      (.content | test("Florida trip|JetBlue|Princeton Junction|EWR|PJT|carry-ons|pack carry-ons|final pack|Leave home"; "i") | not)
+      (.content | test("Florida trip|JetBlue|Princeton Junction|EWR|PJT|carry-ons|pack carry-ons|final pack|Leave home|Splendor|change Neel clothes|stroller"; "i") | not)
       or (.days_overdue >= -1)
     ))
   | map(del(.days_overdue))
