@@ -73,6 +73,9 @@ def parse_trip(raw):
         except Exception:
             pass
 
+    if days_until is not None and days_until < 0:
+        return None
+
     return {
         'trip_id': trip_id,
         'outbound_date': outbound_date,

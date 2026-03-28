@@ -7,13 +7,29 @@ source /home/nik/.openclaw/workspace/brief-lib.sh
 INBOX_PROJECT_ID="6CrgCMq6FmVMQQM8"
 TODAY_JSON=$(/home/nik/.npm-global/bin/todoist today --json 2>/dev/null || echo '[]')
 INBOX_JSON=$(/home/nik/.npm-global/bin/todoist tasks -p "Inbox" --json 2>/dev/null || echo '[]')
+TODAY=$(date '+%Y-%m-%d')
 
-COMBINED_JSON=$(jq -n --argjson today "$TODAY_JSON" --argjson inbox "$INBOX_JSON" '
+FILTERED_TODAY_JSON=$(echo "$TODAY_JSON" | jq --arg today "$TODAY" '
+  map(
+    if ((.due.date // "") != "") then
+      . + {days_overdue: (((.due.date[0:10] | strptime("%Y-%m-%d") | mktime) - ($today | strptime("%Y-%m-%d") | mktime)) / 86400 | floor)}
+    else
+      . + {days_overdue: 0}
+    end
+  )
+  | map(select(
+      (.content | test("Florida trip|JetBlue|Princeton Junction|EWR|PJT|carry-ons|pack carry-ons|final pack|Leave home"; "i") | not)
+      or (.days_overdue >= -1)
+    ))
+  | map(del(.days_overdue))
+')
+
+COMBINED_JSON=$(jq -n --argjson today "$FILTERED_TODAY_JSON" --argjson inbox "$INBOX_JSON" '
   ($today + $inbox)
   | unique_by(.id)
 ')
 
-TODO_COUNT=$(echo "$TODAY_JSON" | jq 'length')
+TODO_COUNT=$(echo "$FILTERED_TODAY_JSON" | jq 'length')
 INBOX_COUNT=$(echo "$INBOX_JSON" | jq 'length')
 INBOX_UNSCHEDULED_COUNT=$(echo "$INBOX_JSON" | jq '[.[] | select((.due.date // "") == "")] | length')
 LATEST_INBOX_TASK_AT=$(echo "$INBOX_JSON" | jq -r 'sort_by(.updatedAt // .addedAt // "") | last.updatedAt // last.addedAt // empty')
@@ -42,7 +58,7 @@ if [ -z "$PRIORITY_MUST" ]; then
   PRIORITY_IF=""
 fi
 
-DUE_LIST=$(echo "$TODAY_JSON" | jq -r '
+DUE_LIST=$(echo "$FILTERED_TODAY_JSON" | jq -r '
   sort_by(.due.date // "9999-12-31", .childOrder // 999999)[] |
   "<li><strong>" + (.content|tostring) + "</strong>" +
   (if .due.date then " <span class=\"muted\">— due " + .due.date + "</span>" else "" end) +
