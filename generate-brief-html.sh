@@ -249,14 +249,25 @@ for item in obj.get('things_i_can_do', []):
 PY
 )
 else
-  EXEC_SUMMARY_HTML="
-        <li><strong>Day shape:</strong> ${DAY_SHAPE}</li>
-        <li><strong>Trip pressure:</strong> ${TRIP_LOGISTICS_SUMMARY}</li>
-        <li><strong>Main work:</strong> ${DECISION_TEXT}</li>
-        <li><strong>Inbox risk:</strong> ${EMAIL_SUMMARY}</li>"
+  EXEC_SUMMARY_HTML=""
+  if [ -n "${TASK_SUMMARY:-}" ]; then
+    EXEC_SUMMARY_HTML+="<li><strong>Primary pressure:</strong> ${TASK_SUMMARY}</li>"
+  fi
+  if [ -n "${UPCOMING_PREP_SUMMARY:-}" ] && ! printf '%s' "$UPCOMING_PREP_SUMMARY" | grep -qi 'nothing in the next week'; then
+    EXEC_SUMMARY_HTML+="<li><strong>Upcoming risk:</strong> ${UPCOMING_PREP_SUMMARY}</li>"
+  fi
+  if [ -n "${EMAIL_SUMMARY:-}" ] && ! printf '%s' "$EMAIL_SUMMARY" | grep -qi '^0 new unread'; then
+    EXEC_SUMMARY_HTML+="<li><strong>Inbox signal:</strong> ${EMAIL_SUMMARY}</li>"
+  fi
+  if [ -n "${WEATHER_SUMMARY:-}" ] && ! printf '%s' "$WEATHER_SUMMARY" | grep -qi 'Nothing weather-wise should get in your way'; then
+    EXEC_SUMMARY_HTML+="<li><strong>Weather:</strong> ${WEATHER_SUMMARY}</li>"
+  fi
+  if [ -z "$EXEC_SUMMARY_HTML" ]; then
+    EXEC_SUMMARY_HTML="<li><strong>Primary pressure:</strong> ${TASK_SUMMARY:-No major pressure detected.}</li>"
+  fi
   TOMORROW_PREP_TEXT="$TOMORROW_SHAPE"
-  RECOMMENDED_NEXT_MOVE="${TRIP_NEXT_ACTION:-$DECISION_TEXT}"
-  THINGS_I_CAN_DO_HTML="<li>Build a Florida trip checklist and split it into today / before departure / airport-day.</li><li>Turn the trip prep into Todoist tasks with due dates.</li><li>Draft a clean departure-day logistics plan for your family.</li>"
+  RECOMMENDED_NEXT_MOVE="${TRIP_NEXT_ACTION:-$TASK_SUMMARY}"
+  THINGS_I_CAN_DO_HTML="<li>Triage the current open tasks into real priorities vs background clutter.</li><li>Prepare a short plan for the next family or school-related planning edge.</li><li>Turn the next important action into a concrete reminder or checklist.</li>"
 fi
 
 cat > "$INDEX_FILE" <<HTML
