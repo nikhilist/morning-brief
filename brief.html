@@ -1,141 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nik's Evening Brief</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 24px;
-      background: #0d1117;
-      color: #e6edf3;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      line-height: 1.55;
-    }
-    .container { max-width: 900px; margin: 0 auto; }
-    header { margin-bottom: 24px; }
-    h1 { margin: 0 0 6px; font-size: 34px; }
-    .sub { color: #8b949e; }
-    .card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 16px;
-      padding: 18px 20px;
-      margin-bottom: 16px;
-    }
-    h2 { margin: 0 0 12px; color: #58a6ff; font-size: 18px; }
-    h3 { margin: 16px 0 10px; color: #c9d1d9; font-size: 15px; }
-    ul { margin: 0; padding-left: 20px; }
-    li { margin: 8px 0; }
-    .muted { color: #8b949e; }
-    .event { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .event:last-child { border-bottom: none; }
-    .event-time { min-width: 72px; color: #58a6ff; }
-    .calendar-tag { color: #8b949e; font-size: 12px; }
-    .footer { color: #8b949e; text-align: center; padding: 24px 0 12px; }
-    .arsenal { border-left: 4px solid #ef0107; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Brief — March 28, 2026</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header {
+            border-bottom: 2px solid #238636;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: #58a6ff;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+        .header .date {
+            color: #8b949e;
+            font-size: 0.9em;
+        }
+        .section {
+            background: #161b22;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 3px solid #238636;
+        }
+        .section h2 {
+            color: #58a6ff;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section p { margin-bottom: 10px; }
+        .section ul { margin-left: 20px; }
+        .section li { margin-bottom: 6px; }
+        .highlight {
+            background: rgba(35, 134, 54, 0.2);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 3px solid #238636;
+        }
+        .weather-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(88, 166, 255, 0.1);
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .weather-temp {
+            font-size: 2em;
+            color: #58a6ff;
+        }
+        .tag {
+            display: inline-block;
+            background: #238636;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            margin-right: 5px;
+        }
+        .tag-blue { background: #1f6feb; }
+        .tag-yellow { background: #d29922; }
+        .tag-red { background: #da3633; }
+        .footer {
+            text-align: center;
+            color: #8b949e;
+            font-size: 0.85em;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #30363d;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Evening Brief</h1>
-      <div class="sub">Friday, March 27, 2026 · Princeton, NJ · Updated 11:23 PM EDT</div>
-    </header>
+    <div class="container">
+        <div class="header">
+            <h1>🌅 Morning Brief</h1>
+            <div class="date">Saturday, March 28, 2026 — 7:00 AM EDT</div>
+        </div>
 
-    <section class="card">
-      <h2>Executive Summary</h2>
-      <ul>
-<li><strong>Primary pressure:</strong> Top priority: Enroll Neel in Soccer class</li><li><strong>Upcoming risk:</strong> 2026-04-03 is the first day that looks worth thinking about ahead of time.</li>
-      </ul>
-    </section>
+        <div class="section highlight">
+            <h2>📊 Executive Summary</h2>
+            <p>Saturday morning, clear skies, crisp -1°C (30°F). No calendar events today — full family day. Three Habitica dailies waiting. Florida trip is <strong>T-minus 2 days</strong> (Monday departure). Arsenal lost the Carabao Cup final to City — international break now, next match April 4 vs Southampton (FA Cup).</p>
+        </div>
 
-    <section class="card">
-      <h2>Recommended Next Move</h2>
-      <p>Top priority: Enroll Neel in Soccer class</p>
-    </section>
+        <div class="section">
+            <h2>📅 Today's Calendar</h2>
+            <ul>
+                <li>No events scheduled — family day</li>
+            </ul>
+            <p style="margin-top: 15px;"><span class="tag tag-blue">UPCOMING</span> <strong>Monday, March 30:</strong> Flight to Newark (B6 828) at 6:00 PM</p>
+        </div>
 
-    <section class="card">
-      <h2>Things I Can Do For You</h2>
-      <ul>
-<li>Triage the current open tasks into real priorities vs background clutter.</li><li>Prepare a short plan for the next family or school-related planning edge.</li><li>Turn the next important action into a concrete reminder or checklist.</li>
-      </ul>
-    </section>
+        <div class="section">
+            <h2>✅ Habitica Dailies</h2>
+            <ul>
+                <li>Nutty Nuts <span style="color: #8b949e;">(streak: 8)</span></li>
+                <li>Vitamin D — 50000IU <span style="color: #8b949e;">(streak: 2)</span></li>
+                <li>Vitamin B12 + Calcium <span style="color: #8b949e;">(streak: 9)</span></li>
+            </ul>
+            <p style="margin-top: 10px; color: #8b949e;">Warrior Level 4 | HP: 50/50 | XP: 39/100</p>
+        </div>
 
-    <section class="card">
-<h2>Trip Logistics</h2>
-<p class="muted">No recent trip logistics found.</p>
-</section>
-    <section class="card">
-  <h2>Day at a Glance</h2>
-  <p>LabCorp Appt</p>
-  <div class="event"><div class="event-time">12:15 PM</div><div class="event-title"><span class="calendar-tag">Neel</span> LabCorp Appt</div></div>
-</section>
-    <section class="card">
-  <h2>Tasks</h2>
-  <p><strong>1</strong> due or overdue tasks now.</p>
-  <p class="muted">Change since last brief: 0.</p>
-  <ul><li><strong>Enroll Neel in Soccer class</strong> <span class="muted">— due 2026-03-08</span></li></ul>
-  <h3>Inbox / Unscheduled</h3>
-  <p class="muted">3 Inbox task(s) without due dates.</p>
-  <ul><li><strong>Sell the BMW matts for the 5 series</strong><span class="muted"> — Inbox / no due date</span></li>
-<li><strong>Electronics</strong><span class="muted"> — Inbox / no due date</span></li>
-<li><strong>Thyroid Med</strong><span class="muted"> — Inbox / no due date</span></li></ul>
-</section>
-    
+        <div class="section">
+            <h2>📧 New Unread Emails</h2>
+            <ul>
+                <li><strong>Todoist:</strong> "8 overdue tasks" notification</li>
+                <li><strong>Monarch:</strong> Restaurants & Bars budget update</li>
+                <li><strong>ClassDojo:</strong> Ms. Maccaroni shared a post in Neel's school</li>
+                <li>Capital One credit score change notification</li>
+                <li>Amazon March First Reads reminder</li>
+                <li>Plus 4 additional updates</li>
+            </ul>
+        </div>
 
-    <section class="card">
-      <h2>Pattern to Notice</h2>
-      <p>When basic maintenance is still open and tasks are hanging around, the problem is usually activation energy, not lack of time.</p>
-    </section>
+        <div class="section">
+            <h2>🌤️ Princeton Weather</h2>
+            <div class="weather-box">
+                <div class="weather-temp">🌙 -1°C</div>
+                <div>
+                    <strong>Clear</strong><br>
+                    <span style="color: #8b949e;">Feels like -6°C • 41% humidity • 18 km/h winds</span>
+                </div>
+            </div>
+        </div>
 
-    <section class="card">
-      <h2>Tomorrow Prep</h2>
-      <p>Tomorrow is open right now.</p>
-    </section>
+        <div class="section">
+            <h2>⚽ Arsenal Update</h2>
+            <p>Carabao Cup final loss to Man City (2-0) still stinging. International break now — players scattered for national duty.</p>
+            <p style="margin-top: 10px;"><strong>Saka's form under scrutiny:</strong> Only 2 goals since January, 15-game drought before the Wolves goal. Wayne Rooney noted he's "struggled this season" despite high minutes.</p>
+            <p style="margin-top: 10px;"><span class="tag">UPCOMING</span> Southampton (FA Cup) — April 4<br>
+            <span class="tag">UPCOMING</span> Sporting Lisbon (Champions League) — April 7</p>
+            <p style="margin-top: 10px; color: #238636;"><strong>Premier League:</strong> 9 points clear with a game in hand on City. Title still very much in Arsenal's control.</p>
+        </div>
 
-    <section class="card">
-  <h2>Weather / Logistics — Orlando, FL</h2>
-  <ul>
-    <li>Now: 71°F, feels like 71°F.</li>
-    <li>Today: 86° / 62°.</li>
-    <li>Tomorrow: 84° / 62°, rain risk 19%.</li>
-    <li>Nothing weather-wise should get in your way.</li>
-  </ul>
-</section>
-    <section class="card arsenal">
-  <h2>Arsenal</h2>
-  <p><strong>What matters:</strong> No immediate match on the calendar, so the news layer matters more than fixtures today. Top news line: Interlull quotes round-up: Havertz, Calafiori, Lehmann, Walcott, Madueke &amp; more</p>
-  <ul>
-    <li class=muted>No upcoming Arsenal match context found.</li>
-    
-  </ul>
-  <h3>News & Commentary</h3>
-  <ul>
-    <li><strong>[Arseblog]</strong> Interlull quotes round-up: Havertz, Calafiori, Lehmann, Walcott, Madueke &amp; more<br><span class="muted">After Sunday’s defeat at Wembley, most of you have probably been glad to take a break from Arsenal chat, so in that sense, the Interlull has come at a good time. That said, with the majority of the squad away on internat</span></li>
-<li><strong>[BBC]</strong> Is Saka&#x27;s form becoming a worry for Arsenal?<br><span class="muted">BBC Arsenal coverage</span></li>
-<li><strong>[BBC]</strong> Arsenal&#x27;s Eze could be out for month with injury<br><span class="muted">BBC Arsenal coverage</span></li>
-  </ul>
-  <h3>Team News</h3>
-  <ul>
-    <li><span class=muted>No clean injury/team-news extraction yet beyond headline signals.</span></li>
-  </ul>
-  <h3>Likely XI / Selection Questions</h3>
-  <ul>
-    <li><strong>Selection question:</strong> No trustworthy lineup edge yet beyond standard match-preview noise, so better to wait for stronger team-news signals.</li>
-  </ul>
-  <h3>Social Pulse</h3>
-  <ul>
-    <li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>
-  </ul>
-</section>
+        <div class="section" style="border-left-color: #d29922;">
+            <h2>🔍 Pattern to Notice</h2>
+            <p>Your Todoist has been sending "8 overdue tasks" notifications for multiple days, but the CLI shows nothing. Either the filter is wrong or tasks are in a project you're not checking. Worth investigating — overdue tasks create ambient stress even if you're ignoring them.</p>
+        </div>
 
-    <div class="footer">
-      <div>Last updated: 11:23 PM EDT</div>
-      <div><a href="https://github.com/nikhilist/morning-brief" style="color:#58a6ff;">github.com/nikhilist/morning-brief</a></div>
+        <div class="section" style="border-left-color: #1f6feb;">
+            <h2>🎯 Recommended Next Move</h2>
+            <p>Check Todoist web/app directly to see those 8 overdue tasks. Clear them or reschedule before the Florida trip — you don't want that hanging over you while traveling with Neel.</p>
+        </div>
+
+        <div class="section">
+            <h2>📋 Tomorrow Prep</h2>
+            <ul>
+                <li><strong>Sunday:</strong> Final day before travel — pack, prep, rest</li>
+                <li><strong>Monday:</strong> Flight at 6 PM (EWR → MCO via JetBlue)</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>Generated at 11:00 AM UTC • <a href="https://nikhilist.github.io/morning-brief/" style="color: #58a6ff;">nikhilist.github.io/morning-brief</a></p>
+        </div>
     </div>
-  </div>
 </body>
 </html>
