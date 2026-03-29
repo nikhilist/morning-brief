@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Afternoon Brief — March 28, 2026</title>
+    <title>Evening Brief — March 28, 2026</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -15,12 +15,12 @@
         }
         .container { max-width: 800px; margin: 0 auto; }
         .header {
-            border-bottom: 2px solid #d29922;
+            border-bottom: 2px solid #8957e5;
             padding-bottom: 15px;
             margin-bottom: 25px;
         }
         .header h1 {
-            color: #58a6ff;
+            color: #a371f7;
             font-size: 1.8em;
             margin-bottom: 5px;
         }
@@ -33,10 +33,10 @@
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
-            border-left: 3px solid #d29922;
+            border-left: 3px solid #8957e5;
         }
         .section h2 {
-            color: #58a6ff;
+            color: #a371f7;
             font-size: 1.2em;
             margin-bottom: 12px;
             display: flex;
@@ -47,22 +47,10 @@
         .section ul { margin-left: 20px; }
         .section li { margin-bottom: 6px; }
         .highlight {
-            background: rgba(210, 153, 34, 0.15);
+            background: rgba(137, 87, 229, 0.15);
             padding: 15px;
             border-radius: 6px;
-            border-left: 3px solid #d29922;
-        }
-        .weather-box {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(88, 166, 255, 0.1);
-            padding: 15px;
-            border-radius: 6px;
-        }
-        .weather-temp {
-            font-size: 2em;
-            color: #58a6ff;
+            border-left: 3px solid #8957e5;
         }
         .tag {
             display: inline-block;
@@ -76,18 +64,7 @@
         .tag-blue { background: #1f6feb; }
         .tag-yellow { background: #d29922; }
         .tag-red { background: #da3633; }
-        .tag-new {
-            background: #238636;
-            font-size: 0.65em;
-            padding: 1px 6px;
-            vertical-align: middle;
-        }
-        .delta {
-            background: rgba(35, 134, 54, 0.1);
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
+        .tag-purple { background: #8957e5; }
         .footer {
             text-align: center;
             color: #8b949e;
@@ -96,83 +73,98 @@
             padding-top: 20px;
             border-top: 1px solid #30363d;
         }
+        .warning {
+            background: rgba(218, 54, 51, 0.15);
+            border-left-color: #da3633;
+        }
+        .success {
+            background: rgba(35, 134, 54, 0.15);
+            border-left-color: #238636;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌤️ Afternoon Brief</h1>
-            <div class="date">Saturday, March 28, 2026 — 4:00 PM EDT<br><em>What's changed since 7 AM</em></div>
+            <h1>🌙 Evening Brief</h1>
+            <div class="date">Saturday, March 28, 2026 — 10:00 PM EDT</div>
         </div>
 
         <div class="section highlight">
             <h2>📊 Executive Summary</h2>
-            <p>4 PM. Warmer now — +6°C (43°F), cloudy. No new calendar events. Habitica dailies still pending. Florida trip <strong>T-minus 2 days</strong>. 7 new emails arrived — including Neel's swim school progress update and school event reminders.</p>
+            <p>Saturday evening, 10 PM. <strong>Tomorrow is the day</strong> — Florida trip eve. Flight departs Monday 6 PM from Newark. No calendar events today; presumably a family day with Meg and Neel. Three Habitica dailies still pending (streaks at risk). Arsenal news is static — still processing the Carabao Cup loss, international break continues.</p>
         </div>
 
         <div class="section">
-            <h2>📅 Calendar Changes</h2>
-            <p>No changes — still just Monday's flight at 6 PM</p>
-        </div>
-
-        <div class="section">
-            <h2>📧 New Unread Emails <span class="tag tag-new">+7 since morning</span></h2>
+            <h2>✅ What Got Done vs Pending</h2>
+            <p><strong>Completed:</strong></p>
             <ul>
-                <li><strong>Goldfish Swim School:</strong> Skills Progress for Neel ⭐</li>
-                <li><strong>ClassDojo:</strong> 5 days until Dance class (April 2nd, not 9th)</li>
-                <li><strong>ClassDojo:</strong> 5 days until Spring Scavenger Hunt & Spring Party</li>
-                <li><strong>The Athletic:</strong> Bukayo Saka feature — "the load of expectation"</li>
-                <li><strong>Vanguard:</strong> Investment information for your account</li>
-                <li>Warby Parker (2x promotional)</li>
+                <li>Family day (assumed)</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>Pending:</strong></p>
+            <ul>
+                <li><span class="tag tag-red">PENDING</span> Habitica: All 3 dailies (Nutty Nuts — streak 8, Vitamin D — streak 2, Vitamin B12 — streak 9)</li>
+                <li><span class="tag tag-yellow">MYSTERY</span> Todoist: 8 "overdue" tasks — CLI shows nothing</li>
+                <li><span class="tag tag-purple">TOMORROW</span> Travel prep — last full day before Florida</li>
             </ul>
         </div>
 
         <div class="section">
-            <h2>🌤️ Weather Update</h2>
-            <div class="weather-box">
-                <div class="weather-temp">☁️ +6°C</div>
-                <div>
-                    <strong>Cloudy</strong><br>
-                    <span style="color: #8b949e;">Feels like +2°C • 24% humidity • 22 km/h winds</span>
-                </div>
-            </div>
+            <h2>📧 New Unread Emails</h2>
+            <ul>
+                <li><strong>JetBlue:</strong> "What to expect on your flight to Newark" — pre-flight info</li>
+                <li><strong>Goldfish Swim School:</strong> Neel's skills progress update</li>
+                <li><strong>ClassDojo:</strong> Dance class (Apr 2) and Spring Scavenger Hunt/Party reminders</li>
+                <li><strong>Tim Ferriss:</strong> 6-Bullet Saturday newsletter</li>
+                <li><strong>The Athletic:</strong> Deep dive on Saka's load and expectations</li>
+                <li>Plus 6 others (Warby Parker, Vanguard, etc.)</li>
+            </ul>
         </div>
 
-        <div class="section">
-            <h2>✅ Habitica Status</h2>
-            <p>Same 3 dailies still pending:</p>
+        <div class="section" style="border-left-color: #d29922;">
+            <h2>📅 Tomorrow (Sunday) — Travel Prep Day</h2>
             <ul>
-                <li>Nutty Nuts <span style="color: #8b949e;">(streak: 8)</span></li>
-                <li>Vitamin D — 50000IU <span style="color: #8b949e;">(streak: 2)</span></li>
-                <li>Vitamin B12 + Calcium <span style="color: #8b949e;">(streak: 9)</span></li>
+                <li>Final packing for Florida</li>
+                <li>Neel's gear, your gear, carry-on optimization</li>
+                <li>Check JetBlue check-in window (24h before = ~6 PM Sunday)</li>
             </ul>
+        </div>
+
+        <div class="section" style="border-left-color: #1f6feb;">
+            <h2>🛫 Monday Flight</h2>
+            <p><span class="tag tag-blue">FLIGHT</span> <strong>B6 828</strong> — 6:00 PM from Newark (EWR)</p>
+            <p style="margin-top: 8px; color: #8b949e;">JetBlue pre-flight email received ✓</p>
         </div>
 
         <div class="section">
             <h2>⚽ Arsenal Update</h2>
-            <p>No fresh news — still digesting the Carabao Cup loss. International break continues. Next match April 4 vs Southampton (FA Cup).</p>
+            <p>No fresh news — international break silence. The Saka fatigue narrative continues to dominate: he's played <strong>2,869 minutes</strong> this season (more than all of last year), and Tuchel is openly concerned about player workload ahead of the World Cup.</p>
+            <p style="margin-top: 10px;">The Athletic has a long piece on "the load of expectation" — essentially asking if we're seeing the first signs of Saka's reliance catching up with him.</p>
+            <p style="margin-top: 10px; color: #238636;"><strong>Premier League:</strong> Still 9 points clear. Next match: April 4 vs Southampton (FA Cup).</p>
         </div>
 
         <div class="section" style="border-left-color: #d29922;">
             <h2>🔍 Pattern to Notice</h2>
-            <p>ClassDojo is your primary signal for Neel's school life — two event reminders today plus the swim progress report. You're getting good visibility into his activities. Consider: are you responding/reacting to these enough? Meg might appreciate acknowledgment that you're seeing these updates.</p>
-        </div>
-
-        <div class="section" style="border-left-color: #1f6feb;">
-            <h2>🎯 Recommended Next Move</h2>
-            <p>Check those 8 overdue Todoist tasks before dinner. Even if you just reschedule them, you'll clear the mental overhead before the weekend ends.</p>
+            <p>Your Habitica dailies are consistently pending by evening. You've got good streaks going (8, 2, 9) but you're cutting it close. The pattern: you wait until late to complete them, which creates a daily "did I remember?" stress. Consider batching them with an existing habit — morning coffee, perhaps?</p>
         </div>
 
         <div class="section">
             <h2>📋 Tomorrow Prep</h2>
             <ul>
-                <li><strong>Sunday:</strong> Final full day before Florida — pack, prep, rest</li>
-                <li><strong>Monday:</strong> 6 PM flight (EWR → MCO)</li>
+                <li><strong>Morning:</strong> Complete Habitica dailies early (protect those streaks)</li>
+                <li><strong>Midday:</strong> Final packing — clothes, Neel's essentials, chargers, documents</li>
+                <li><strong>Evening:</strong> JetBlue online check-in opens (~6 PM), confirm seats</li>
+                <li><strong>Night:</strong> Early sleep — travel days are exhausting with a 3-year-old</li>
             </ul>
         </div>
 
+        <div class="section success">
+            <h2>🎯 Recommended Next Move</h2>
+            <p>Set a phone reminder for <strong>7 AM Sunday</strong> to knock out all 3 Habitica dailies immediately. Don't let streaks break on travel eve — it's demoralizing and unnecessary. The 2-minute task now saves the mental overhead later.</p>
+        </div>
+
         <div class="footer">
-            <p>Generated at 8:00 PM UTC • <a href="https://nikhilist.github.io/morning-brief/" style="color: #58a6ff;">nikhilist.github.io/morning-brief</a></p>
+            <p>Generated at 2:00 AM UTC • <a href="https://nikhilist.github.io/morning-brief/" style="color: #a371f7;">nikhilist.github.io/morning-brief</a></p>
         </div>
     </div>
 </body>
