@@ -1,10 +1,10 @@
 {
-  "active": false,
-  "location_name": "Princeton, NJ",
+  "active": true,
+  "location_name": "Travel",
   "latitude": 40.3573,
   "longitude": -74.6672,
   "timezone": "America/New_York",
-  "note": "Default home base.",
+  "note": "Auto-inferred active travel from recent outbound + future return calendar signals.",
   "source": "auto-calendar",
-  "generated_at": "2026-03-29T22:00:35.061847-04:00"
+  "generated_at": "2026-03-30T07:00:43.851109-04:00"
 }
