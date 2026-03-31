@@ -1573,3 +1573,29 @@ To github.com:nikhilist/morning-brief.git
 Morning brief generated
 GitHub Pages: https://nikhilist.github.io/morning-brief/
 === Finished: Tue Mar 31 10:53:30 AM EDT 2026 ===
+=== Starting brief generation: Tue Mar 31 11:16:37 AM EDT 2026 ===
+/home/nik/.openclaw/workspace/brief-email.sh: line 45: /usr/bin/jq: Argument list too long
+=== Starting brief generation: Tue Mar 31 11:17:22 AM EDT 2026 ===
+file:///home/nik/.openclaw/workspace/morning-brief/scripts/brief-synthesizer.mjs:85
+- Use the `decision_support` block heavily. Prefer signal over status, blind spots over summaries, and latent risks over trivia.
+           ^^^^^^^^^^^^^^^^
+
+SyntaxError: Unexpected identifier 'decision_support'
+    at compileSourceTextModule (node:internal/modules/esm/utils:346:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:107:18)
+    at #translate (node:internal/modules/esm/loader:546:20)
+    at afterLoad (node:internal/modules/esm/loader:596:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:601:12)
+    at #createModuleJob (node:internal/modules/esm/loader:624:36)
+    at #getJobFromResolveResult (node:internal/modules/esm/loader:343:34)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:311:41)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:664:25)
+
+Node.js v22.22.0
+[main 4a1b7d8] Rewrite Morning brief structure: Tuesday, March 31, 2026 11:17 AM EDT
+ 4 files changed, 72 insertions(+), 46 deletions(-)
+To github.com:nikhilist/morning-brief.git
+   a00a7b3..4a1b7d8  main -> main
+Morning brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Tue Mar 31 11:18:02 AM EDT 2026 ===
