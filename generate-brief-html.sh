@@ -241,10 +241,11 @@ obj = json.load(open(sys.argv[1]))
 print(html.escape(str(obj.get('recommended_next_move', ''))))
 PY
 )
-  THINGS_I_CAN_DO_HTML=$(python3 - "$MODEL_JSON_FILE" <<'PY'
+  WHAT_CAN_WAIT_HTML=$(python3 - "$MODEL_JSON_FILE" <<'PY'
 import json, sys, html
 obj = json.load(open(sys.argv[1]))
-for item in obj.get('things_i_can_do', []):
+items = obj.get('things_i_can_do', [])
+for item in items[:3]:
     print(f'<li>{html.escape(str(item))}</li>')
 PY
 )
@@ -265,9 +266,8 @@ else
   if [ -z "$EXEC_SUMMARY_HTML" ]; then
     EXEC_SUMMARY_HTML="<li><strong>Primary pressure:</strong> ${TASK_SUMMARY:-No major pressure detected.}</li>"
   fi
-  TOMORROW_PREP_TEXT="$TOMORROW_SHAPE"
   RECOMMENDED_NEXT_MOVE="${TRIP_NEXT_ACTION:-$TASK_SUMMARY}"
-  THINGS_I_CAN_DO_HTML="<li>Triage the current open tasks into real priorities vs background clutter.</li><li>Prepare a short plan for the next family or school-related planning edge.</li><li>Turn the next important action into a concrete reminder or checklist.</li>"
+  WHAT_CAN_WAIT_HTML="<li>Low-value inbox triage can wait until after the first meaningful task is done.</li><li>Unscheduled inbox tasks do not get to outrank today's must-do by default.</li><li>Anything optional should stay optional until the main task is finished.</li>"
 fi
 
 cat > "$INDEX_FILE" <<HTML
@@ -319,21 +319,21 @@ cat > "$INDEX_FILE" <<HTML
     </header>
 
     <section class="card">
-      <h2>Executive Summary</h2>
+      <h2>What Matters</h2>
       <ul>
 ${EXEC_SUMMARY_HTML}
       </ul>
     </section>
 
     <section class="card">
-      <h2>Recommended Next Move</h2>
+      <h2>What To Do First</h2>
       <p>$RECOMMENDED_NEXT_MOVE</p>
     </section>
 
     <section class="card">
-      <h2>Things I Can Do For You</h2>
+      <h2>What Can Wait</h2>
       <ul>
-${THINGS_I_CAN_DO_HTML}
+${WHAT_CAN_WAIT_HTML}
       </ul>
     </section>
 
