@@ -342,16 +342,6 @@ ${THINGS_I_CAN_DO_HTML}
     ${TASKS_HTML}
     ${EMAIL_HTML}
 
-    <section class="card">
-      <h2>Pattern to Notice</h2>
-      <p>$PATTERN_TEXT</p>
-    </section>
-
-    <section class="card">
-      <h2>Tomorrow Prep</h2>
-      <p>$TOMORROW_PREP_TEXT</p>
-    </section>
-
     ${WEATHER_HTML}
     ${ARSENAL_HTML}
 
