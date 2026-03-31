@@ -19,33 +19,46 @@ else
   : > "$PREV_EMAILS_FILE"
 fi
 
-EMAILS_JSON=$(gog gmail search 'is:unread' --json --results-only 2>/dev/null || echo '[]')
-echo "$EMAILS_JSON" | jq -r '.[].id' | sort -u > "$CURRENT_EMAILS_FILE"
+EMAILS_JSON_FILE="$TMP_DIR/emails.json"
+gog gmail search 'is:unread' --json --results-only > "$EMAILS_JSON_FILE" 2>/dev/null || echo '[]' > "$EMAILS_JSON_FILE"
+jq -r '.[].id' "$EMAILS_JSON_FILE" | sort -u > "$CURRENT_EMAILS_FILE"
 comm -23 "$CURRENT_EMAILS_FILE" "$PREV_EMAILS_FILE" > "$NEW_EMAILS_FILE" || :
-EMAIL_COUNT=$(echo "$EMAILS_JSON" | jq 'length')
+EMAIL_COUNT=$(jq 'length' "$EMAILS_JSON_FILE")
 NEW_COUNT=$(wc -l < "$NEW_EMAILS_FILE" 2>/dev/null | tr -d ' ')
 NEW_COUNT=${NEW_COUNT:-0}
-LATEST_EMAIL_AT=$(echo "$EMAILS_JSON" | jq -r '.[0].date // empty')
+LATEST_EMAIL_AT=$(jq -r '.[0].date // empty' "$EMAILS_JSON_FILE")
 
 SCORING_INPUT="$TMP_DIR/scoring-input.jsonl"
 : > "$SCORING_INPUT"
+SELECTED_IDS_FILE="$TMP_DIR/selected_ids.txt"
+cat "$NEW_EMAILS_FILE" > "$SELECTED_IDS_FILE"
+
+if [ "$(wc -l < "$SELECTED_IDS_FILE" | tr -d ' ')" -lt 8 ]; then
+  jq -r '.[].id' "$EMAILS_JSON_FILE" | head -n 12 >> "$SELECTED_IDS_FILE"
+fi
+sort -u "$SELECTED_IDS_FILE" | head -n 12 > "$TMP_DIR/selected_ids_final.txt"
 
 while IFS= read -r id; do
   [ -n "$id" ] || continue
-  META=$(echo "$EMAILS_JSON" | jq -c --arg id "$id" '.[] | select(.id == $id)')
-  FULL=$(gog gmail get "$id" --json --results-only 2>/dev/null || echo '{}')
+  META_FILE="$TMP_DIR/meta-$id.json"
+  FULL_FILE="$TMP_DIR/full-$id.json"
+  jq -c --arg id "$id" '.[] | select(.id == $id)' "$EMAILS_JSON_FILE" > "$META_FILE"
+  [ -s "$META_FILE" ] || continue
+  gog gmail get "$id" --json --results-only > "$FULL_FILE" 2>/dev/null || echo '{}' > "$FULL_FILE"
   jq -cn \
-    --argjson meta "$META" \
-    --argjson full "$FULL" \
+    --slurpfile meta "$META_FILE" \
+    --slurpfile full "$FULL_FILE" \
+    --arg is_new "$(grep -qx "$id" "$NEW_EMAILS_FILE" && echo true || echo false)" \
     '{
-      id: ($meta.id // ""),
-      date: ($meta.date // ""),
-      from: ($meta.from // "Unknown"),
-      subject: ($meta.subject // "(no subject)"),
-      labels: ($meta.labels // []),
-      body: (($full.body // "") | tostring)
+      id: ($meta[0].id // ""),
+      date: ($meta[0].date // ""),
+      from: ($meta[0].from // "Unknown"),
+      subject: ($meta[0].subject // "(no subject)"),
+      labels: ($meta[0].labels // []),
+      is_new: ($is_new == "true"),
+      body: (($full[0].body // "") | tostring)
     }' >> "$SCORING_INPUT"
-done < <(head -n 12 "$NEW_EMAILS_FILE")
+done < "$TMP_DIR/selected_ids_final.txt"
 
 if [ ! -s "$SCORING_INPUT" ]; then
   echo '[]' > "$TMP_DIR/scored_emails.json"
@@ -59,23 +72,24 @@ else
     map(. + {
       score: (
         0 +
-        (if (.from_lower | test("school|teacher|dojo|doctor|medical|calendar|airline|delta|jetblue|united|american airlines|billing|invoice|payment due|appointment|daycare|camp|soccer|karate|swim|princeton")) then 50 else 0 end) +
-        (if (.subject_lower | test("action required|payment due|appointment|schedule|shared a post|message from|flight|receipt|invoice|statement|renewal|reminder|deadline|registration|enroll|school|doctor|medical|karate|soccer|swim")) then 35 else 0 end) +
-        (if (.body_lower | test("action required|please respond|please review|complete your registration|confirm|scheduled|appointment|invoice|payment due|shared a post|teacher|school|classdojo|karate|soccer|swim|flight|boarding|reservation")) then 35 else 0 end) +
-        (if (.from_lower | test("noreply|no-reply|newsletter|marketing|promo|deals|sale|substack|medium|linkedin|instagram|facebook|x.com|twitter|huckberry|the athletic|arsemail")) then -45 else 0 end) +
-        (if (.body_lower | test("unsubscribe|manage preferences|view in browser|shop now|limited time|sale ends|sponsored|advertisement")) then -35 else 0 end)
+        (if (.from_lower | test("school|teacher|dojo|doctor|medical|calendar|airline|delta|jetblue|united|american airlines|billing|invoice|payment due|appointment|daycare|camp|soccer|karate|swim|princeton|amazon|monarch")) then 45 else 0 end) +
+        (if (.subject_lower | test("action required|payment due|appointment|schedule|shared a post|message from|flight|receipt|invoice|statement|renewal|reminder|deadline|registration|enroll|school|doctor|medical|karate|soccer|swim|delivery|order|return|account|trip")) then 30 else 0 end) +
+        (if (.body_lower | test("action required|please respond|please review|complete your registration|confirm|scheduled|appointment|invoice|payment due|shared a post|teacher|school|classdojo|karate|soccer|swim|flight|boarding|reservation|delivered|out for delivery|tracking|return window|statement available|budget|transaction")) then 30 else 0 end) +
+        (if (.body_lower | test("unsubscribe|manage preferences|view in browser|shop now|limited time|sale ends|sponsored|advertisement|recommended for you|you may also like")) then -40 else 0 end) +
+        (if (.from_lower | test("newsletter|marketing|promo|deals|sale|substack|medium|linkedin|instagram|facebook|x.com|twitter|huckberry|the athletic|arsemail")) then -50 else 0 end) +
+        (if ((.subject_lower | test("weekly round(up)?|daily digest|newsletter|top stories|news update|breaking news")) and (.body_lower | test("unsubscribe|manage preferences|view in browser"))) then -60 else 0 end)
       )
     }) |
     map(. + {
-      bucket: (if .score >= 70 then "needs" elif .score >= 25 then "noting" else "ignore" end),
+      bucket: (if .score >= 65 then "needs" elif .score >= 30 then "noting" else "ignore" end),
       reason: (
-        if .score >= 70 then
-          (if (.body_lower | test("action required|please respond|payment due|confirm|complete your registration|appointment|flight|teacher|shared a post|school|karate|soccer|swim"))
-           then "useful after reading"
-           else "probably useful"
+        if .score >= 65 then
+          (if (.body_lower | test("action required|please respond|payment due|confirm|complete your registration|appointment|flight|teacher|shared a post|school|karate|soccer|swim|delivered|tracking|statement available|budget|transaction"))
+           then "action or real-world relevance"
+           else "likely worth your attention"
            end)
-        elif .score >= 25 then "maybe useful"
-        else "looks like junk/noise"
+        elif .score >= 30 then "informational but not urgent"
+        else "junk/noise after reading"
         end
       )
     })
@@ -86,6 +100,8 @@ NEEDS_JSON=$(jq '[.[] | select(.bucket == "needs")][0:5]' "$TMP_DIR/scored_email
 NOTING_JSON=$(jq '[.[] | select(.bucket == "noting")][0:3]' "$TMP_DIR/scored_emails.json")
 IGNORE_COUNT=$(jq '[.[] | select(.bucket == "ignore")] | length' "$TMP_DIR/scored_emails.json")
 REVIEWED_COUNT=$(jq 'length' "$TMP_DIR/scored_emails.json")
+NEW_REVIEWED_COUNT=$(jq '[.[] | select(.is_new == true)] | length' "$TMP_DIR/scored_emails.json")
+BACKLOG_REVIEWED_COUNT=$(jq '[.[] | select(.is_new != true)] | length' "$TMP_DIR/scored_emails.json")
 
 render_email_bucket() {
   local json="$1"
@@ -104,7 +120,7 @@ if [ "$(brief_mode)" = "delta" ]; then
     cat <<HTML
 <section class="card">
   <h2>Inbox</h2>
-  <p><strong>${NEW_COUNT}</strong> new unread since the last brief. Reviewed ${REVIEWED_COUNT} new email bodies.</p>
+  <p><strong>${NEW_COUNT}</strong> new unread since the last brief. Reviewed ${NEW_REVIEWED_COUNT} new email bodies and ${BACKLOG_REVIEWED_COUNT} older unread for context.</p>
   <p><strong>Actually useful</strong></p>
   <ul>$EMAIL_NEEDS_HTML</ul>
 </section>
@@ -114,7 +130,7 @@ else
   cat <<HTML
 <section class="card">
   <h2>Inbox Triage</h2>
-  <p class="muted">Reviewed ${REVIEWED_COUNT} new email bodies, not just subject lines.</p>
+  <p class="muted">Reviewed ${NEW_REVIEWED_COUNT} new email bodies and ${BACKLOG_REVIEWED_COUNT} older unread emails, not just subject lines.</p>
 HTML
   if [ -n "$EMAIL_NEEDS_HTML" ]; then
     cat <<HTML
