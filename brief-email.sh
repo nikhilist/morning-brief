@@ -45,19 +45,19 @@ while IFS= read -r id; do
   jq -c --arg id "$id" '.[] | select(.id == $id)' "$EMAILS_JSON_FILE" > "$META_FILE"
   [ -s "$META_FILE" ] || continue
   gog gmail get "$id" --json --results-only > "$FULL_FILE" 2>/dev/null || echo '{}' > "$FULL_FILE"
-  jq -cn \
-    --slurpfile meta "$META_FILE" \
-    --slurpfile full "$FULL_FILE" \
+  # Create combined JSON for this email
+  jq -c --arg id "$id" '.[] | select(.id == $id)' "$EMAILS_JSON_FILE" | jq -c \
     --arg is_new "$(grep -qx "$id" "$NEW_EMAILS_FILE" && echo true || echo false)" \
+    --slurpfile full "$FULL_FILE" \
     '{
-      id: ($meta[0].id // ""),
-      date: ($meta[0].date // ""),
-      from: ($meta[0].from // "Unknown"),
-      subject: ($meta[0].subject // "(no subject)"),
-      labels: ($meta[0].labels // []),
+      id: .id,
+      date: .date,
+      from: (.from // "Unknown"),
+      subject: (.subject // "(no subject)"),
+      labels: (.labels // []),
       is_new: ($is_new == "true"),
-      body: (($full[0].body // "") | tostring)
-    }' >> "$SCORING_INPUT"
+      body: ($full[0].body // "")
+    }' >> "$SCORING_INPUT" 2>/dev/null || true
 done < "$TMP_DIR/selected_ids_final.txt"
 
 if [ ! -s "$SCORING_INPUT" ]; then
