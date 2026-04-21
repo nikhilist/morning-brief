@@ -1,0 +1,31 @@
+{
+  "generated_at": "2026-04-21T07:00:00-04:00",
+  "brief_type": "Morning",
+  "brief_mode": "full",
+  "calendar": {
+    "today_events": ["3:30 PM — Karate Neel"],
+    "tomorrow_events": ["Swim Neel"]
+  },
+  "tasks": {
+    "count": 1,
+    "inbox_unscheduled_count": 3,
+    "items": ["Sell the BMW matts for the 5 series (due 2026-04-04)", "Use A&F gift card", "50% off on Sport Clips MVP", "Followup on Allergy Test"]
+  },
+  "email": {
+    "new_count": 5,
+    "needs_attention": ["ClassDojo — Mrs. Smith added a new event to Neel's school", "Amazon — Shipped: Pure White M Mens Henley...", "Monarch — 2 new updates in Monarch"]
+  },
+  "weather": {
+    "summary": "Home weather for Princeton, NJ: Nothing weather-wise should get in your way.",
+    "details": ["Now: 32°F, feels like 24°F", "Today: 55° / 30°", "Tomorrow: 56° / 43°, rain risk 27%"]
+  },
+  "habits": {
+    "count": 3,
+    "open_items": ["Nutty Nuts (value: 10)", "Vitamin D - 50000IU (value: 3)", "Vitamin B12 + Calcium (value: 11)"]
+  },
+  "arsenal": {
+    "what_matters": "Next up. Arsenal vs Newcastle United (H) (in 101h) is the main Arsenal event to care about. Top news line: Highlights: Manchester City 2-1 Arsenal",
+    "next_match": "Arsenal vs Newcastle United (H) at 12:30 PM — in 101h • Emirates Stadium, London",
+    "news": ["Highlights: Manchester City 2-1 Arsenal", "Post-City quotes round-up: Arteta, Guardiola, Odegaard, Silva, Vieira, Keane, Keown & more", "Report: Man City 2-1 Arsenal (inc. goals)"]
+  }
+}
