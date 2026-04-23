@@ -3050,3 +3050,27 @@ To github.com:nikhilist/morning-brief.git
 Afternoon brief generated
 GitHub Pages: https://nikhilist.github.io/morning-brief/
 === Finished: Wed Apr 22 04:01:03 PM EDT 2026 ===
+=== Starting brief generation: Wed Apr 22 10:00:27 PM EDT 2026 ===
+file:///home/nik/.openclaw/workspace/morning-brief/scripts/brief-synthesizer.mjs:85
+- Use the `decision_support` block heavily. Prefer signal over status, blind spots over summaries, and latent risks over trivia.
+           ^^^^^^^^^^^^^^^^
+
+SyntaxError: Unexpected identifier 'decision_support'
+    at compileSourceTextModule (node:internal/modules/esm/utils:346:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:107:18)
+    at #translate (node:internal/modules/esm/loader:546:20)
+    at afterLoad (node:internal/modules/esm/loader:596:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:601:12)
+    at #createModuleJob (node:internal/modules/esm/loader:624:36)
+    at #getJobFromResolveResult (node:internal/modules/esm/loader:343:34)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:311:41)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:664:25)
+
+Node.js v22.22.0
+[main dd3af7b] Rewrite Evening brief structure: Wednesday, April 22, 2026 10:00 PM EDT
+ 3 files changed, 25 insertions(+), 25 deletions(-)
+To github.com:nikhilist/morning-brief.git
+   96b4c02..dd3af7b  main -> main
+Evening brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Wed Apr 22 10:01:07 PM EDT 2026 ===
