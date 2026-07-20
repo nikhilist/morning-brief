@@ -108,10 +108,6 @@ WEATHER_FETCHED_AT=$(printf '%s\n' "$WEATHER_RAW" | extract_meta FETCHED_AT)
 MARKET_FETCHED_AT=$(printf '%s\n' "$MARKET_INTEL_RAW" | extract_meta FETCHED_AT)
 ARSENAL_FETCHED_AT=$(printf '%s\n' "$ARSENAL_RAW" | extract_meta FETCHED_AT)
 
-if [ "$BRIEF_TYPE" != "Evening" ]; then
-  MARKET_INTEL_HTML=""
-fi
-
 PATTERN_TEXT=""
 EMAIL_NEW_COUNT=$(printf '%s' "$EMAIL_SUMMARY" | grep -o '^[0-9]\+' || echo 0)
 DAY_LOWER=$(printf '%s' "$DAY_SHAPE" | tr '[:upper:]' '[:lower:]')
@@ -341,9 +337,11 @@ ${WHAT_CAN_WAIT_HTML}
     ${CALENDAR_HTML}
     ${TASKS_HTML}
     ${EMAIL_HTML}
+    ${HABITS_HTML}
 
     ${WEATHER_HTML}
     ${ARSENAL_HTML}
+    ${MARKET_INTEL_HTML}
 
     <div class="footer">
       <div>Last updated: $TIME</div>
