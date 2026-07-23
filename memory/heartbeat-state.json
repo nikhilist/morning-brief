@@ -1,14 +1,14 @@
 {
   "lastChecks": {
     "afternoon_brief": 1753214400,
-    "evening_brief": 1753159200,
-    "calendar": 1753214400,
-    "email": 1753214400,
-    "weather": 1753214400,
-    "habits": 1753214400,
-    "tasks": 1753214400
+    "evening_brief": 1753245600,
+    "calendar": 1753245600,
+    "email": 1753245600,
+    "weather": 1753245600,
+    "habits": 1753245600,
+    "tasks": 1753245600
   },
   "briefGenerated": true,
-  "briefType": "afternoon",
+  "briefType": "evening",
   "briefUrl": "https://nikhilist.github.io/morning-brief/"
 }
