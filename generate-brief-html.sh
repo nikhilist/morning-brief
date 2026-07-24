@@ -263,6 +263,7 @@ else
     EXEC_SUMMARY_HTML="<li><strong>Primary pressure:</strong> ${TASK_SUMMARY:-No major pressure detected.}</li>"
   fi
   RECOMMENDED_NEXT_MOVE="${TRIP_NEXT_ACTION:-$TASK_SUMMARY}"
+  TOMORROW_PREP_TEXT="${TOMORROW_SHAPE:-No calendar carryover detected for tomorrow.}"
   WHAT_CAN_WAIT_HTML="<li>Low-value inbox triage can wait until after the first meaningful task is done.</li><li>Unscheduled inbox tasks do not get to outrank today's must-do by default.</li><li>Anything optional should stay optional until the main task is finished.</li>"
 fi
 
@@ -315,14 +316,40 @@ cat > "$INDEX_FILE" <<HTML
     </header>
 
     <section class="card">
-      <h2>What Matters</h2>
+      <h2>Executive Summary</h2>
       <ul>
 ${EXEC_SUMMARY_HTML}
       </ul>
     </section>
 
     <section class="card">
-      <h2>What To Do First</h2>
+      <h2>What Got Done vs Still Pending</h2>
+      <p><strong>Completed:</strong> No completed work was recorded in the connected calendar or task sources.</p>
+      <p><strong>Still pending:</strong> $TASK_SUMMARY</p>
+    </section>
+
+    <section class="card">
+      <h2>Calendar Carryover</h2>
+      <p>$TOMORROW_PREP_TEXT</p>
+    </section>
+
+    <section class="card">
+      <h2>New Unread Email</h2>
+      <p>$EMAIL_SUMMARY</p>
+    </section>
+
+    <section class="card">
+      <h2>Pattern to Notice</h2>
+      <p>$PATTERN_TEXT</p>
+    </section>
+
+    <section class="card">
+      <h2>Tomorrow Prep</h2>
+      <p>$TOMORROW_PREP_TEXT</p>
+    </section>
+
+    <section class="card">
+      <h2>Recommended Next Move for Tomorrow Morning</h2>
       <p>$RECOMMENDED_NEXT_MOVE</p>
     </section>
 
