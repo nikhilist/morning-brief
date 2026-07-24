@@ -3458,3 +3458,59 @@ To github.com:nikhilist/morning-brief.git
 Afternoon brief generated
 GitHub Pages: https://nikhilist.github.io/morning-brief/
 === Finished: Thu Jul 23 04:00:52 PM EDT 2026 ===
+=== Starting brief generation: Thu Jul 23 22:01:13 EDT 2026 ===
+file:///home/nik/.openclaw/workspace/morning-brief/scripts/brief-synthesizer.mjs:85
+- Use the `decision_support` block heavily. Prefer signal over status, blind spots over summaries, and latent risks over trivia.
+           ^^^^^^^^^^^^^^^^
+
+SyntaxError: Unexpected identifier 'decision_support'
+    at compileSourceTextModule (node:internal/modules/esm/utils:346:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:110:18)
+    at #translate (node:internal/modules/esm/loader:559:20)
+    at afterLoad (node:internal/modules/esm/loader:612:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:617:12)
+    at #createModuleJob (node:internal/modules/esm/loader:640:36)
+    at #getJobFromResolveResult (node:internal/modules/esm/loader:353:34)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:321:41)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:680:25)
+
+Node.js v22.23.1
+[main 7f288f5] Rewrite Evening brief structure: Thursday, July 23, 2026 10:01 PM EDT
+ 3 files changed, 27 insertions(+), 27 deletions(-)
+To github.com:nikhilist/morning-brief.git
+   5f64877..7f288f5  main -> main
+Evening brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Thu Jul 23 22:01:49 EDT 2026 ===
+=== Starting brief generation: Thu Jul 23 22:02:51 EDT 2026 ===
+file:///home/nik/.openclaw/workspace/morning-brief/scripts/brief-synthesizer.mjs:86
+- Explicitly down-rank anything listed in `decision_support.noise`.
+                                           ^^^^^^^^^^^^^^^^
+
+SyntaxError: Unexpected identifier 'decision_support'
+    at compileSourceTextModule (node:internal/modules/esm/utils:346:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:110:18)
+    at #translate (node:internal/modules/esm/loader:559:20)
+    at afterLoad (node:internal/modules/esm/loader:612:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:617:12)
+    at #createModuleJob (node:internal/modules/esm/loader:640:36)
+    at #getJobFromResolveResult (node:internal/modules/esm/loader:353:34)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:321:41)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:680:25)
+
+Node.js v22.23.1
+[main a34ee73] Rewrite Evening brief structure: Thursday, July 23, 2026 10:02 PM EDT
+ 4 files changed, 100 insertions(+), 33 deletions(-)
+To github.com:nikhilist/morning-brief.git
+   7f288f5..a34ee73  main -> main
+Evening brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Thu Jul 23 22:03:25 EDT 2026 ===
+=== Starting brief generation: Thu Jul 23 22:04:09 EDT 2026 ===
+[main c56480a] Rewrite Evening brief structure: Thursday, July 23, 2026 10:04 PM EDT
+ 3 files changed, 35 insertions(+), 25 deletions(-)
+To github.com:nikhilist/morning-brief.git
+   387e7a8..c56480a  main -> main
+Evening brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Thu Jul 23 22:04:56 EDT 2026 ===
