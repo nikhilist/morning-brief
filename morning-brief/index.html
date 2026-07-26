@@ -1,149 +1,402 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Morning Brief - Tuesday, March 3</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f5f5f5;
-      padding: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #333;
-    }
-    .section {
-      background: white;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    .section h2 {
-      font-size: 14px;
-      text-transform: uppercase;
-      color: #666;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
-    }
-    .weather {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .weather .temp {
-      font-size: 32px;
-      font-weight: 600;
-    }
-    .weather .emoji {
-      font-size: 40px;
-    }
-    .event, .task {
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .event:last-child, .task:last-child {
-      border-bottom: none;
-    }
-    .event-time, .task-check {
-      color: #666;
-      font-size: 14px;
-      min-width: 80px;
-    }
-    .event-title, .task-title {
-      flex: 1;
-      font-size: 15px;
-    }
-    .calendar-name {
-      font-size: 12px;
-      color: #999;
-      background: #f0f0f0;
-      padding: 2px 8px;
-      border-radius: 12px;
-    }
-    .empty {
-      color: #999;
-      font-style: italic;
-      padding: 10px 0;
-    }
-    .gmail-count {
-      font-size: 18px;
-      color: #333;
-    }
-    .gmail-count span {
-      font-size: 32px;
-      font-weight: 600;
-      color: #ea4335;
-    }
-    .footer {
-      text-align: center;
-      color: #999;
-      font-size: 12px;
-      margin-top: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nik's Evening Brief - July 25, 2026</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-red: #f85149;
+            --accent-yellow: #d29922;
+            --border: #30363d;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+        h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .timestamp { color: var(--text-secondary); font-size: 0.9rem; }
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+        }
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            text-align: center;
+        }
+        .weather-item { padding: 15px; background: var(--bg-tertiary); border-radius: 8px; }
+        .weather-item .day { font-size: 0.85rem; color: var(--text-secondary); }
+        .weather-item .temp { font-size: 1.5rem; font-weight: bold; margin: 5px 0; }
+        .weather-item .desc { font-size: 0.85rem; color: var(--text-secondary); }
+        .event { padding: 12px; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 10px; }
+        .event .time { font-size: 0.8rem; color: var(--text-secondary); }
+        .event .title { font-weight: 500; margin-top: 4px; }
+        .email-item { padding: 12px; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 10px; }
+        .email-item .sender { font-size: 0.85rem; color: var(--text-secondary); }
+        .email-item .subject { font-weight: 500; margin-top: 4px; }
+        .task-list { list-style: none; }
+        .task-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .task-list li:last-child { border-bottom: none; }
+        .task-list .overdue { color: var(--accent-red); }
+        .task-list .pending { color: var(--accent-yellow); }
+        .streak-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .streak-item {
+            padding: 15px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .streak-item .name { font-size: 0.85rem; color: var(--text-secondary); }
+        .streak-item .count { font-size: 1.8rem; font-weight: bold; color: var(--accent-green); margin: 5px 0; }
+        .streak-item .label { font-size: 0.75rem; color: var(--text-secondary); }
+        .news-item { padding: 12px; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 10px; }
+        .news-item .source { font-size: 0.8rem; color: var(--text-secondary); }
+        .news-item .headline { font-weight: 500; margin-top: 4px; }
+        .market-section { margin-bottom: 20px; }
+        .market-section h3 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+        .stock-item {
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stock-item .symbol { font-weight: bold; font-size: 0.9rem; }
+        .stock-item .price { font-size: 1.1rem; margin: 4px 0; }
+        .stock-item .change { font-size: 0.8rem; }
+        .up { color: var(--accent-green); }
+        .down { color: var(--accent-red); }
+        .crypto-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .insight-box {
+            background: var(--bg-tertiary);
+            border-left: 3px solid var(--accent);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 15px;
+        }
+        .insight-box h4 { font-size: 0.9rem; margin-bottom: 8px; color: var(--accent); }
+        .insight-box p { font-size: 0.9rem; color: var(--text-secondary); }
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 30px;
+        }
+        @media (max-width: 600px) {
+            .crypto-grid { grid-template-columns: repeat(2, 1fr); }
+            .stock-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
 </head>
 <body>
-  <h1>📅 Tuesday, March 3</h1>
-  
-  <div class="section">
-    <h2>Weather - Princeton, NJ</h2>
-    <div class="weather">
-      <div class="emoji">🌧️</div>
-      <div class="temp">5° / -1°</div>
-    </div>
-  </div>
+    <div class="container">
+        <header>
+            <h1>🌙 Evening Brief</h1>
+            <p class="timestamp">Saturday, July 25, 2026 · 10:00 PM EDT</p>
+        </header>
 
-  <div class="section">
-    <h2>Today's Events</h2>
-    <div class="event">
-      <span class="event-time">All day</span>
-      <span class="event-title">Pajama Day@school</span>
-      <span class="calendar-name">Family</span>
-    </div>
-    <div class="event">
-      <span class="event-time">1:30 PM</span>
-      <span class="event-title">Procedure@BaskingRidge</span>
-      <span class="calendar-name">Family</span>
-    </div>
-    <div class="event">
-      <span class="event-time">8:30 PM</span>
-      <span class="event-title">Karate Neel</span>
-      <span class="calendar-name">Family</span>
-    </div>
-    <div class="event">
-      <span class="event-time">All day</span>
-      <span class="event-title">Wacky Day@School</span>
-      <span class="calendar-name">Family</span>
-    </div>
-  </div>
+        <div class="card">
+            <h2>🌤️ Weather · Princeton, NJ</h2>
+            <div class="weather-grid">
+                <div class="weather-item">
+                    <div class="day">Tonight</div>
+                    <div class="temp">72°F</div>
+                    <div class="desc">Clear</div>
+                </div>
+                <div class="weather-item">
+                    <div class="day">Sunday</div>
+                    <div class="temp">85°F</div>
+                    <div class="desc">Partly cloudy · 2% rain</div>
+                </div>
+            </div>
+        </div>
 
-  <div class="section">
-    <h2>Tasks</h2>
-    <div class="task">
-      <span class="task-check">☐</span>
-      <span class="task-title">Call up Goldfish to re-enroll Neel</span>
-    </div>
-  </div>
+        <div class="card">
+            <h2>📅 Tomorrow</h2>
+            <div class="event">
+                <div class="time">All Day</div>
+                <div class="title">Last day at Restoration Cottage</div>
+            </div>
+            <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem;">
+                No other calendar events scheduled for Sunday. Clean slate for the week ahead.
+            </p>
+        </div>
 
-  <div class="section">
-    <h2>Gmail</h2>
-    <div class="gmail-count">
-      <span>5</span> unread messages
-    </div>
-  </div>
+        <div class="card">
+            <h2>📧 Unread Emails (10 new today)</h2>
+            <div class="email-item">
+                <div class="sender">Little Kicks Soccer</div>
+                <div class="subject">Fall I 2026 Soccer is OPEN! ⚽</div>
+            </div>
+            <div class="email-item">
+                <div class="sender">Goldfish Swim School</div>
+                <div class="subject">1:1 Private Lessons ✨</div>
+            </div>
+            <div class="email-item">
+                <div class="sender">Monarch</div>
+                <div class="subject">Account balance activity - Jul 24th</div>
+            </div>
+            <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem;">
+                Also: Chase statement available, Starlink Mini promo, Adventure Aquarium welcome.
+            </p>
+        </div>
 
-  <div class="footer">
-    Generated at 5:30 AM
-  </div>
+        <div class="card">
+            <h2>✅ Tasks & Habits</h2>
+            <ul class="task-list">
+                <li class="overdue">📋 1 overdue task (Todoist)</li>
+                <li class="pending">📥 2 unscheduled inbox tasks</li>
+                <li class="pending">🎯 3 Habitica dailies pending</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔥 Habit Streaks</h2>
+            <div class="streak-grid">
+                <div class="streak-item">
+                    <div class="name">Nutty Nuts</div>
+                    <div class="count">10</div>
+                    <div class="label">day streak 🔥</div>
+                </div>
+                <div class="streak-item">
+                    <div class="name">Vitamin D</div>
+                    <div class="count">3</div>
+                    <div class="label">day streak</div>
+                </div>
+                <div class="streak-item">
+                    <div class="name">B12 + Calcium</div>
+                    <div class="count">11</div>
+                    <div class="label">day streak 🔥</div>
+                </div>
+            </div>
+            <div class="insight-box">
+                <h4>💡 Evening Insight</h4>
+                <p>Strong consistency on B12+Calcium (11 days) and Nutty Nuts (10 days). Vitamin D streak shorter — consider setting a phone reminder for Sunday evening to keep it going.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚽ Arsenal News</h2>
+            <div class="news-item">
+                <div class="source">Arseblog · Today</div>
+                <div class="headline">Per Mertesacker lands top role at German FA</div>
+            </div>
+            <div class="news-item">
+                <div class="source">Arseblog · Today</div>
+                <div class="headline">Confirmed: Elijah Upson signs for Arsenal</div>
+            </div>
+            <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem;">
+                Next match: Girona (away) · August 1
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>📈 Markets Watchlist</h2>
+            
+            <div class="market-section">
+                <h3>AI / Semiconductors</h3>
+                <div class="stock-grid">
+                    <div class="stock-item">
+                        <div class="symbol">NVDA</div>
+                        <div class="price">$206.84</div>
+                        <div class="change down">-0.92%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">ALAB</div>
+                        <div class="price">$291.58</div>
+                        <div class="change down">-10.82%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">AMAT</div>
+                        <div class="price">$536.25</div>
+                        <div class="change down">-4.72%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">SITM</div>
+                        <div class="price">$554.46</div>
+                        <div class="change down">-3.81%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="market-section">
+                <h3>Software / Cyber / Infra</h3>
+                <div class="stock-grid">
+                    <div class="stock-item">
+                        <div class="symbol">CRWD</div>
+                        <div class="price">$183.28</div>
+                        <div class="change down">-0.08%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">RBRK</div>
+                        <div class="price">$80.38</div>
+                        <div class="change down">-8.71%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">NOW</div>
+                        <div class="price">$98.78</div>
+                        <div class="change up">+7.44%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">DOCN</div>
+                        <div class="price">$133.89</div>
+                        <div class="change up">+12.43%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="market-section">
+                <h3>AI Infrastructure / Power</h3>
+                <div class="stock-grid">
+                    <div class="stock-item">
+                        <div class="symbol">VRT</div>
+                        <div class="price">$290.36</div>
+                        <div class="change down">-4.50%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="market-section">
+                <h3>Consumer / Commerce / Platforms</h3>
+                <div class="stock-grid">
+                    <div class="stock-item">
+                        <div class="symbol">AMZN</div>
+                        <div class="price">$232.11</div>
+                        <div class="change down">-0.66%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">MELI</div>
+                        <div class="price">$1,801</div>
+                        <div class="change up">+0.15%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">JMIA</div>
+                        <div class="price">$5.86</div>
+                        <div class="change down">-1.18%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="market-section">
+                <h3>Commodities / International</h3>
+                <div class="stock-grid">
+                    <div class="stock-item">
+                        <div class="symbol">COPX</div>
+                        <div class="price">$79.99</div>
+                        <div class="change up">+2.24%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">NBIS</div>
+                        <div class="price">$187.77</div>
+                        <div class="change down">-15.02%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="market-section">
+                <h3>Crypto</h3>
+                <div class="crypto-grid">
+                    <div class="stock-item">
+                        <div class="symbol">BTC</div>
+                        <div class="price">$64,409</div>
+                        <div class="change up">+0.61%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">ETH</div>
+                        <div class="price">$1,877</div>
+                        <div class="change up">+0.99%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">SOL</div>
+                        <div class="price">$74.76</div>
+                        <div class="change up">+0.95%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="symbol">HYPE</div>
+                        <div class="price">$58.36</div>
+                        <div class="change up">+1.64%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <h4>🎯 Market Insight</h4>
+                <p><strong>Rotation continues:</strong> Software names (NOW +7.4%, DOCN +12.4%) outperforming semis today. AI hardware taking a breather after a massive run — ALAB -10.8%, NBIS -15%. Crypto showing resilience with modest gains across the board. Copper miners (COPX +2.2%) catching a bid. For a long-term holder: this looks like healthy sector rotation, not a trend reversal.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🌙 Day in Review</h2>
+            <div class="insight-box">
+                <h4>Saturday at Restoration Cottage</h4>
+                <p>Quiet day with the family. No major calendar events — just the stay at the cottage wrapping up tomorrow. Emails were light on urgency (mostly promotional). Markets had a mixed Friday with software shining and AI hardware cooling off.</p>
+            </div>
+            <div class="insight-box" style="border-left-color: var(--accent-green);">
+                <h4>Tomorrow Prep</h4>
+                <p>Last day of the cottage stay. Consider: (1) Completing Habitica dailies before the day ends, (2) Checking if any fall soccer registration deadlines are approaching, (3) Planning the week ahead — work week starts Monday.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Evening Brief · Generated at 10:00 PM EDT · <a href="https://nikhilist.github.io/morning-brief/" style="color: var(--accent);">nikhilist.github.io/morning-brief</a></p>
+        </footer>
+    </div>
 </body>
 </html>
