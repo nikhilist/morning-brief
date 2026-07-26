@@ -3,400 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nik's Evening Brief - July 25, 2026</title>
+    <title>Morning Brief — July 26, 2026</title>
     <style>
-        :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-tertiary: #21262d;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #58a6ff;
-            --accent-green: #3fb950;
-            --accent-red: #f85149;
-            --accent-yellow: #d29922;
-            --border: #30363d;
-        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            background: #0d1117;
+            color: #c9d1d9;
             line-height: 1.6;
             padding: 20px;
         }
-        .container { max-width: 800px; margin: 0 auto; }
-        header {
+        .container { max-width: 600px; margin: 0 auto; }
+        .header {
             text-align: center;
             padding: 30px 0;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #30363d;
             margin-bottom: 30px;
         }
-        h1 { font-size: 1.8rem; margin-bottom: 8px; }
-        .timestamp { color: var(--text-secondary); font-size: 0.9rem; }
-        .card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
+        .header h1 { font-size: 28px; color: #58a6ff; margin-bottom: 5px; }
+        .header .date { color: #8b949e; font-size: 14px; }
+        .section {
+            background: #161b22;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
+            border: 1px solid #30363d;
         }
-        .card h2 {
-            font-size: 1.1rem;
+        .section h2 {
+            font-size: 16px;
+            color: #58a6ff;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--accent);
+            gap: 8px;
         }
         .weather-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            text-align: center;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
         }
-        .weather-item { padding: 15px; background: var(--bg-tertiary); border-radius: 8px; }
-        .weather-item .day { font-size: 0.85rem; color: var(--text-secondary); }
-        .weather-item .temp { font-size: 1.5rem; font-weight: bold; margin: 5px 0; }
-        .weather-item .desc { font-size: 0.85rem; color: var(--text-secondary); }
-        .event { padding: 12px; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 10px; }
-        .event .time { font-size: 0.8rem; color: var(--text-secondary); }
-        .event .title { font-weight: 500; margin-top: 4px; }
-        .email-item { padding: 12px; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 10px; }
-        .email-item .sender { font-size: 0.85rem; color: var(--text-secondary); }
-        .email-item .subject { font-weight: 500; margin-top: 4px; }
-        .task-list { list-style: none; }
-        .task-list li {
+        .weather-item { display: flex; justify-content: space-between; }
+        .weather-item span:first-child { color: #8b949e; }
+        .event {
+            background: #21262d;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .event-title { font-weight: 500; }
+        .event-time { color: #8b949e; font-size: 13px; }
+        .email-item {
             padding: 10px 0;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #30363d;
+            font-size: 14px;
+        }
+        .email-item:last-child { border-bottom: none; }
+        .email-from { color: #8b949e; font-size: 12px; }
+        .habit {
             display: flex;
             align-items: center;
             gap: 10px;
+            padding: 8px 0;
         }
-        .task-list li:last-child { border-bottom: none; }
-        .task-list .overdue { color: var(--accent-red); }
-        .task-list .pending { color: var(--accent-yellow); }
-        .streak-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+        .habit-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #30363d;
+            border-radius: 4px;
         }
-        .streak-item {
-            padding: 15px;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            text-align: center;
-        }
-        .streak-item .name { font-size: 0.85rem; color: var(--text-secondary); }
-        .streak-item .count { font-size: 1.8rem; font-weight: bold; color: var(--accent-green); margin: 5px 0; }
-        .streak-item .label { font-size: 0.75rem; color: var(--text-secondary); }
-        .news-item { padding: 12px; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 10px; }
-        .news-item .source { font-size: 0.8rem; color: var(--text-secondary); }
-        .news-item .headline { font-weight: 500; margin-top: 4px; }
-        .market-section { margin-bottom: 20px; }
-        .market-section h3 {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .stock-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-        }
-        .stock-item {
-            padding: 12px;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            text-align: center;
-        }
-        .stock-item .symbol { font-weight: bold; font-size: 0.9rem; }
-        .stock-item .price { font-size: 1.1rem; margin: 4px 0; }
-        .stock-item .change { font-size: 0.8rem; }
-        .up { color: var(--accent-green); }
-        .down { color: var(--accent-red); }
+        .habit-checkbox.done { background: #238636; border-color: #238636; }
         .crypto-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
         }
-        .insight-box {
-            background: var(--bg-tertiary);
-            border-left: 3px solid var(--accent);
+        .crypto-item {
+            background: #21262d;
             padding: 15px;
-            border-radius: 0 8px 8px 0;
-            margin-top: 15px;
+            border-radius: 8px;
+            text-align: center;
         }
-        .insight-box h4 { font-size: 0.9rem; margin-bottom: 8px; color: var(--accent); }
-        .insight-box p { font-size: 0.9rem; color: var(--text-secondary); }
-        footer {
+        .crypto-symbol { font-size: 12px; color: #8b949e; }
+        .crypto-price { font-size: 20px; font-weight: 600; margin: 5px 0; }
+        .crypto-change { font-size: 12px; }
+        .positive { color: #3fb950; }
+        .negative { color: #f85149; }
+        .news-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #30363d;
+        }
+        .news-item:last-child { border-bottom: none; }
+        .footer {
             text-align: center;
             padding: 30px 0;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            border-top: 1px solid var(--border);
-            margin-top: 30px;
-        }
-        @media (max-width: 600px) {
-            .crypto-grid { grid-template-columns: repeat(2, 1fr); }
-            .stock-grid { grid-template-columns: repeat(2, 1fr); }
+            color: #8b949e;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🌙 Evening Brief</h1>
-            <p class="timestamp">Saturday, July 25, 2026 · 10:00 PM EDT</p>
-        </header>
+        <div class="header">
+            <h1>🌅 Morning Brief</h1>
+            <div class="date">Saturday, July 26, 2026 — 7:00 AM EDT</div>
+        </div>
 
-        <div class="card">
-            <h2>🌤️ Weather · Princeton, NJ</h2>
+        <div class="section">
+            <h2>🌤️ Weather — Princeton, NJ</h2>
             <div class="weather-grid">
-                <div class="weather-item">
-                    <div class="day">Tonight</div>
-                    <div class="temp">72°F</div>
-                    <div class="desc">Clear</div>
-                </div>
-                <div class="weather-item">
-                    <div class="day">Sunday</div>
-                    <div class="temp">85°F</div>
-                    <div class="desc">Partly cloudy · 2% rain</div>
-                </div>
+                <div class="weather-item"><span>Condition</span><span>Sunny</span></div>
+                <div class="weather-item"><span>Temperature</span><span>53°F</span></div>
+                <div class="weather-item"><span>Humidity</span><span>94%</span></div>
+                <div class="weather-item"><span>Wind</span><span>3 mph ↓</span></div>
+                <div class="weather-item"><span>Sunset</span><span>8:19 PM</span></div>
             </div>
         </div>
 
-        <div class="card">
-            <h2>📅 Tomorrow</h2>
+        <div class="section">
+            <h2>📅 Calendar</h2>
             <div class="event">
-                <div class="time">All Day</div>
-                <div class="title">Last day at Restoration Cottage</div>
+                <div class="event-title">🏡 Stay at Restoration Cottage</div>
+                <div class="event-time">Saturday, Jul 25 – Sunday, Jul 27</div>
             </div>
-            <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem;">
-                No other calendar events scheduled for Sunday. Clean slate for the week ahead.
-            </p>
         </div>
 
-        <div class="card">
-            <h2>📧 Unread Emails (10 new today)</h2>
+        <div class="section">
+            <h2>📧 Emails (20 unread)</h2>
             <div class="email-item">
-                <div class="sender">Little Kicks Soccer</div>
-                <div class="subject">Fall I 2026 Soccer is OPEN! ⚽</div>
+                <div>Todoist: 1 overdue task notification</div>
+                <div class="email-from">no-reply@todoist.com</div>
             </div>
             <div class="email-item">
-                <div class="sender">Goldfish Swim School</div>
-                <div class="subject">1:1 Private Lessons ✨</div>
+                <div>Security alert</div>
+                <div class="email-from">Google</div>
             </div>
             <div class="email-item">
-                <div class="sender">Monarch</div>
-                <div class="subject">Account balance activity - Jul 24th</div>
+                <div>Order: Nutrition & Wellness item</div>
+                <div class="email-from">Amazon</div>
             </div>
-            <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem;">
-                Also: Chase statement available, Starlink Mini promo, Adventure Aquarium welcome.
-            </p>
+            <div class="email-item">
+                <div>Credit card statement available</div>
+                <div class="email-from">Chase</div>
+            </div>
+            <div class="email-item">
+                <div>5-Bullet Friday — Earplugs, Drone Factories...</div>
+                <div class="email-from">Tim Ferriss</div>
+            </div>
         </div>
 
-        <div class="card">
+        <div class="section">
             <h2>✅ Tasks & Habits</h2>
-            <ul class="task-list">
-                <li class="overdue">📋 1 overdue task (Todoist)</li>
-                <li class="pending">📥 2 unscheduled inbox tasks</li>
-                <li class="pending">🎯 3 Habitica dailies pending</li>
-            </ul>
+            <p style="color: #8b949e; margin-bottom: 15px;">Todoist: No tasks due today (1 overdue flagged)</p>
+            <div class="habit">
+                <div class="habit-checkbox"></div>
+                <span>Nutty Nuts (streak: 10)</span>
+            </div>
+            <div class="habit">
+                <div class="habit-checkbox"></div>
+                <span>Vitamin D - 50000IU (streak: 3)</span>
+            </div>
+            <div class="habit">
+                <div class="habit-checkbox"></div>
+                <span>Vitamin B12 + Calcium (streak: 11)</span>
+            </div>
+            <p style="color: #f85149; margin-top: 15px; font-size: 14px;">⚠️ Pending: Call up Kids United</p>
         </div>
 
-        <div class="card">
-            <h2>🔥 Habit Streaks</h2>
-            <div class="streak-grid">
-                <div class="streak-item">
-                    <div class="name">Nutty Nuts</div>
-                    <div class="count">10</div>
-                    <div class="label">day streak 🔥</div>
+        <div class="section">
+            <h2>📈 Markets</h2>
+            <div class="crypto-grid">
+                <div class="crypto-item">
+                    <div class="crypto-symbol">BTC</div>
+                    <div class="crypto-price">$64,472</div>
+                    <div class="crypto-change positive">+0.74%</div>
                 </div>
-                <div class="streak-item">
-                    <div class="name">Vitamin D</div>
-                    <div class="count">3</div>
-                    <div class="label">day streak</div>
+                <div class="crypto-item">
+                    <div class="crypto-symbol">ETH</div>
+                    <div class="crypto-price">$1,885</div>
+                    <div class="crypto-change positive">+1.46%</div>
                 </div>
-                <div class="streak-item">
-                    <div class="name">B12 + Calcium</div>
-                    <div class="count">11</div>
-                    <div class="label">day streak 🔥</div>
+                <div class="crypto-item">
+                    <div class="crypto-symbol">SOL</div>
+                    <div class="crypto-price">$75.08</div>
+                    <div class="crypto-change positive">+1.57%</div>
+                </div>
+                <div class="crypto-item">
+                    <div class="crypto-symbol">HYPE</div>
+                    <div class="crypto-price">$58.72</div>
+                    <div class="crypto-change positive">+2.05%</div>
                 </div>
             </div>
-            <div class="insight-box">
-                <h4>💡 Evening Insight</h4>
-                <p>Strong consistency on B12+Calcium (11 days) and Nutty Nuts (10 days). Vitamin D streak shorter — consider setting a phone reminder for Sunday evening to keep it going.</p>
-            </div>
+            <p style="color: #8b949e; margin-top: 15px; font-size: 13px;">
+                💡 Crypto showing modest green across the board. Steady upward drift — nothing dramatic.
+            </p>
+            <p style="color: #8b949e; margin-top: 10px; font-size: 13px;">
+                📊 Stock prices: Unable to fetch live data (API limits). Will retry for afternoon brief.
+            </p>
         </div>
 
-        <div class="card">
+        <div class="section">
             <h2>⚽ Arsenal News</h2>
             <div class="news-item">
-                <div class="source">Arseblog · Today</div>
-                <div class="headline">Per Mertesacker lands top role at German FA</div>
+                <strong>Women's Team:</strong> Jessie Gale set to join Newcastle United on loan
             </div>
             <div class="news-item">
-                <div class="source">Arseblog · Today</div>
-                <div class="headline">Confirmed: Elijah Upson signs for Arsenal</div>
+                <strong>Women's Team:</strong> Misa Rodriguez signed from Real Madrid (Spanish international goalkeeper)
             </div>
-            <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem;">
-                Next match: Girona (away) · August 1
-            </p>
-        </div>
-
-        <div class="card">
-            <h2>📈 Markets Watchlist</h2>
-            
-            <div class="market-section">
-                <h3>AI / Semiconductors</h3>
-                <div class="stock-grid">
-                    <div class="stock-item">
-                        <div class="symbol">NVDA</div>
-                        <div class="price">$206.84</div>
-                        <div class="change down">-0.92%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">ALAB</div>
-                        <div class="price">$291.58</div>
-                        <div class="change down">-10.82%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">AMAT</div>
-                        <div class="price">$536.25</div>
-                        <div class="change down">-4.72%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">SITM</div>
-                        <div class="price">$554.46</div>
-                        <div class="change down">-3.81%</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="market-section">
-                <h3>Software / Cyber / Infra</h3>
-                <div class="stock-grid">
-                    <div class="stock-item">
-                        <div class="symbol">CRWD</div>
-                        <div class="price">$183.28</div>
-                        <div class="change down">-0.08%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">RBRK</div>
-                        <div class="price">$80.38</div>
-                        <div class="change down">-8.71%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">NOW</div>
-                        <div class="price">$98.78</div>
-                        <div class="change up">+7.44%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">DOCN</div>
-                        <div class="price">$133.89</div>
-                        <div class="change up">+12.43%</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="market-section">
-                <h3>AI Infrastructure / Power</h3>
-                <div class="stock-grid">
-                    <div class="stock-item">
-                        <div class="symbol">VRT</div>
-                        <div class="price">$290.36</div>
-                        <div class="change down">-4.50%</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="market-section">
-                <h3>Consumer / Commerce / Platforms</h3>
-                <div class="stock-grid">
-                    <div class="stock-item">
-                        <div class="symbol">AMZN</div>
-                        <div class="price">$232.11</div>
-                        <div class="change down">-0.66%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">MELI</div>
-                        <div class="price">$1,801</div>
-                        <div class="change up">+0.15%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">JMIA</div>
-                        <div class="price">$5.86</div>
-                        <div class="change down">-1.18%</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="market-section">
-                <h3>Commodities / International</h3>
-                <div class="stock-grid">
-                    <div class="stock-item">
-                        <div class="symbol">COPX</div>
-                        <div class="price">$79.99</div>
-                        <div class="change up">+2.24%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">NBIS</div>
-                        <div class="price">$187.77</div>
-                        <div class="change down">-15.02%</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="market-section">
-                <h3>Crypto</h3>
-                <div class="crypto-grid">
-                    <div class="stock-item">
-                        <div class="symbol">BTC</div>
-                        <div class="price">$64,409</div>
-                        <div class="change up">+0.61%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">ETH</div>
-                        <div class="price">$1,877</div>
-                        <div class="change up">+0.99%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">SOL</div>
-                        <div class="price">$74.76</div>
-                        <div class="change up">+0.95%</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="symbol">HYPE</div>
-                        <div class="price">$58.36</div>
-                        <div class="change up">+1.64%</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="insight-box">
-                <h4>🎯 Market Insight</h4>
-                <p><strong>Rotation continues:</strong> Software names (NOW +7.4%, DOCN +12.4%) outperforming semis today. AI hardware taking a breather after a massive run — ALAB -10.8%, NBIS -15%. Crypto showing resilience with modest gains across the board. Copper miners (COPX +2.2%) catching a bid. For a long-term holder: this looks like healthy sector rotation, not a trend reversal.</p>
+            <div class="news-item">
+                <strong>Pre-season:</strong> Arsenal opened with MK Dons victory — Tzolis with an assist
             </div>
         </div>
 
-        <div class="card">
-            <h2>🌙 Day in Review</h2>
-            <div class="insight-box">
-                <h4>Saturday at Restoration Cottage</h4>
-                <p>Quiet day with the family. No major calendar events — just the stay at the cottage wrapping up tomorrow. Emails were light on urgency (mostly promotional). Markets had a mixed Friday with software shining and AI hardware cooling off.</p>
-            </div>
-            <div class="insight-box" style="border-left-color: var(--accent-green);">
-                <h4>Tomorrow Prep</h4>
-                <p>Last day of the cottage stay. Consider: (1) Completing Habitica dailies before the day ends, (2) Checking if any fall soccer registration deadlines are approaching, (3) Planning the week ahead — work week starts Monday.</p>
-            </div>
+        <div class="footer">
+            <p>Generated at 7:00 AM EDT</p>
+            <p style="margin-top: 5px;">🤖 Your daily briefing</p>
         </div>
-
-        <footer>
-            <p>Evening Brief · Generated at 10:00 PM EDT · <a href="https://nikhilist.github.io/morning-brief/" style="color: var(--accent);">nikhilist.github.io/morning-brief</a></p>
-        </footer>
     </div>
 </body>
 </html>
