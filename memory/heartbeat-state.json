@@ -8,7 +8,8 @@
     "tasks": 1785150013,
     "arsenal": 1785150013,
     "markets": 1785150013,
-    "evening_brief": 1753662068
+    "evening_brief": 1753662068,
+    "heartbeat_poll": 1753674000
   },
   "briefGenerated": true,
   "briefType": "evening",
