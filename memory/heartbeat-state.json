@@ -1,18 +1,18 @@
 {
   "lastChecks": {
     "morning_brief": 1785150013,
-    "calendar": 1785268800,
-    "email": 1785268800,
-    "weather": 1785150013,
-    "habits": 1785268800,
-    "tasks": 1785268800,
-    "arsenal": 1785268800,
-    "markets": 1785268800,
+    "calendar": 1786634400,
+    "email": 1786634400,
+    "weather": 1786634400,
+    "habits": 1786634400,
+    "tasks": 1786634400,
+    "arsenal": 1786634400,
+    "markets": 1786634400,
     "afternoon_brief": 1785268800,
-    "evening_brief": 1785290400,
-    "heartbeat_poll": 1785344400
+    "evening_brief": 1786634400,
+    "heartbeat_poll": 1786634400
   },
   "briefGenerated": true,
-  "briefType": "afternoon",
+  "briefType": "evening",
   "briefUrl": "https://nikhilist.github.io/morning-brief/"
 }
