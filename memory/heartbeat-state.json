@@ -1,18 +1,23 @@
 {
   "lastChecks": {
-    "morning_brief": 1785150013,
-    "calendar": 1786900800,
-    "email": 1786900800,
-    "weather": 1786900800,
-    "habits": 1786900800,
-    "tasks": 1786900800,
-    "arsenal": 1786900800,
-    "markets": 1786900800,
-    "afternoon_brief": 1786900800,
+    "morning_brief": 1786964400,
+    "afternoon_brief": 1786910400,
+    "calendar": 1786986000,
+    "email": 1786986000,
+    "weather": 1786986000,
+    "habits": 1786986000,
+    "tasks": 1786986000,
+    "arsenal": 1786986000,
+    "markets": 1786986000,
     "evening_brief": 1786759200,
-    "heartbeat_poll": 1786759200
+    "heartbeat_poll": 1786986000
   },
-  "briefGenerated": true,
-  "briefType": "afternoon",
-  "briefUrl": "https://nikhilist.github.io/morning-brief/"
+  "briefGenerated": false,
+  "briefType": null,
+  "briefUrl": "https://nikhilist.github.io/morning-brief/",
+  "issues": [
+    "Morning brief cron ran at 7:00 AM EDT but only took 35ms - brief not actually generated",
+    "Afternoon brief cron ran at 4:00 PM EDT but only took 14ms - brief not actually generated",
+    "brief.html still shows August 16 (yesterday) evening brief"
+  ]
 }
