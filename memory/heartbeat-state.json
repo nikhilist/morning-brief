@@ -1,7 +1,7 @@
 {
   "lastChecks": {
     "morning_brief": 1787223600,
-    "afternoon_brief": 1787169600,
+    "afternoon_brief": 1787256000,
     "calendar": 1787223600,
     "email": 1787223600,
     "weather": 1787223600,
@@ -10,10 +10,10 @@
     "arsenal": 1787223600,
     "markets": 1787223600,
     "evening_brief": 1787104800,
-    "heartbeat_poll": 1787223600
+    "heartbeat_poll": 1787256000
   },
   "briefGenerated": true,
-  "briefType": "Morning",
+  "briefType": "Afternoon",
   "briefUrl": "https://nikhilist.github.io/morning-brief/",
   "issues": []
 }
