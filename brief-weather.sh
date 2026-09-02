@@ -39,7 +39,16 @@ print(urllib.parse.quote(sys.argv[1]))
 PY
 )
 
-WEATHER_JSON=$(curl -s "https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=3&timezone=${ENC_TZ}")
+WEATHER_JSON=$(curl -sS --connect-timeout 10 --max-time 30 --retry 2 --retry-all-errors "https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=3&timezone=${ENC_TZ}" || true)
+
+# Upstream/proxy error text is not JSON.  Keep the whole brief resilient and
+# make the outage explicit instead of letting jq abort generation.
+if ! printf '%s' "$WEATHER_JSON" | jq -e '.current and .daily' >/dev/null 2>&1; then
+  WEATHER_JSON='{"current":{"temperature_2m":0,"apparent_temperature":0,"wind_speed_10m":0},"daily":{"temperature_2m_max":[0,0],"temperature_2m_min":[0,0],"precipitation_probability_max":[0,0]}}'
+  WEATHER_CALL="Live weather data was unavailable; check conditions before heading out."
+else
+  WEATHER_CALL=""
+fi
 TEMP=$(echo "$WEATHER_JSON" | jq -r '.current.temperature_2m // 0')
 FEELS_LIKE=$(echo "$WEATHER_JSON" | jq -r '.current.apparent_temperature // 0')
 WIND_KMH=$(echo "$WEATHER_JSON" | jq -r '.current.wind_speed_10m // 0')
@@ -56,7 +65,9 @@ TOMORROW_HIGH_F=$(echo "scale=0; ($TOMORROW_HIGH_C * 9/5) + 32" | bc -l 2>/dev/n
 TOMORROW_LOW_F=$(echo "scale=0; ($TOMORROW_LOW_C * 9/5) + 32" | bc -l 2>/dev/null | cut -d. -f1)
 WIND_MPH=$(echo "scale=0; $WIND_KMH * 0.621371" | bc -l 2>/dev/null | cut -d. -f1)
 
-if [ "$WIND_MPH" -ge 18 ] 2>/dev/null; then
+if [ -n "$WEATHER_CALL" ]; then
+  :
+elif [ "$WIND_MPH" -ge 18 ] 2>/dev/null; then
   WEATHER_CALL="Windy enough to be annoying."
 elif [ "$TOMORROW_PRECIP" -ge 60 ] 2>/dev/null; then
   WEATHER_CALL="Tomorrow has real rain risk."
