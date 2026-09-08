@@ -9,11 +9,11 @@
     "tasks": 1788811200,
     "arsenal": 1788811200,
     "markets": 1788811200,
-    "evening_brief": 1788573755,
-    "heartbeat_poll": 1788811200
+    "evening_brief": 1788818489,
+    "heartbeat_poll": 1788818489
   },
   "briefGenerated": true,
-  "briefType": "Afternoon",
+  "briefType": "Evening",
   "briefUrl": "https://nikhilist.github.io/morning-brief/",
   "issues": []
 }
