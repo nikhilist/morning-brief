@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#183a2d" />
+    <meta name="description" content="A calm shared meal planner for your household." />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>At the Table</title>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="#today"><span class="brand-mark">✦</span> At the Table</a>
+        <div class="household"><span class="presence"></span>Nik &amp; Meg <button class="text-button" id="share-button">Share</button></div>
+      </header>
+
+      <section class="hero" id="today">
+        <p class="eyebrow" id="date-label">TODAY</p>
+        <h1>What are we eating?</h1>
+        <p class="subhead">A gentle plan for today. Change anything—nothing is locked in.</p>
+        <div class="mode-switch" role="tablist" aria-label="Planning mode">
+          <button class="mode active" data-mode="quick" role="tab">Quick pick</button>
+          <button class="mode" data-mode="pantry" role="tab">Cook from what we have</button>
+        </div>
+      </section>
+
+      <section id="quick-panel" class="planner-panel">
+        <div class="panel-heading"><div><h2>Today’s draft</h2><p>Built from your meals, with Meg’s avoid list applied.</p></div><button class="primary" id="plan-day">Plan my day</button></div>
+        <div class="meal-grid" id="today-grid"></div>
+      </section>
+
+      <section id="pantry-panel" class="planner-panel hidden">
+        <div class="panel-heading"><div><h2>Cook from what you have</h2><p>Tap what’s on hand, then see the best fits.</p></div><button class="primary" id="find-meals">Find meals</button></div>
+        <div id="pantry-chips" class="chips"></div>
+        <div id="suggestions" class="suggestions"><p class="empty">Choose ingredients above to find meals.</p></div>
+      </section>
+
+      <section class="section" id="library">
+        <div class="panel-heading"><div><p class="eyebrow">YOUR LIBRARY</p><h2>Meals you actually make</h2></div><button class="secondary" id="open-add">+ Add meal</button></div>
+        <div class="library-actions"><button class="secondary" id="open-import">Import a list</button><span id="meal-count"></span></div>
+        <div class="meal-list" id="meal-list"></div>
+      </section>
+
+      <section class="section two-column">
+        <div id="pantry">
+          <p class="eyebrow">INGREDIENTS</p><h2>Kitchen list</h2>
+          <div class="add-row"><input id="pantry-input" placeholder="Add an ingredient" /><button class="secondary" id="add-pantry">Add</button></div>
+          <div class="chips" id="pantry-manage"></div>
+        </div>
+        <div id="safety">
+          <p class="eyebrow">MEG’S SETTINGS</p><h2>Pregnancy avoid list</h2>
+          <p class="muted">These ingredients are always filtered out before suggestions are made.</p>
+          <div class="add-row"><input id="avoid-input" placeholder="Add an ingredient to avoid" /><button class="secondary" id="add-avoid">Add</button></div>
+          <div class="chips danger-chips" id="avoid-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="meal-dialog"><form method="dialog" id="meal-form" class="dialog-card"><button class="close" value="cancel" aria-label="Close">×</button><p class="eyebrow">MEAL</p><h2 id="meal-form-title">Add a meal</h2><input type="hidden" id="meal-id" /><label>Name<input required id="meal-name" placeholder="e.g. Chicken tacos" /></label><label>Meal time<select id="meal-slot"><option>Breakfast</option><option>Snack</option><option>Lunch</option><option selected>Dinner</option></select></label><label>Ingredients <span>comma-separated</span><textarea id="meal-ingredients" placeholder="chicken, tortillas, avocado, salsa"></textarea></label><label>Recipe link <span>optional</span><input id="meal-link" type="url" placeholder="https://…" /></label><label>Notes <span>optional</span><textarea id="meal-notes" placeholder="15 minutes, Neel likes it with extra cheese"></textarea></label><button class="primary" value="default">Save meal</button></form></dialog>
+
+    <dialog id="import-dialog"><form method="dialog" class="dialog-card import-card"><button class="close" value="cancel" aria-label="Close">×</button><p class="eyebrow">IMPORT</p><h2>Bring your list as it is</h2><p class="muted">Paste one meal per line. This is intentionally forgiving.</p><textarea id="import-text" placeholder="Chicken tacos | dinner | chicken, tortillas, avocado, salsa&#10;Breakfast: overnight oats, eggs on toast&#10;Salmon bowls | dinner | salmon, rice, cucumber"></textarea><p class="hint">Format: <code>Meal | meal time | ingredients</code>. A bare “Dinner:” list works too.</p><button class="primary" value="default" id="do-import">Import meals</button></form></dialog>
+
+    <dialog id="share-dialog"><form method="dialog" class="dialog-card"><button class="close" value="cancel" aria-label="Close">×</button><p class="eyebrow">SHARED HOUSEHOLD</p><h2>Sharing is next</h2><p class="muted">This first build saves on this device while we validate the workflow. Account-backed live sync and a household invite for Meg are the next layer—your meals and rules are already modeled for it.</p><button class="primary" value="cancel">Got it</button></form></dialog>
+    <script src="app.js"></script>
+  </body>
+</html>
