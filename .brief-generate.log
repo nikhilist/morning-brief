@@ -8381,3 +8381,11 @@ GitHub Pages: https://nikhilist.github.io/morning-brief/
 + echo '=== Finished: Sat Sep 12 07:03:42 EDT 2026 ==='
 === Finished: Sat Sep 12 07:03:42 EDT 2026 ===
 + rm -f /tmp/tmp.w94AvtoWXy /tmp/tmp.A8Zwt7ldvz /tmp/tmp.hVunvtK8Ht
+=== Starting brief generation: Sat Sep 12 16:01:07 EDT 2026 ===
+[main ad5c556] Rewrite Afternoon brief structure: Saturday, September 12, 2026 04:01 PM EDT
+ 3 files changed, 83 insertions(+), 99 deletions(-)
+To github.com:nikhilist/morning-brief.git
+   2e73b1f..ad5c556  main -> main
+Afternoon brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Sat Sep 12 16:01:42 EDT 2026 ===
