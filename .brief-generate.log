@@ -7240,3 +7240,1144 @@ To github.com:nikhilist/morning-brief.git
 Evening brief generated
 GitHub Pages: https://nikhilist.github.io/morning-brief/
 === Finished: Fri Sep 11 22:01:34 EDT 2026 ===
+=== Starting brief generation: Sat Sep 12 07:01:22 EDT 2026 ===
++ TZ=America/New_York
++ export TZ
++ export PATH=/usr/local/bin:/usr/bin:/bin:/home/nik/.local/bin:/home/nik/.npm-global/bin
++ PATH=/usr/local/bin:/usr/bin:/bin:/home/nik/.local/bin:/home/nik/.npm-global/bin
++ export HOME=/home/nik
++ HOME=/home/nik
++ export GOG_KEYRING_BACKEND=file
++ GOG_KEYRING_BACKEND=file
++ export GOG_KEYRING_PASSWORD=
++ GOG_KEYRING_PASSWORD=
++ export GOG_ACCOUNT=nikhilist@gmail.com
++ GOG_ACCOUNT=nikhilist@gmail.com
++ export HABITICA_USER_ID=404a4487-6eea-4ed3-b60b-03f82092b29a
++ HABITICA_USER_ID=404a4487-6eea-4ed3-b60b-03f82092b29a
++ export HABITICA_API_TOKEN=e3470ee9-56d7-49f4-bd56-4f3f175bd804
++ HABITICA_API_TOKEN=e3470ee9-56d7-49f4-bd56-4f3f175bd804
++ export TODOIST_API_TOKEN=81d341953323302cf0919e4ec8a8d9531ea6f881
++ TODOIST_API_TOKEN=81d341953323302cf0919e4ec8a8d9531ea6f881
+++ date
++ echo '=== Starting brief generation: Sat Sep 12 07:02:51 EDT 2026 ==='
+=== Starting brief generation: Sat Sep 12 07:02:51 EDT 2026 ===
++ WORKSPACE=/home/nik/.openclaw/workspace
++ '[' -x /home/nik/.openclaw/workspace/brief-travel-context.sh ']'
++ /home/nik/.openclaw/workspace/brief-travel-context.sh
++ OUTPUT_FILE=/home/nik/.openclaw/workspace/brief.html
++ INDEX_FILE=/home/nik/.openclaw/workspace/index.html
++ STATE_FILE=/home/nik/.openclaw/workspace/.brief-state.json
+++ date '+%A, %B %-d, %Y'
++ DATE='Saturday, September 12, 2026'
+++ date '+%I:%M %p %Z'
++ TIME='07:02 AM EDT'
+++ date +%H
++ HOUR=07
+++ cat /home/nik/.openclaw/workspace/.brief-state.json
++ PREV_STATE='{"emails":["1a08ee12caa18c68","1a090847f4bb60fb","1a0908885b367bf2","1a09116822d5560b","1a091424133f5bb8","1a09167dffb25304","1a0917d341ca6dee","1a0918ec3575b30a","1a091c432021ea05","1a092a667396f232"],"tasks":1,"timestamp":"2026-09-11T22:01:32-04:00"}'
++ '[' 07 -lt 12 ']'
++ BRIEF_TYPE=Morning
++ BRIEF_MODE=full
++ export BRIEF_MODE
+++ run_module /home/nik/.openclaw/workspace/brief-weather.sh
+++ local script=/home/nik/.openclaw/workspace/brief-weather.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-weather.sh ']'
+++ /home/nik/.openclaw/workspace/brief-weather.sh
++ WEATHER_RAW='<section class="card">
+  <h2>Weather / Logistics — Home Base (Princeton, NJ)</h2>
+  <ul>
+    <li>Now: 56°F, feels like 54°F.</li>
+    <li>Today: 81° / 56°.</li>
+    <li>Tomorrow: 80° / 66°, rain risk 70%.</li>
+    <li>Tomorrow has real rain risk.</li>
+  </ul>
+</section>
+__SUMMARY__Home weather for Princeton, NJ: Tomorrow has real rain risk.
+__FETCHED_AT__2026-09-12T07:02:53-04:00'
+++ run_module /home/nik/.openclaw/workspace/brief-calendar.sh
+++ local script=/home/nik/.openclaw/workspace/brief-calendar.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-calendar.sh ']'
+++ /home/nik/.openclaw/workspace/brief-calendar.sh
++ CALENDAR_RAW='<section class="card">
+  <h2>Day at a Glance</h2>
+  <p>Sunderland vs Arsenal (A)</p>
+  <div class="event"><div class="event-time">3:00 PM</div><div class="event-title"><span class="calendar-tag">Arsenal FC</span> Sunderland vs Arsenal (A)</div></div>
+</section>
+__SUMMARY__Sunderland vs Arsenal (A)
+__TOMORROW__Tomorrow is open right now.'
+++ run_module /home/nik/.openclaw/workspace/brief-email.sh
+++ local script=/home/nik/.openclaw/workspace/brief-email.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-email.sh ']'
+++ /home/nik/.openclaw/workspace/brief-email.sh
++ EMAIL_RAW='<section class="card">
+  <h2>Inbox Triage</h2>
+  <p class="muted">Reviewed 6 new email bodies and 4 older unread emails, not just subject lines.</p>
+  <p><strong>Actually useful</strong></p>
+  <ul><li><strong>"Amazon.com" <auto-confirm@amazon.com></strong> — Ordered 1 item: Electronics <span class="muted">(action or real-world relevance)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for YSAGi Double-Sided Desk Pad.... <span class="muted">(action or real-world relevance)</span></li></ul>
+  <p><strong>Maybe useful</strong></p>
+  <ul><li><strong>Ally Bank <email@alert.ally.com></strong> — Your latest statement is ready to view. <span class="muted">(informational but not urgent)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for Spigen Nano Pop MagFit for.... <span class="muted">(informational but not urgent)</span></li></ul>
+  <p class="muted">Ignored as likely junk/noise: 6. Total unread: 10.</p>
+</section>
+__SUMMARY__2 of 6 new unread emails look actually useful after reading the email bodies.
+__EMAIL_IDS__["1a0917d341ca6dee","1a0918ec3575b30a","1a091c432021ea05","1a092a667396f232","1a0937c74a7a0438","1a0946741200fe9c","1a09492f6dc75f3d","1a094c76e6c9b382","1a095132b4805857","1a09539ebf702ad6"]
+__NEEDS_TOP__"Amazon.com" <auto-confirm@amazon.com> — Ordered 1 item: Electronics | "return@amazon.com" <return@amazon.com> — Refund issued for YSAGi Double-Sided Desk Pad....
+__LATEST_EMAIL_AT__2026-09-12 06:57'
+++ run_module /home/nik/.openclaw/workspace/brief-tasks.sh
+++ local script=/home/nik/.openclaw/workspace/brief-tasks.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-tasks.sh ']'
+++ /home/nik/.openclaw/workspace/brief-tasks.sh
++ TASKS_RAW='<section class="card">
+  <h2>Top Priorities</h2>
+  <ul>
+    <li><strong>Must-do:</strong> Sell the BMW matts for the 5 series</li>
+    <li><strong>Should-do:</strong> Use A&F gift card</li>
+    <li><strong>If there’s time:</strong> Why did goldfish charge 200 vs 130 usually?</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>Task Pressure</h2>
+  <p class="muted">1 due or overdue task(s). 2 unscheduled Inbox task(s).</p>
+  <h3>Due / Overdue</h3>
+  <ul><li><strong>Sell the BMW matts for the 5 series</strong> <span class="muted">— due 2026-04-04</span></li></ul>
+  <h3>Inbox / No Due Date</h3>
+  <ul><li><strong>Use A&F gift card</strong><span class="muted"> — Inbox / no due date</span></li>
+<li><strong>Why did goldfish charge 200 vs 130 usually?</strong><span class="muted"> — Inbox / no due date</span></li></ul>
+</section>
+__SUMMARY__Top priority: Sell the BMW matts for the 5 series
+__TODO_COUNT__1
+__TASK_TOP__Sell the BMW matts for the 5 series | Use A&F gift card | Why did goldfish charge 200 vs 130 usually?
+__INBOX_UNSCHEDULED_COUNT__2
+__LATEST_INBOX_TASK_AT__2026-09-04T08:32:55.189312Z'
+++ run_module /home/nik/.openclaw/workspace/brief-habits.sh
+++ local script=/home/nik/.openclaw/workspace/brief-habits.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-habits.sh ']'
+++ /home/nik/.openclaw/workspace/brief-habits.sh
++ HABITS_RAW='<section class="card">
+  <h2>Habits</h2>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 10)</li><li>Vitamin D - 50000IU (value: 3)</li><li>Vitamin B12 + Calcium (value: 11)</li></ul>
+</section>
+__SUMMARY__Basics are still open late, which usually means the trigger is weak, not the intention.
+__HABIT_COUNT__3'
+++ run_module /home/nik/.openclaw/workspace/arsenal-brief.sh
+++ local script=/home/nik/.openclaw/workspace/arsenal-brief.sh
+++ '[' -x /home/nik/.openclaw/workspace/arsenal-brief.sh ']'
+++ /home/nik/.openclaw/workspace/arsenal-brief.sh
+[main a0bf1b3] Rewrite Morning brief structure: Saturday, September 12, 2026 07:01 AM EDT
+ 3 files changed, 101 insertions(+), 81 deletions(-)
+To github.com:nikhilist/morning-brief.git
+   e8fc1dd..a0bf1b3  main -> main
+Morning brief generated
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+=== Finished: Sat Sep 12 07:03:09 EDT 2026 ===
++ ARSENAL_RAW='<section class="card arsenal">
+  <h2>Arsenal</h2>
+  <p><strong>What matters:</strong> Matchday. Sunderland vs Arsenal (A) (in 7h) is the main Arsenal event to care about. Top news line: Arsenal are passing every test - and Odegaard is in form of his life</p>
+  <ul>
+    <li><strong>Today: Sunderland vs Arsenal (A) at 3:00 PM</strong><br><span class="muted">in 7h • Stadium of Light, Sunderland</span><br><span class="muted">Premier League | Matchweek 4 | Watch live on TalkSport, UK - TNT Sports. Join us for analysis and live commentary in The Breakdown Live on the Arsenal App and Arsenal.com | Join In #SUNARS Shop Arsenal Direct Join Member</span></li>
+    
+  </ul>
+  <h3>News & Commentary</h3>
+  <ul>
+    <li><strong>[BBC]</strong> Arsenal are passing every test - and Odegaard is in form of his life<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arsenal close to finalising new contract for Arteta<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arteta&#x27;s suprise tactics to deal with travel issues<br><span class="muted">BBC Arsenal coverage</span></li>
+  </ul>
+  <h3>Team News</h3>
+  <ul>
+    <li><strong>Fitness watch:</strong> Odegaard/Trossard availability is in the official pre-match signal set, so that is real team-news rather than fluff.</li><li><strong>Manager line:</strong> Arteta is part of the pre-match cycle, which usually means the section to trust most is availability plus selection hints, not fan noise.</li>
+  </ul>
+  <h3>Likely XI / Selection Questions</h3>
+  <ul>
+    <li><strong>Selection question:</strong> The module still refuses to fake a probable XI. The real watchpoints are the Odegaard/Trossard fitness picture and how aggressive Arteta goes before the next run of fixtures.</li>
+  </ul>
+  <h3>Social Pulse</h3>
+  <ul>
+    <li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>
+  </ul>
+</section>
+__FETCHED_AT__2026-09-12T07:03:04-04:00'
+++ run_module /home/nik/.openclaw/workspace/brief-market-intel.sh
+++ local script=/home/nik/.openclaw/workspace/brief-market-intel.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-market-intel.sh ']'
+++ /home/nik/.openclaw/workspace/brief-market-intel.sh
++ MARKET_INTEL_RAW='<section class="card">
+<h2>Market Intelligence</h2>
+<p><strong>What matters:</strong> No dominant macro regime is obvious, so theme selection matters more than market narration.</p>
+<ul>
+<li>The right default is patience: no regime shift, no need to manufacture one.</li>
+</ul>
+<h3>Invested Themes</h3>
+<ul>
+<li>No invested theme is moving enough to matter; that is usually a sign to focus on thesis, not tape noise.</li>
+</ul>
+<h3>Only Moves Big Enough to Matter</h3>
+<ul>
+<li>No name in your watchlist is moving enough to deserve attention on price action alone.</li>
+</ul>
+<h3>Crypto</h3>
+<ul>
+<li><strong>BTC</strong> $77,316 (+0.5%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>ETH</strong> $2,533 (+3.0%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>SOL</strong> $102.12 (+3.1%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>HYPE</strong> $79.87 (+1.0%) — mostly noise unless the move extends or the thesis changes.</li>
+</ul>
+</section>
+__SUMMARY__No dominant macro regime is obvious, so theme selection matters more than market narration.
+__FETCHED_AT__2026-09-12T07:03:25-04:00'
+++ run_module /home/nik/.openclaw/workspace/brief-upcoming-prep.sh
+++ local script=/home/nik/.openclaw/workspace/brief-upcoming-prep.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-upcoming-prep.sh ']'
+++ /home/nik/.openclaw/workspace/brief-upcoming-prep.sh
++ UPCOMING_PREP_RAW='<section class="card">
+<h2>Upcoming Things Worth Thinking About</h2>
+<p><strong>What matters:</strong> 2026-09-14 is the first day that looks worth thinking about ahead of time.</p>
+<ul>
+<li><strong>2026-09-14</strong> — easy to forget if not decided early; needs daytime planning; travel logistics<br><span class="muted">All day — Dad&#x27;s birthday • 10:00 AM — Grandparents Day@School • 1:00 PM — Mom Flight India</span></li>
+<li><strong>2026-09-18</strong> — needs daytime planning<br><span class="muted">11:00 AM — Soccer@school</span></li>
+<li><strong>2026-09-19</strong> — easy to forget if not decided early; you care enough that timing matters<br><span class="muted">5:30 PM — Vivaan Birthday • 10:00 AM — Brighton and Hove Albion vs Arsenal (A)</span></li>
+</ul>
+</section>
+__SUMMARY__2026-09-14 is the first day that looks worth thinking about ahead of time.'
+++ run_module /home/nik/.openclaw/workspace/brief-trip-logistics.sh
+++ local script=/home/nik/.openclaw/workspace/brief-trip-logistics.sh
+++ '[' -x /home/nik/.openclaw/workspace/brief-trip-logistics.sh ']'
+++ /home/nik/.openclaw/workspace/brief-trip-logistics.sh
++ TRIP_LOGISTICS_RAW='<section class="card">
+<h2>Trip Logistics</h2>
+<p class="muted">No recent trip logistics found.</p>
+</section>
+__SUMMARY__No current trip logistics detected.
+__NEXT_ACTION__
+__HELP_IDEAS__'
+++ printf '%s\n' '<section class="card">
+  <h2>Weather / Logistics — Home Base (Princeton, NJ)</h2>
+  <ul>
+    <li>Now: 56°F, feels like 54°F.</li>
+    <li>Today: 81° / 56°.</li>
+    <li>Tomorrow: 80° / 66°, rain risk 70%.</li>
+    <li>Tomorrow has real rain risk.</li>
+  </ul>
+</section>
+__SUMMARY__Home weather for Princeton, NJ: Tomorrow has real rain risk.
+__FETCHED_AT__2026-09-12T07:02:53-04:00'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ WEATHER_HTML='<section class="card">
+  <h2>Weather / Logistics — Home Base (Princeton, NJ)</h2>
+  <ul>
+    <li>Now: 56°F, feels like 54°F.</li>
+    <li>Today: 81° / 56°.</li>
+    <li>Tomorrow: 80° / 66°, rain risk 70%.</li>
+    <li>Tomorrow has real rain risk.</li>
+  </ul>
+</section>'
+++ printf '%s\n' '<section class="card">
+  <h2>Day at a Glance</h2>
+  <p>Sunderland vs Arsenal (A)</p>
+  <div class="event"><div class="event-time">3:00 PM</div><div class="event-title"><span class="calendar-tag">Arsenal FC</span> Sunderland vs Arsenal (A)</div></div>
+</section>
+__SUMMARY__Sunderland vs Arsenal (A)
+__TOMORROW__Tomorrow is open right now.'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ CALENDAR_HTML='<section class="card">
+  <h2>Day at a Glance</h2>
+  <p>Sunderland vs Arsenal (A)</p>
+  <div class="event"><div class="event-time">3:00 PM</div><div class="event-title"><span class="calendar-tag">Arsenal FC</span> Sunderland vs Arsenal (A)</div></div>
+</section>'
+++ printf '%s\n' '<section class="card">
+  <h2>Inbox Triage</h2>
+  <p class="muted">Reviewed 6 new email bodies and 4 older unread emails, not just subject lines.</p>
+  <p><strong>Actually useful</strong></p>
+++ extract_html
+  <ul><li><strong>"Amazon.com" <auto-confirm@amazon.com></strong> — Ordered 1 item: Electronics <span class="muted">(action or real-world relevance)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for YSAGi Double-Sided Desk Pad.... <span class="muted">(action or real-world relevance)</span></li></ul>
+  <p><strong>Maybe useful</strong></p>
+  <ul><li><strong>Ally Bank <email@alert.ally.com></strong> — Your latest statement is ready to view. <span class="muted">(informational but not urgent)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for Spigen Nano Pop MagFit for.... <span class="muted">(informational but not urgent)</span></li></ul>
+  <p class="muted">Ignored as likely junk/noise: 6. Total unread: 10.</p>
+</section>
+__SUMMARY__2 of 6 new unread emails look actually useful after reading the email bodies.
+__EMAIL_IDS__["1a0917d341ca6dee","1a0918ec3575b30a","1a091c432021ea05","1a092a667396f232","1a0937c74a7a0438","1a0946741200fe9c","1a09492f6dc75f3d","1a094c76e6c9b382","1a095132b4805857","1a09539ebf702ad6"]
+__NEEDS_TOP__"Amazon.com" <auto-confirm@amazon.com> — Ordered 1 item: Electronics | "return@amazon.com" <return@amazon.com> — Refund issued for YSAGi Double-Sided Desk Pad....
+__LATEST_EMAIL_AT__2026-09-12 06:57'
+++ sed '/^__.*__.*$/d'
++ EMAIL_HTML='<section class="card">
+  <h2>Inbox Triage</h2>
+  <p class="muted">Reviewed 6 new email bodies and 4 older unread emails, not just subject lines.</p>
+  <p><strong>Actually useful</strong></p>
+  <ul><li><strong>"Amazon.com" <auto-confirm@amazon.com></strong> — Ordered 1 item: Electronics <span class="muted">(action or real-world relevance)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for YSAGi Double-Sided Desk Pad.... <span class="muted">(action or real-world relevance)</span></li></ul>
+  <p><strong>Maybe useful</strong></p>
+  <ul><li><strong>Ally Bank <email@alert.ally.com></strong> — Your latest statement is ready to view. <span class="muted">(informational but not urgent)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for Spigen Nano Pop MagFit for.... <span class="muted">(informational but not urgent)</span></li></ul>
+  <p class="muted">Ignored as likely junk/noise: 6. Total unread: 10.</p>
+</section>'
+++ printf '%s\n' '<section class="card">
+  <h2>Top Priorities</h2>
+  <ul>
+    <li><strong>Must-do:</strong> Sell the BMW matts for the 5 series</li>
+    <li><strong>Should-do:</strong> Use A&F gift card</li>
+    <li><strong>If there’s time:</strong> Why did goldfish charge 200 vs 130 usually?</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>Task Pressure</h2>
+  <p class="muted">1 due or overdue task(s). 2 unscheduled Inbox task(s).</p>
+  <h3>Due / Overdue</h3>
+  <ul><li><strong>Sell the BMW matts for the 5 series</strong> <span class="muted">— due 2026-04-04</span></li></ul>
+  <h3>Inbox / No Due Date</h3>
+  <ul><li><strong>Use A&F gift card</strong><span class="muted"> — Inbox / no due date</span></li>
+<li><strong>Why did goldfish charge 200 vs 130 usually?</strong><span class="muted"> — Inbox / no due date</span></li></ul>
+</section>
+__SUMMARY__Top priority: Sell the BMW matts for the 5 series
+__TODO_COUNT__1
+__TASK_TOP__Sell the BMW matts for the 5 series | Use A&F gift card | Why did goldfish charge 200 vs 130 usually?
+__INBOX_UNSCHEDULED_COUNT__2
+__LATEST_INBOX_TASK_AT__2026-09-04T08:32:55.189312Z'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ TASKS_HTML='<section class="card">
+  <h2>Top Priorities</h2>
+  <ul>
+    <li><strong>Must-do:</strong> Sell the BMW matts for the 5 series</li>
+    <li><strong>Should-do:</strong> Use A&F gift card</li>
+    <li><strong>If there’s time:</strong> Why did goldfish charge 200 vs 130 usually?</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>Task Pressure</h2>
+  <p class="muted">1 due or overdue task(s). 2 unscheduled Inbox task(s).</p>
+  <h3>Due / Overdue</h3>
+  <ul><li><strong>Sell the BMW matts for the 5 series</strong> <span class="muted">— due 2026-04-04</span></li></ul>
+  <h3>Inbox / No Due Date</h3>
+  <ul><li><strong>Use A&F gift card</strong><span class="muted"> — Inbox / no due date</span></li>
+<li><strong>Why did goldfish charge 200 vs 130 usually?</strong><span class="muted"> — Inbox / no due date</span></li></ul>
+</section>'
+++ printf '%s\n' '<section class="card">
+  <h2>Habits</h2>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 10)</li><li>Vitamin D - 50000IU (value: 3)</li><li>Vitamin B12 + Calcium (value: 11)</li></ul>
+</section>
+__SUMMARY__Basics are still open late, which usually means the trigger is weak, not the intention.
+__HABIT_COUNT__3'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ HABITS_HTML='<section class="card">
+  <h2>Habits</h2>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 10)</li><li>Vitamin D - 50000IU (value: 3)</li><li>Vitamin B12 + Calcium (value: 11)</li></ul>
+</section>'
+++ printf '%s\n' '<section class="card arsenal">
+  <h2>Arsenal</h2>
+  <p><strong>What matters:</strong> Matchday. Sunderland vs Arsenal (A) (in 7h) is the main Arsenal event to care about. Top news line: Arsenal are passing every test - and Odegaard is in form of his life</p>
+  <ul>
+    <li><strong>Today: Sunderland vs Arsenal (A) at 3:00 PM</strong><br><span class="muted">in 7h • Stadium of Light, Sunderland</span><br><span class="muted">Premier League | Matchweek 4 | Watch live on TalkSport, UK - TNT Sports. Join us for analysis and live commentary in The Breakdown Live on the Arsenal App and Arsenal.com | Join In #SUNARS Shop Arsenal Direct Join Member</span></li>
+    
+  </ul>
+  <h3>News & Commentary</h3>
+  <ul>
+    <li><strong>[BBC]</strong> Arsenal are passing every test - and Odegaard is in form of his life<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arsenal close to finalising new contract for Arteta<br><span class="muted">BBC Arsenal coverage</span></li>
+++ extract_html
+<li><strong>[BBC]</strong> Arteta&#x27;s suprise tactics to deal with travel issues<br><span class="muted">BBC Arsenal coverage</span></li>
+  </ul>
+  <h3>Team News</h3>
+  <ul>
+    <li><strong>Fitness watch:</strong> Odegaard/Trossard availability is in the official pre-match signal set, so that is real team-news rather than fluff.</li><li><strong>Manager line:</strong> Arteta is part of the pre-match cycle, which usually means the section to trust most is availability plus selection hints, not fan noise.</li>
+  </ul>
+  <h3>Likely XI / Selection Questions</h3>
+  <ul>
+    <li><strong>Selection question:</strong> The module still refuses to fake a probable XI. The real watchpoints are the Odegaard/Trossard fitness picture and how aggressive Arteta goes before the next run of fixtures.</li>
+  </ul>
+  <h3>Social Pulse</h3>
+  <ul>
+    <li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>
+  </ul>
+</section>
+__FETCHED_AT__2026-09-12T07:03:04-04:00'
+++ sed '/^__.*__.*$/d'
++ ARSENAL_HTML='<section class="card arsenal">
+  <h2>Arsenal</h2>
+  <p><strong>What matters:</strong> Matchday. Sunderland vs Arsenal (A) (in 7h) is the main Arsenal event to care about. Top news line: Arsenal are passing every test - and Odegaard is in form of his life</p>
+  <ul>
+    <li><strong>Today: Sunderland vs Arsenal (A) at 3:00 PM</strong><br><span class="muted">in 7h • Stadium of Light, Sunderland</span><br><span class="muted">Premier League | Matchweek 4 | Watch live on TalkSport, UK - TNT Sports. Join us for analysis and live commentary in The Breakdown Live on the Arsenal App and Arsenal.com | Join In #SUNARS Shop Arsenal Direct Join Member</span></li>
+    
+  </ul>
+  <h3>News & Commentary</h3>
+  <ul>
+    <li><strong>[BBC]</strong> Arsenal are passing every test - and Odegaard is in form of his life<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arsenal close to finalising new contract for Arteta<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arteta&#x27;s suprise tactics to deal with travel issues<br><span class="muted">BBC Arsenal coverage</span></li>
+  </ul>
+  <h3>Team News</h3>
+  <ul>
+    <li><strong>Fitness watch:</strong> Odegaard/Trossard availability is in the official pre-match signal set, so that is real team-news rather than fluff.</li><li><strong>Manager line:</strong> Arteta is part of the pre-match cycle, which usually means the section to trust most is availability plus selection hints, not fan noise.</li>
+  </ul>
+  <h3>Likely XI / Selection Questions</h3>
+  <ul>
+    <li><strong>Selection question:</strong> The module still refuses to fake a probable XI. The real watchpoints are the Odegaard/Trossard fitness picture and how aggressive Arteta goes before the next run of fixtures.</li>
+  </ul>
+  <h3>Social Pulse</h3>
+  <ul>
+    <li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>
+  </ul>
+</section>'
+++ printf '%s\n' '<section class="card">
+<h2>Market Intelligence</h2>
+<p><strong>What matters:</strong> No dominant macro regime is obvious, so theme selection matters more than market narration.</p>
+<ul>
+<li>The right default is patience: no regime shift, no need to manufacture one.</li>
+</ul>
+<h3>Invested Themes</h3>
+<ul>
+<li>No invested theme is moving enough to matter; that is usually a sign to focus on thesis, not tape noise.</li>
+</ul>
+<h3>Only Moves Big Enough to Matter</h3>
+<ul>
+<li>No name in your watchlist is moving enough to deserve attention on price action alone.</li>
+</ul>
+<h3>Crypto</h3>
+<ul>
+<li><strong>BTC</strong> $77,316 (+0.5%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>ETH</strong> $2,533 (+3.0%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>SOL</strong> $102.12 (+3.1%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>HYPE</strong> $79.87 (+1.0%) — mostly noise unless the move extends or the thesis changes.</li>
+</ul>
+</section>
+__SUMMARY__No dominant macro regime is obvious, so theme selection matters more than market narration.
+__FETCHED_AT__2026-09-12T07:03:25-04:00'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ MARKET_INTEL_HTML='<section class="card">
+<h2>Market Intelligence</h2>
+<p><strong>What matters:</strong> No dominant macro regime is obvious, so theme selection matters more than market narration.</p>
+<ul>
+<li>The right default is patience: no regime shift, no need to manufacture one.</li>
+</ul>
+<h3>Invested Themes</h3>
+<ul>
+<li>No invested theme is moving enough to matter; that is usually a sign to focus on thesis, not tape noise.</li>
+</ul>
+<h3>Only Moves Big Enough to Matter</h3>
+<ul>
+<li>No name in your watchlist is moving enough to deserve attention on price action alone.</li>
+</ul>
+<h3>Crypto</h3>
+<ul>
+<li><strong>BTC</strong> $77,316 (+0.5%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>ETH</strong> $2,533 (+3.0%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>SOL</strong> $102.12 (+3.1%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>HYPE</strong> $79.87 (+1.0%) — mostly noise unless the move extends or the thesis changes.</li>
+</ul>
+</section>'
+++ printf '%s\n' '<section class="card">
+<h2>Upcoming Things Worth Thinking About</h2>
+<p><strong>What matters:</strong> 2026-09-14 is the first day that looks worth thinking about ahead of time.</p>
+<ul>
+<li><strong>2026-09-14</strong> — easy to forget if not decided early; needs daytime planning; travel logistics<br><span class="muted">All day — Dad&#x27;s birthday • 10:00 AM — Grandparents Day@School • 1:00 PM — Mom Flight India</span></li>
+<li><strong>2026-09-18</strong> — needs daytime planning<br><span class="muted">11:00 AM — Soccer@school</span></li>
+<li><strong>2026-09-19</strong> — easy to forget if not decided early; you care enough that timing matters<br><span class="muted">5:30 PM — Vivaan Birthday • 10:00 AM — Brighton and Hove Albion vs Arsenal (A)</span></li>
+</ul>
+</section>
+__SUMMARY__2026-09-14 is the first day that looks worth thinking about ahead of time.'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ UPCOMING_PREP_HTML='<section class="card">
+<h2>Upcoming Things Worth Thinking About</h2>
+<p><strong>What matters:</strong> 2026-09-14 is the first day that looks worth thinking about ahead of time.</p>
+<ul>
+<li><strong>2026-09-14</strong> — easy to forget if not decided early; needs daytime planning; travel logistics<br><span class="muted">All day — Dad&#x27;s birthday • 10:00 AM — Grandparents Day@School • 1:00 PM — Mom Flight India</span></li>
+<li><strong>2026-09-18</strong> — needs daytime planning<br><span class="muted">11:00 AM — Soccer@school</span></li>
+<li><strong>2026-09-19</strong> — easy to forget if not decided early; you care enough that timing matters<br><span class="muted">5:30 PM — Vivaan Birthday • 10:00 AM — Brighton and Hove Albion vs Arsenal (A)</span></li>
+</ul>
+</section>'
+++ printf '%s\n' '<section class="card">
+<h2>Trip Logistics</h2>
+<p class="muted">No recent trip logistics found.</p>
+</section>
+__SUMMARY__No current trip logistics detected.
+__NEXT_ACTION__
+__HELP_IDEAS__'
+++ extract_html
+++ sed '/^__.*__.*$/d'
++ TRIP_LOGISTICS_HTML='<section class="card">
+<h2>Trip Logistics</h2>
+<p class="muted">No recent trip logistics found.</p>
+</section>'
+++ printf '%s\n' '<section class="card">
+  <h2>Day at a Glance</h2>
+  <p>Sunderland vs Arsenal (A)</p>
+  <div class="event"><div class="event-time">3:00 PM</div><div class="event-title"><span class="calendar-tag">Arsenal FC</span> Sunderland vs Arsenal (A)</div></div>
+</section>
+__SUMMARY__Sunderland vs Arsenal (A)
+__TOMORROW__Tomorrow is open right now.'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ DAY_SHAPE='Sunderland vs Arsenal (A)'
+++ printf '%s\n' '<section class="card">
+  <h2>Day at a Glance</h2>
+  <p>Sunderland vs Arsenal (A)</p>
+  <div class="event"><div class="event-time">3:00 PM</div><div class="event-title"><span class="calendar-tag">Arsenal FC</span> Sunderland vs Arsenal (A)</div></div>
+</section>
+__SUMMARY__Sunderland vs Arsenal (A)
+__TOMORROW__Tomorrow is open right now.'
+++ extract_meta TOMORROW
+++ local key=TOMORROW
+++ sed -n 's/^__TOMORROW__//p'
+++ head -n1
++ TOMORROW_SHAPE='Tomorrow is open right now.'
+++ printf '%s\n' '<section class="card">
+  <h2>Inbox Triage</h2>
+  <p class="muted">Reviewed 6 new email bodies and 4 older unread emails, not just subject lines.</p>
+  <p><strong>Actually useful</strong></p>
+  <ul><li><strong>"Amazon.com" <auto-confirm@amazon.com></strong> — Ordered 1 item: Electronics <span class="muted">(action or real-world relevance)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for YSAGi Double-Sided Desk Pad.... <span class="muted">(action or real-world relevance)</span></li></ul>
+  <p><strong>Maybe useful</strong></p>
+  <ul><li><strong>Ally Bank <email@alert.ally.com></strong> — Your latest statement is ready to view. <span class="muted">(informational but not urgent)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for Spigen Nano Pop MagFit for.... <span class="muted">(informational but not urgent)</span></li></ul>
+  <p class="muted">Ignored as likely junk/noise: 6. Total unread: 10.</p>
+</section>
+__SUMMARY__2 of 6 new unread emails look actually useful after reading the email bodies.
+__EMAIL_IDS__["1a0917d341ca6dee","1a0918ec3575b30a","1a091c432021ea05","1a092a667396f232","1a0937c74a7a0438","1a0946741200fe9c","1a09492f6dc75f3d","1a094c76e6c9b382","1a095132b4805857","1a09539ebf702ad6"]
+__NEEDS_TOP__"Amazon.com" <auto-confirm@amazon.com> — Ordered 1 item: Electronics | "return@amazon.com" <return@amazon.com> — Refund issued for YSAGi Double-Sided Desk Pad....
+__LATEST_EMAIL_AT__2026-09-12 06:57'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ EMAIL_SUMMARY='2 of 6 new unread emails look actually useful after reading the email bodies.'
+++ printf '%s\n' '<section class="card">
+  <h2>Top Priorities</h2>
+  <ul>
+    <li><strong>Must-do:</strong> Sell the BMW matts for the 5 series</li>
+    <li><strong>Should-do:</strong> Use A&F gift card</li>
+    <li><strong>If there’s time:</strong> Why did goldfish charge 200 vs 130 usually?</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>Task Pressure</h2>
+  <p class="muted">1 due or overdue task(s). 2 unscheduled Inbox task(s).</p>
+  <h3>Due / Overdue</h3>
+  <ul><li><strong>Sell the BMW matts for the 5 series</strong> <span class="muted">— due 2026-04-04</span></li></ul>
+  <h3>Inbox / No Due Date</h3>
+  <ul><li><strong>Use A&F gift card</strong><span class="muted"> — Inbox / no due date</span></li>
+<li><strong>Why did goldfish charge 200 vs 130 usually?</strong><span class="muted"> — Inbox / no due date</span></li></ul>
+</section>
+__SUMMARY__Top priority: Sell the BMW matts for the 5 series
+__TODO_COUNT__1
+__TASK_TOP__Sell the BMW matts for the 5 series | Use A&F gift card | Why did goldfish charge 200 vs 130 usually?
+__INBOX_UNSCHEDULED_COUNT__2
+__LATEST_INBOX_TASK_AT__2026-09-04T08:32:55.189312Z'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ TASK_SUMMARY='Top priority: Sell the BMW matts for the 5 series'
+++ printf '%s\n' '<section class="card">
+  <h2>Weather / Logistics — Home Base (Princeton, NJ)</h2>
+  <ul>
+    <li>Now: 56°F, feels like 54°F.</li>
+    <li>Today: 81° / 56°.</li>
+    <li>Tomorrow: 80° / 66°, rain risk 70%.</li>
+    <li>Tomorrow has real rain risk.</li>
+  </ul>
+</section>
+__SUMMARY__Home weather for Princeton, NJ: Tomorrow has real rain risk.
+__FETCHED_AT__2026-09-12T07:02:53-04:00'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ WEATHER_SUMMARY='Home weather for Princeton, NJ: Tomorrow has real rain risk.'
+++ printf '%s\n' '<section class="card">
+  <h2>Habits</h2>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 10)</li><li>Vitamin D - 50000IU (value: 3)</li><li>Vitamin B12 + Calcium (value: 11)</li></ul>
+</section>
+__SUMMARY__Basics are still open late, which usually means the trigger is weak, not the intention.
+__HABIT_COUNT__3'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ HABIT_SUMMARY='Basics are still open late, which usually means the trigger is weak, not the intention.'
+++ printf '%s\n' '<section class="card">
+<h2>Market Intelligence</h2>
+<p><strong>What matters:</strong> No dominant macro regime is obvious, so theme selection matters more than market narration.</p>
+<ul>
+<li>The right default is patience: no regime shift, no need to manufacture one.</li>
+</ul>
+<h3>Invested Themes</h3>
+<ul>
+<li>No invested theme is moving enough to matter; that is usually a sign to focus on thesis, not tape noise.</li>
+</ul>
+<h3>Only Moves Big Enough to Matter</h3>
+<ul>
+<li>No name in your watchlist is moving enough to deserve attention on price action alone.</li>
+</ul>
+<h3>Crypto</h3>
+<ul>
+<li><strong>BTC</strong> $77,316 (+0.5%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>ETH</strong> $2,533 (+3.0%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>SOL</strong> $102.12 (+3.1%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>HYPE</strong> $79.87 (+1.0%) — mostly noise unless the move extends or the thesis changes.</li>
+</ul>
+</section>
+__SUMMARY__No dominant macro regime is obvious, so theme selection matters more than market narration.
+__FETCHED_AT__2026-09-12T07:03:25-04:00'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ MARKET_INTEL_SUMMARY='No dominant macro regime is obvious, so theme selection matters more than market narration.'
+++ printf '%s\n' '<section class="card">
+<h2>Upcoming Things Worth Thinking About</h2>
+<p><strong>What matters:</strong> 2026-09-14 is the first day that looks worth thinking about ahead of time.</p>
+<ul>
+<li><strong>2026-09-14</strong> — easy to forget if not decided early; needs daytime planning; travel logistics<br><span class="muted">All day — Dad&#x27;s birthday • 10:00 AM — Grandparents Day@School • 1:00 PM — Mom Flight India</span></li>
+<li><strong>2026-09-18</strong> — needs daytime planning<br><span class="muted">11:00 AM — Soccer@school</span></li>
+<li><strong>2026-09-19</strong> — easy to forget if not decided early; you care enough that timing matters<br><span class="muted">5:30 PM — Vivaan Birthday • 10:00 AM — Brighton and Hove Albion vs Arsenal (A)</span></li>
+</ul>
+</section>
+__SUMMARY__2026-09-14 is the first day that looks worth thinking about ahead of time.'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ UPCOMING_PREP_SUMMARY='2026-09-14 is the first day that looks worth thinking about ahead of time.'
+++ printf '%s\n' '<section class="card">
+<h2>Trip Logistics</h2>
+<p class="muted">No recent trip logistics found.</p>
+</section>
+__SUMMARY__No current trip logistics detected.
+__NEXT_ACTION__
+__HELP_IDEAS__'
+++ extract_meta SUMMARY
+++ local key=SUMMARY
+++ sed -n 's/^__SUMMARY__//p'
+++ head -n1
++ TRIP_LOGISTICS_SUMMARY='No current trip logistics detected.'
+++ printf '%s\n' '<section class="card">
+<h2>Trip Logistics</h2>
+<p class="muted">No recent trip logistics found.</p>
+</section>
+__SUMMARY__No current trip logistics detected.
+__NEXT_ACTION__
+__HELP_IDEAS__'
+++ extract_meta NEXT_ACTION
+++ local key=NEXT_ACTION
+++ head -n1
+++ sed -n 's/^__NEXT_ACTION__//p'
++ TRIP_NEXT_ACTION=
+++ printf '%s\n' '<section class="card">
+<h2>Trip Logistics</h2>
+<p class="muted">No recent trip logistics found.</p>
+</section>
+__SUMMARY__No current trip logistics detected.
+__NEXT_ACTION__
+__HELP_IDEAS__'
+++ extract_meta HELP_IDEAS
+++ local key=HELP_IDEAS
+++ sed -n 's/^__HELP_IDEAS__//p'
+++ head -n1
++ TRIP_HELP_IDEAS=
+++ printf '%s\n' '<section class="card">
+  <h2>Inbox Triage</h2>
+  <p class="muted">Reviewed 6 new email bodies and 4 older unread emails, not just subject lines.</p>
+  <p><strong>Actually useful</strong></p>
+  <ul><li><strong>"Amazon.com" <auto-confirm@amazon.com></strong> — Ordered 1 item: Electronics <span class="muted">(action or real-world relevance)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for YSAGi Double-Sided Desk Pad.... <span class="muted">(action or real-world relevance)</span></li></ul>
+  <p><strong>Maybe useful</strong></p>
+  <ul><li><strong>Ally Bank <email@alert.ally.com></strong> — Your latest statement is ready to view. <span class="muted">(informational but not urgent)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for Spigen Nano Pop MagFit for.... <span class="muted">(informational but not urgent)</span></li></ul>
+  <p class="muted">Ignored as likely junk/noise: 6. Total unread: 10.</p>
+</section>
+__SUMMARY__2 of 6 new unread emails look actually useful after reading the email bodies.
+__EMAIL_IDS__["1a0917d341ca6dee","1a0918ec3575b30a","1a091c432021ea05","1a092a667396f232","1a0937c74a7a0438","1a0946741200fe9c","1a09492f6dc75f3d","1a094c76e6c9b382","1a095132b4805857","1a09539ebf702ad6"]
+__NEEDS_TOP__"Amazon.com" <auto-confirm@amazon.com> — Ordered 1 item: Electronics | "return@amazon.com" <return@amazon.com> — Refund issued for YSAGi Double-Sided Desk Pad....
+__LATEST_EMAIL_AT__2026-09-12 06:57'
+++ extract_meta EMAIL_IDS
+++ local key=EMAIL_IDS
+++ sed -n 's/^__EMAIL_IDS__//p'
+++ head -n1
++ CURRENT_EMAIL_IDS='["1a0917d341ca6dee","1a0918ec3575b30a","1a091c432021ea05","1a092a667396f232","1a0937c74a7a0438","1a0946741200fe9c","1a09492f6dc75f3d","1a094c76e6c9b382","1a095132b4805857","1a09539ebf702ad6"]'
+++ printf '%s\n' '<section class="card">
+  <h2>Inbox Triage</h2>
+  <p class="muted">Reviewed 6 new email bodies and 4 older unread emails, not just subject lines.</p>
+  <p><strong>Actually useful</strong></p>
+  <ul><li><strong>"Amazon.com" <auto-confirm@amazon.com></strong> — Ordered 1 item: Electronics <span class="muted">(action or real-world relevance)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for YSAGi Double-Sided Desk Pad.... <span class="muted">(action or real-world relevance)</span></li></ul>
+  <p><strong>Maybe useful</strong></p>
+  <ul><li><strong>Ally Bank <email@alert.ally.com></strong> — Your latest statement is ready to view. <span class="muted">(informational but not urgent)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for Spigen Nano Pop MagFit for.... <span class="muted">(informational but not urgent)</span></li></ul>
+  <p class="muted">Ignored as likely junk/noise: 6. Total unread: 10.</p>
+</section>
+__SUMMARY__2 of 6 new unread emails look actually useful after reading the email bodies.
+__EMAIL_IDS__["1a0917d341ca6dee","1a0918ec3575b30a","1a091c432021ea05","1a092a667396f232","1a0937c74a7a0438","1a0946741200fe9c","1a09492f6dc75f3d","1a094c76e6c9b382","1a095132b4805857","1a09539ebf702ad6"]
+__NEEDS_TOP__"Amazon.com" <auto-confirm@amazon.com> — Ordered 1 item: Electronics | "return@amazon.com" <return@amazon.com> — Refund issued for YSAGi Double-Sided Desk Pad....
+__LATEST_EMAIL_AT__2026-09-12 06:57'
+++ extract_meta LATEST_EMAIL_AT
+++ local key=LATEST_EMAIL_AT
+++ sed -n 's/^__LATEST_EMAIL_AT__//p'
+++ head -n1
++ LATEST_EMAIL_AT='2026-09-12 06:57'
+++ printf '%s\n' '<section class="card">
+  <h2>Top Priorities</h2>
+  <ul>
+    <li><strong>Must-do:</strong> Sell the BMW matts for the 5 series</li>
+    <li><strong>Should-do:</strong> Use A&F gift card</li>
+    <li><strong>If there’s time:</strong> Why did goldfish charge 200 vs 130 usually?</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>Task Pressure</h2>
+  <p class="muted">1 due or overdue task(s). 2 unscheduled Inbox task(s).</p>
+  <h3>Due / Overdue</h3>
+  <ul><li><strong>Sell the BMW matts for the 5 series</strong> <span class="muted">— due 2026-04-04</span></li></ul>
+  <h3>Inbox / No Due Date</h3>
+  <ul><li><strong>Use A&F gift card</strong><span class="muted"> — Inbox / no due date</span></li>
+<li><strong>Why did goldfish charge 200 vs 130 usually?</strong><span class="muted"> — Inbox / no due date</span></li></ul>
+</section>
+__SUMMARY__Top priority: Sell the BMW matts for the 5 series
+__TODO_COUNT__1
+__TASK_TOP__Sell the BMW matts for the 5 series | Use A&F gift card | Why did goldfish charge 200 vs 130 usually?
+__INBOX_UNSCHEDULED_COUNT__2
+__LATEST_INBOX_TASK_AT__2026-09-04T08:32:55.189312Z'
+++ extract_meta TODO_COUNT
+++ local key=TODO_COUNT
+++ sed -n 's/^__TODO_COUNT__//p'
+++ head -n1
++ TODO_COUNT=1
+++ printf '%s\n' '<section class="card">
+  <h2>Top Priorities</h2>
+  <ul>
+    <li><strong>Must-do:</strong> Sell the BMW matts for the 5 series</li>
+    <li><strong>Should-do:</strong> Use A&F gift card</li>
+    <li><strong>If there’s time:</strong> Why did goldfish charge 200 vs 130 usually?</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>Task Pressure</h2>
+  <p class="muted">1 due or overdue task(s). 2 unscheduled Inbox task(s).</p>
+  <h3>Due / Overdue</h3>
+  <ul><li><strong>Sell the BMW matts for the 5 series</strong> <span class="muted">— due 2026-04-04</span></li></ul>
+  <h3>Inbox / No Due Date</h3>
+  <ul><li><strong>Use A&F gift card</strong><span class="muted"> — Inbox / no due date</span></li>
+<li><strong>Why did goldfish charge 200 vs 130 usually?</strong><span class="muted"> — Inbox / no due date</span></li></ul>
+</section>
+__SUMMARY__Top priority: Sell the BMW matts for the 5 series
+__TODO_COUNT__1
+__TASK_TOP__Sell the BMW matts for the 5 series | Use A&F gift card | Why did goldfish charge 200 vs 130 usually?
+__INBOX_UNSCHEDULED_COUNT__2
+__LATEST_INBOX_TASK_AT__2026-09-04T08:32:55.189312Z'
+++ extract_meta INBOX_UNSCHEDULED_COUNT
+++ local key=INBOX_UNSCHEDULED_COUNT
+++ sed -n 's/^__INBOX_UNSCHEDULED_COUNT__//p'
+++ head -n1
++ INBOX_UNSCHEDULED_COUNT=2
+++ printf '%s\n' '<section class="card">
+  <h2>Top Priorities</h2>
+  <ul>
+    <li><strong>Must-do:</strong> Sell the BMW matts for the 5 series</li>
+    <li><strong>Should-do:</strong> Use A&F gift card</li>
+    <li><strong>If there’s time:</strong> Why did goldfish charge 200 vs 130 usually?</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>Task Pressure</h2>
+  <p class="muted">1 due or overdue task(s). 2 unscheduled Inbox task(s).</p>
+  <h3>Due / Overdue</h3>
+  <ul><li><strong>Sell the BMW matts for the 5 series</strong> <span class="muted">— due 2026-04-04</span></li></ul>
+  <h3>Inbox / No Due Date</h3>
+  <ul><li><strong>Use A&F gift card</strong><span class="muted"> — Inbox / no due date</span></li>
+<li><strong>Why did goldfish charge 200 vs 130 usually?</strong><span class="muted"> — Inbox / no due date</span></li></ul>
+</section>
+__SUMMARY__Top priority: Sell the BMW matts for the 5 series
+__TODO_COUNT__1
+__TASK_TOP__Sell the BMW matts for the 5 series | Use A&F gift card | Why did goldfish charge 200 vs 130 usually?
+__INBOX_UNSCHEDULED_COUNT__2
+__LATEST_INBOX_TASK_AT__2026-09-04T08:32:55.189312Z'
+++ extract_meta LATEST_INBOX_TASK_AT
+++ local key=LATEST_INBOX_TASK_AT
+++ sed -n 's/^__LATEST_INBOX_TASK_AT__//p'
+++ head -n1
++ LATEST_INBOX_TASK_AT=2026-09-04T08:32:55.189312Z
+++ printf '%s\n' '<section class="card">
+  <h2>Habits</h2>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 10)</li><li>Vitamin D - 50000IU (value: 3)</li><li>Vitamin B12 + Calcium (value: 11)</li></ul>
+</section>
+__SUMMARY__Basics are still open late, which usually means the trigger is weak, not the intention.
+__HABIT_COUNT__3'
+++ extract_meta HABIT_COUNT
+++ local key=HABIT_COUNT
+++ sed -n 's/^__HABIT_COUNT__//p'
+++ head -n1
++ HABIT_COUNT=3
+++ printf '%s\n' '<section class="card">
+  <h2>Weather / Logistics — Home Base (Princeton, NJ)</h2>
+  <ul>
+    <li>Now: 56°F, feels like 54°F.</li>
+    <li>Today: 81° / 56°.</li>
+    <li>Tomorrow: 80° / 66°, rain risk 70%.</li>
+    <li>Tomorrow has real rain risk.</li>
+  </ul>
+</section>
+__SUMMARY__Home weather for Princeton, NJ: Tomorrow has real rain risk.
+__FETCHED_AT__2026-09-12T07:02:53-04:00'
+++ extract_meta FETCHED_AT
+++ local key=FETCHED_AT
+++ sed -n 's/^__FETCHED_AT__//p'
+++ head -n1
++ WEATHER_FETCHED_AT=2026-09-12T07:02:53-04:00
+++ printf '%s\n' '<section class="card">
+<h2>Market Intelligence</h2>
+<p><strong>What matters:</strong> No dominant macro regime is obvious, so theme selection matters more than market narration.</p>
+<ul>
+<li>The right default is patience: no regime shift, no need to manufacture one.</li>
+</ul>
+<h3>Invested Themes</h3>
+<ul>
+<li>No invested theme is moving enough to matter; that is usually a sign to focus on thesis, not tape noise.</li>
+</ul>
+<h3>Only Moves Big Enough to Matter</h3>
+<ul>
+<li>No name in your watchlist is moving enough to deserve attention on price action alone.</li>
+</ul>
+<h3>Crypto</h3>
+<ul>
+<li><strong>BTC</strong> $77,316 (+0.5%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>ETH</strong> $2,533 (+3.0%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>SOL</strong> $102.12 (+3.1%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>HYPE</strong> $79.87 (+1.0%) — mostly noise unless the move extends or the thesis changes.</li>
+</ul>
+</section>
+__SUMMARY__No dominant macro regime is obvious, so theme selection matters more than market narration.
+__FETCHED_AT__2026-09-12T07:03:25-04:00'
+++ extract_meta FETCHED_AT
+++ local key=FETCHED_AT
+++ sed -n 's/^__FETCHED_AT__//p'
+++ head -n1
++ MARKET_FETCHED_AT=2026-09-12T07:03:25-04:00
+++ printf '%s\n' '<section class="card arsenal">
+  <h2>Arsenal</h2>
+  <p><strong>What matters:</strong> Matchday. Sunderland vs Arsenal (A) (in 7h) is the main Arsenal event to care about. Top news line: Arsenal are passing every test - and Odegaard is in form of his life</p>
+  <ul>
+    <li><strong>Today: Sunderland vs Arsenal (A) at 3:00 PM</strong><br><span class="muted">in 7h • Stadium of Light, Sunderland</span><br><span class="muted">Premier League | Matchweek 4 | Watch live on TalkSport, UK - TNT Sports. Join us for analysis and live commentary in The Breakdown Live on the Arsenal App and Arsenal.com | Join In #SUNARS Shop Arsenal Direct Join Member</span></li>
+    
+  </ul>
+  <h3>News & Commentary</h3>
+  <ul>
+    <li><strong>[BBC]</strong> Arsenal are passing every test - and Odegaard is in form of his life<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arsenal close to finalising new contract for Arteta<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arteta&#x27;s suprise tactics to deal with travel issues<br><span class="muted">BBC Arsenal coverage</span></li>
+  </ul>
+  <h3>Team News</h3>
+  <ul>
+    <li><strong>Fitness watch:</strong> Odegaard/Trossard availability is in the official pre-match signal set, so that is real team-news rather than fluff.</li><li><strong>Manager line:</strong> Arteta is part of the pre-match cycle, which usually means the section to trust most is availability plus selection hints, not fan noise.</li>
+  </ul>
+++ extract_meta FETCHED_AT
+  <h3>Likely XI / Selection Questions</h3>
+  <ul>
+    <li><strong>Selection question:</strong> The module still refuses to fake a probable XI. The real watchpoints are the Odegaard/Trossard fitness picture and how aggressive Arteta goes before the next run of fixtures.</li>
+  </ul>
+  <h3>Social Pulse</h3>
+  <ul>
+    <li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>
+  </ul>
+</section>
+__FETCHED_AT__2026-09-12T07:03:04-04:00'
+++ local key=FETCHED_AT
+++ sed -n 's/^__FETCHED_AT__//p'
+++ head -n1
++ ARSENAL_FETCHED_AT=2026-09-12T07:03:04-04:00
++ PATTERN_TEXT=
+++ printf %s '2 of 6 new unread emails look actually useful after reading the email bodies.'
+++ grep -o '^[0-9]\+'
++ EMAIL_NEW_COUNT=2
+++ printf %s 'Sunderland vs Arsenal (A)'
+++ tr '[:upper:]' '[:lower:]'
++ DAY_LOWER='sunderland vs arsenal (a)'
+++ printf %s 'Tomorrow is open right now.'
+++ tr '[:upper:]' '[:lower:]'
++ TOMORROW_LOWER='tomorrow is open right now.'
++ printf %s 'sunderland vs arsenal (a)'
++ grep -qi travel
++ printf %s 'sunderland vs arsenal (a)'
++ grep -qi 'karate\|school\|parent'
++ printf %s 'sunderland vs arsenal (a)'
++ grep -qi arsenal
++ PATTERN_TEXT='There’s a hard stop in the day because of the match, which is useful. Treat the afternoon like a deadline, not a suggestion.'
++ DECISION_TEXT='Top priority: Sell the BMW matts for the 5 series'
++ '[' -n 'No dominant macro regime is obvious, so theme selection matters more than market narration.' ']'
++ '[' Morning '!=' Morning ']'
++ '[' Morning = Morning ']'
++ '[' 1 -gt 0 ']'
++ DECISION_TEXT='Top priority: Sell the BMW matts for the 5 series'
+++ mktemp
++ MODEL_JSON_FILE=/tmp/tmp.w94AvtoWXy
+++ mktemp
++ MODEL_CONTEXT_FILE=/tmp/tmp.A8Zwt7ldvz
++ trap 'rm -f "$MODEL_JSON_FILE" "$MODEL_CONTEXT_FILE"' EXIT
+++ mktemp
++ RAW_CONTEXT_FILE=/tmp/tmp.hVunvtK8Ht
++ trap 'rm -f "$MODEL_JSON_FILE" "$MODEL_CONTEXT_FILE" "$RAW_CONTEXT_FILE"' EXIT
++ cat
+++ date -Iseconds
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s Morning
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s full
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'Saturday, September 12, 2026'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '07:02 AM EDT'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'Sunderland vs Arsenal (A)'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'Tomorrow is open right now.'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '2026-09-14 is the first day that looks worth thinking about ahead of time.'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'No current trip logistics detected.'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s ''
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s ''
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'Top priority: Sell the BMW matts for the 5 series'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '2 of 6 new unread emails look actually useful after reading the email bodies.'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'Home weather for Princeton, NJ: Tomorrow has real rain risk.'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 2026-09-12T07:02:53-04:00
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'Basics are still open late, which usually means the trigger is weak, not the intention.'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'No dominant macro regime is obvious, so theme selection matters more than market narration.'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 2026-09-12T07:03:25-04:00
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 2026-09-12T07:03:04-04:00
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '2026-09-12 06:57'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 2026-09-04T08:32:55.189312Z
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '<section class="card">
+  <h2>Day at a Glance</h2>
+  <p>Sunderland vs Arsenal (A)</p>
+  <div class="event"><div class="event-time">3:00 PM</div><div class="event-title"><span class="calendar-tag">Arsenal FC</span> Sunderland vs Arsenal (A)</div></div>
+</section>'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '<section class="card">
+  <h2>Top Priorities</h2>
+  <ul>
+    <li><strong>Must-do:</strong> Sell the BMW matts for the 5 series</li>
+    <li><strong>Should-do:</strong> Use A&F gift card</li>
+    <li><strong>If there’s time:</strong> Why did goldfish charge 200 vs 130 usually?</li>
+  </ul>
+</section>
+<section class="card">
+  <h2>Task Pressure</h2>
+  <p class="muted">1 due or overdue task(s). 2 unscheduled Inbox task(s).</p>
+  <h3>Due / Overdue</h3>
+  <ul><li><strong>Sell the BMW matts for the 5 series</strong> <span class="muted">— due 2026-04-04</span></li></ul>
+  <h3>Inbox / No Due Date</h3>
+  <ul><li><strong>Use A&F gift card</strong><span class="muted"> — Inbox / no due date</span></li>
+<li><strong>Why did goldfish charge 200 vs 130 usually?</strong><span class="muted"> — Inbox / no due date</span></li></ul>
+</section>'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '<section class="card">
+  <h2>Inbox Triage</h2>
+  <p class="muted">Reviewed 6 new email bodies and 4 older unread emails, not just subject lines.</p>
+  <p><strong>Actually useful</strong></p>
+  <ul><li><strong>"Amazon.com" <auto-confirm@amazon.com></strong> — Ordered 1 item: Electronics <span class="muted">(action or real-world relevance)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for YSAGi Double-Sided Desk Pad.... <span class="muted">(action or real-world relevance)</span></li></ul>
+  <p><strong>Maybe useful</strong></p>
+  <ul><li><strong>Ally Bank <email@alert.ally.com></strong> — Your latest statement is ready to view. <span class="muted">(informational but not urgent)</span></li>
+<li><strong>"return@amazon.com" <return@amazon.com></strong> — Refund issued for Spigen Nano Pop MagFit for.... <span class="muted">(informational but not urgent)</span></li></ul>
+  <p class="muted">Ignored as likely junk/noise: 6. Total unread: 10.</p>
+</section>'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '<section class="card">
+  <h2>Weather / Logistics — Home Base (Princeton, NJ)</h2>
+  <ul>
+    <li>Now: 56°F, feels like 54°F.</li>
+    <li>Today: 81° / 56°.</li>
+    <li>Tomorrow: 80° / 66°, rain risk 70%.</li>
+    <li>Tomorrow has real rain risk.</li>
+  </ul>
+</section>'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '<section class="card">
+  <h2>Habits</h2>
+  <p>Basics are still open late, which usually means the trigger is weak, not the intention.</p>
+  <ul><li>Nutty Nuts (value: 10)</li><li>Vitamin D - 50000IU (value: 3)</li><li>Vitamin B12 + Calcium (value: 11)</li></ul>
+</section>'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '<section class="card arsenal">
+  <h2>Arsenal</h2>
+  <p><strong>What matters:</strong> Matchday. Sunderland vs Arsenal (A) (in 7h) is the main Arsenal event to care about. Top news line: Arsenal are passing every test - and Odegaard is in form of his life</p>
+  <ul>
+    <li><strong>Today: Sunderland vs Arsenal (A) at 3:00 PM</strong><br><span class="muted">in 7h • Stadium of Light, Sunderland</span><br><span class="muted">Premier League | Matchweek 4 | Watch live on TalkSport, UK - TNT Sports. Join us for analysis and live commentary in The Breakdown Live on the Arsenal App and Arsenal.com | Join In #SUNARS Shop Arsenal Direct Join Member</span></li>
+    
+  </ul>
+  <h3>News & Commentary</h3>
+  <ul>
+    <li><strong>[BBC]</strong> Arsenal are passing every test - and Odegaard is in form of his life<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arsenal close to finalising new contract for Arteta<br><span class="muted">BBC Arsenal coverage</span></li>
+<li><strong>[BBC]</strong> Arteta&#x27;s suprise tactics to deal with travel issues<br><span class="muted">BBC Arsenal coverage</span></li>
+  </ul>
+  <h3>Team News</h3>
+  <ul>
+    <li><strong>Fitness watch:</strong> Odegaard/Trossard availability is in the official pre-match signal set, so that is real team-news rather than fluff.</li><li><strong>Manager line:</strong> Arteta is part of the pre-match cycle, which usually means the section to trust most is availability plus selection hints, not fan noise.</li>
+  </ul>
+  <h3>Likely XI / Selection Questions</h3>
+  <ul>
+    <li><strong>Selection question:</strong> The module still refuses to fake a probable XI. The real watchpoints are the Odegaard/Trossard fitness picture and how aggressive Arteta goes before the next run of fixtures.</li>
+  </ul>
+  <h3>Social Pulse</h3>
+  <ul>
+    <li><strong>Signal policy:</strong> Kept intentionally strict. When this section is populated, it should only surface official Arsenal output or converged reporter signals — not random rumor sludge.</li>
+  </ul>
+</section>'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '<section class="card">
+<h2>Market Intelligence</h2>
+<p><strong>What matters:</strong> No dominant macro regime is obvious, so theme selection matters more than market narration.</p>
+<ul>
+<li>The right default is patience: no regime shift, no need to manufacture one.</li>
+</ul>
+<h3>Invested Themes</h3>
+<ul>
+<li>No invested theme is moving enough to matter; that is usually a sign to focus on thesis, not tape noise.</li>
+</ul>
+<h3>Only Moves Big Enough to Matter</h3>
+<ul>
+<li>No name in your watchlist is moving enough to deserve attention on price action alone.</li>
+</ul>
+<h3>Crypto</h3>
+<ul>
+<li><strong>BTC</strong> $77,316 (+0.5%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>ETH</strong> $2,533 (+3.0%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>SOL</strong> $102.12 (+3.1%) — mostly noise unless the move extends or the thesis changes.</li>
+<li><strong>HYPE</strong> $79.87 (+1.0%) — mostly noise unless the move extends or the thesis changes.</li>
+</ul>
+</section>'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '<section class="card">
+<h2>Upcoming Things Worth Thinking About</h2>
+<p><strong>What matters:</strong> 2026-09-14 is the first day that looks worth thinking about ahead of time.</p>
+<ul>
+<li><strong>2026-09-14</strong> — easy to forget if not decided early; needs daytime planning; travel logistics<br><span class="muted">All day — Dad&#x27;s birthday • 10:00 AM — Grandparents Day@School • 1:00 PM — Mom Flight India</span></li>
+<li><strong>2026-09-18</strong> — needs daytime planning<br><span class="muted">11:00 AM — Soccer@school</span></li>
+<li><strong>2026-09-19</strong> — easy to forget if not decided early; you care enough that timing matters<br><span class="muted">5:30 PM — Vivaan Birthday • 10:00 AM — Brighton and Hove Albion vs Arsenal (A)</span></li>
+</ul>
+</section>'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '<section class="card">
+<h2>Trip Logistics</h2>
+<p class="muted">No recent trip logistics found.</p>
+</section>'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'Sunderland vs Arsenal (A)'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'No current trip logistics detected.'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'Top priority: Sell the BMW matts for the 5 series'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s '2 of 6 new unread emails look actually useful after reading the email bodies.'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'There’s a hard stop in the day because of the match, which is useful. Treat the afternoon like a deadline, not a suggestion.'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'Tomorrow is open right now.'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+++ printf %s 'Top priority: Sell the BMW matts for the 5 series'
+++ json_escape
+++ python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
++ python3 /home/nik/.openclaw/workspace/brief-context-builder.py
+++ python3 /home/nik/.openclaw/workspace/brief-freshness.py
++ FRESHNESS_JSON='{"generated_at_local": "2026-09-12 07:03 AM EDT", "weather_fetched_age": "0m ago", "market_fetched_age": "0m ago", "arsenal_fetched_age": "0m ago", "latest_email_age": "6m ago", "latest_inbox_task_age": "7d ago"}'
++ python3 - /tmp/tmp.A8Zwt7ldvz '{"generated_at_local": "2026-09-12 07:03 AM EDT", "weather_fetched_age": "0m ago", "market_fetched_age": "0m ago", "arsenal_fetched_age": "0m ago", "latest_email_age": "6m ago", "latest_inbox_task_age": "7d ago"}'
++ cp /tmp/tmp.A8Zwt7ldvz /home/nik/.openclaw/workspace/.brief-context.json
++ node /home/nik/.openclaw/workspace/morning-brief/scripts/brief-synthesizer.mjs /tmp/tmp.A8Zwt7ldvz
+++ python3 - /tmp/tmp.w94AvtoWXy
++ EXEC_SUMMARY_HTML='<li><strong>Day Event:</strong> Sunderland vs Arsenal (A) at 3:00 PM.</li>
+<li><strong>Top Task:</strong> Must-sell BMW mats for the 5 series.</li>
+<li><strong>Email Signals:</strong> 2 unread emails require action: Amazon order confirmation and refund.</li>
+<li><strong>Tomorrow Outlook:</strong> Weather risk: 70% chance of rain in the morning.</li>'
+++ python3 - /tmp/tmp.w94AvtoWXy
++ PATTERN_TEXT='The match creates a hard deadline for the afternoon. Be strategic about completing tasks before then.'
+++ python3 - /tmp/tmp.w94AvtoWXy
++ TOMORROW_PREP_TEXT='Plan for Dad&#x27;s birthday and logistics for earlier events on the 14th.'
+++ python3 - /tmp/tmp.w94AvtoWXy
++ RECOMMENDED_NEXT_MOVE='Sell the BMW mats today to clear that task off the list.'
+++ python3 - /tmp/tmp.w94AvtoWXy
++ WHAT_CAN_WAIT_HTML='<li>Draft a plan for Dad&#x27;s birthday celebration on the 14th.</li>
+<li>Prepare reminders for upcoming family events.</li>
+<li>Check in on the status of the Amazon order and refund.</li>'
++ cat
++ cp /home/nik/.openclaw/workspace/index.html /home/nik/.openclaw/workspace/brief.html
+++ date -Iseconds
++ echo '{"emails":["1a0917d341ca6dee","1a0918ec3575b30a","1a091c432021ea05","1a092a667396f232","1a0937c74a7a0438","1a0946741200fe9c","1a09492f6dc75f3d","1a094c76e6c9b382","1a095132b4805857","1a09539ebf702ad6"],"tasks":1,"timestamp":"2026-09-12T07:03:40-04:00"}'
++ cd /home/nik/.openclaw/workspace
++ git add index.html brief.html .brief-state.json generate-brief-html.sh arsenal-brief.sh brief-calendar.sh brief-email.sh brief-habits.sh brief-lib.sh brief-macro-news.sh brief-market-intel.sh brief-market-regime.sh brief-markets.sh brief-tasks.sh brief-travel-context.sh brief-trip-logistics.sh brief-upcoming-prep.sh brief-weather.sh
++ git commit -m 'Rewrite Morning brief structure: Saturday, September 12, 2026 07:02 AM EDT'
+[main ac4edda] Rewrite Morning brief structure: Saturday, September 12, 2026 07:02 AM EDT
+ 3 files changed, 27 insertions(+), 27 deletions(-)
++ git push origin main
+To github.com:nikhilist/morning-brief.git
+   a0bf1b3..ac4edda  main -> main
++ echo 'Morning brief generated'
+Morning brief generated
++ echo 'GitHub Pages: https://nikhilist.github.io/morning-brief/'
+GitHub Pages: https://nikhilist.github.io/morning-brief/
+++ date
++ echo '=== Finished: Sat Sep 12 07:03:42 EDT 2026 ==='
+=== Finished: Sat Sep 12 07:03:42 EDT 2026 ===
++ rm -f /tmp/tmp.w94AvtoWXy /tmp/tmp.A8Zwt7ldvz /tmp/tmp.hVunvtK8Ht
